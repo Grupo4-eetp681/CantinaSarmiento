@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form1
     ' Esta función le dice a Windows que libere el control del mouse
@@ -23,7 +24,6 @@ Public Class Form1
         End If
     End Sub
 
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Evitar que el usuario pueda usar el tab en los botones de cierre y minimizar'
         ButtonCierreApp.TabStop = False
@@ -40,11 +40,49 @@ Public Class Form1
         WindowState = FormWindowState.Minimized
     End Sub
 
-    Private Sub PanelBarraSuperior_LocationChanged(sender As Object, e As EventArgs) Handles PanelBarraSuperior.LocationChanged
+    Private Sub TimerHORA_Tick(sender As Object, e As EventArgs) Handles TimerHORA.Tick
+        'Cambiar la hora del label'
+        LabelHORA.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
+    End Sub
+    Public Function ObtenerValorNumerico(textoFormateado As String) As Integer
+        Dim limpio = textoFormateado.Replace("$", "").Replace(".", "").Trim()
+        If IsNumeric(limpio) Then
+            Return CInt(limpio)
+        Else
+            Return 0 ' o lanzar un error si preferís
+        End If
+    End Function
 
+    Private Sub TextPago_TextChanged(sender As Object, e As EventArgs) Handles TextPago.TextChanged
+        'Funcion para aplicar formato de $ x.xxx.xxx'
+        Dim textoSinSimbolo As String = TextPago.Text.Replace("$", "").Replace(".", "").Trim()
+
+        If IsNumeric(textoSinSimbolo) Then
+            Dim valor As Decimal = Decimal.Parse(textoSinSimbolo)
+            TextPago.Text = "$ " & Format(valor, "#,##0")
+            TextPago.SelectionStart = TextPago.Text.Length ' Mueve el cursor al final
+        ElseIf TextPago.Text.Length <= 2 Then
+            TextPago.Text = "$ "
+            TextPago.SelectionStart = TextPago.Text.Length
+        End If
     End Sub
 
-    Private Sub TimerHORA_Tick(sender As Object, e As EventArgs) Handles TimerHORA.Tick
-        LabelHORA.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
+    Private Sub TextPago_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextPago.KeyPress
+        If Char.IsDigit(e.KeyChar) Then
+            e.Handled = False
+        ElseIf Char.IsControl(e.KeyChar) Then
+            e.Handled = False
+        Else
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub TextPago_KeyDown(sender As Object, e As KeyEventArgs) Handles TextPago.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True ' Evita que suene el 'beep' o se pase al siguiente control
+            ' Si se presiona Enter, se agrega la lógica para procesar el pago
+            Dim valor As Integer = ObtenerValorNumerico(TextPago.Text)
+            LabelVuelto.Text = "Vuelto: $ " & Format(valor - 1000, "#,##0")
+        End If
     End Sub
 End Class

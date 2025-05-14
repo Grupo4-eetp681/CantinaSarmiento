@@ -36,11 +36,15 @@ Partial Class Form1
         BotonImportar = New Button()
         GenerarPDF = New Button()
         PanelInferiorAcciones = New Panel()
+        LabelPago = New Label()
         PanelBotonesVentas = New Panel()
         BotonRegistrar = New Button()
         BotonTicket = New Button()
         BotonFactura = New Button()
+        TextPago = New TextBox()
         Button5 = New Button()
+        LabelVuelto = New Label()
+        LabelTotal = New Label()
         PanelMargenI = New Panel()
         PanelBarraInferior = New Panel()
         PanelHora = New Panel()
@@ -48,10 +52,7 @@ Partial Class Form1
         TimerHORA = New Timer(components)
         ContenidoGeneral = New Panel()
         LogoMarcaAgua = New PictureBox()
-        LabelTotal = New Label()
         PanelPagoVuelto = New Panel()
-        TextVuelto = New TextBox()
-        TextPago = New TextBox()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -189,14 +190,28 @@ Partial Class Form1
         ' 
         ' PanelInferiorAcciones
         ' 
-        PanelInferiorAcciones.Controls.Add(LabelTotal)
+        PanelInferiorAcciones.Controls.Add(LabelPago)
         PanelInferiorAcciones.Controls.Add(PanelBotonesVentas)
+        PanelInferiorAcciones.Controls.Add(TextPago)
         PanelInferiorAcciones.Controls.Add(Button5)
+        PanelInferiorAcciones.Controls.Add(LabelVuelto)
         PanelInferiorAcciones.Dock = DockStyle.Bottom
         PanelInferiorAcciones.Location = New Point(25, 645)
         PanelInferiorAcciones.Name = "PanelInferiorAcciones"
         PanelInferiorAcciones.Size = New Size(675, 30)
         PanelInferiorAcciones.TabIndex = 2
+        ' 
+        ' LabelPago
+        ' 
+        LabelPago.Anchor = AnchorStyles.Right
+        LabelPago.AutoSize = True
+        LabelPago.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelPago.Location = New Point(403, 5)
+        LabelPago.Name = "LabelPago"
+        LabelPago.Size = New Size(55, 21)
+        LabelPago.TabIndex = 8
+        LabelPago.Text = "Pago:"
+        LabelPago.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' PanelBotonesVentas
         ' 
@@ -242,6 +257,13 @@ Partial Class Form1
         BotonFactura.TabIndex = 1
         BotonFactura.UseVisualStyleBackColor = False
         ' 
+        ' TextPago
+        ' 
+        TextPago.Location = New Point(460, 4)
+        TextPago.Name = "TextPago"
+        TextPago.Size = New Size(80, 23)
+        TextPago.TabIndex = 7
+        ' 
         ' Button5
         ' 
         Button5.Anchor = AnchorStyles.Top Or AnchorStyles.Right
@@ -251,6 +273,30 @@ Partial Class Form1
         Button5.TabIndex = 0
         Button5.Text = "GENERAR PDF"
         Button5.UseVisualStyleBackColor = True
+        ' 
+        ' LabelVuelto
+        ' 
+        LabelVuelto.Anchor = AnchorStyles.Right
+        LabelVuelto.AutoSize = True
+        LabelVuelto.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelVuelto.Location = New Point(545, 5)
+        LabelVuelto.Name = "LabelVuelto"
+        LabelVuelto.Size = New Size(65, 21)
+        LabelVuelto.TabIndex = 4
+        LabelVuelto.Text = "Vuelto:"
+        LabelVuelto.TextAlign = ContentAlignment.MiddleRight
+        ' 
+        ' LabelTotal
+        ' 
+        LabelTotal.Anchor = AnchorStyles.Right
+        LabelTotal.AutoSize = True
+        LabelTotal.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelTotal.Location = New Point(626, 6)
+        LabelTotal.Name = "LabelTotal"
+        LabelTotal.Size = New Size(49, 21)
+        LabelTotal.TabIndex = 3
+        LabelTotal.Text = "Total"
+        LabelTotal.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' PanelMargenI
         ' 
@@ -315,41 +361,14 @@ Partial Class Form1
         LogoMarcaAgua.TabIndex = 6
         LogoMarcaAgua.TabStop = False
         ' 
-        ' LabelTotal
-        ' 
-        LabelTotal.Anchor = AnchorStyles.Right
-        LabelTotal.AutoSize = True
-        LabelTotal.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelTotal.Location = New Point(623, 5)
-        LabelTotal.Name = "LabelTotal"
-        LabelTotal.Size = New Size(49, 21)
-        LabelTotal.TabIndex = 3
-        LabelTotal.Text = "Total"
-        LabelTotal.TextAlign = ContentAlignment.MiddleRight
-        ' 
         ' PanelPagoVuelto
         ' 
-        PanelPagoVuelto.Controls.Add(TextPago)
-        PanelPagoVuelto.Controls.Add(TextVuelto)
+        PanelPagoVuelto.Controls.Add(LabelTotal)
         PanelPagoVuelto.Dock = DockStyle.Bottom
         PanelPagoVuelto.Location = New Point(25, 615)
         PanelPagoVuelto.Name = "PanelPagoVuelto"
         PanelPagoVuelto.Size = New Size(675, 30)
         PanelPagoVuelto.TabIndex = 7
-        ' 
-        ' TextVuelto
-        ' 
-        TextVuelto.Location = New Point(572, 4)
-        TextVuelto.Name = "TextVuelto"
-        TextVuelto.Size = New Size(100, 23)
-        TextVuelto.TabIndex = 0
-        ' 
-        ' TextPago
-        ' 
-        TextPago.Location = New Point(466, 4)
-        TextPago.Name = "TextPago"
-        TextPago.Size = New Size(100, 23)
-        TextPago.TabIndex = 1
         ' 
         ' Form1
         ' 
@@ -413,6 +432,7 @@ Partial Class Form1
     Friend WithEvents LogoMarcaAgua As PictureBox
     Friend WithEvents PanelPagoVuelto As Panel
     Friend WithEvents TextPago As TextBox
-    Friend WithEvents TextVuelto As TextBox
+    Friend WithEvents LabelVuelto As Label
+    Friend WithEvents LabelPago As Label
 
 End Class

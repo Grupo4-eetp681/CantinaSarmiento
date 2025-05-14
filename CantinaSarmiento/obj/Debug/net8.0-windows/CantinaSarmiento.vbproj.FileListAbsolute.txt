@@ -15,3 +15,21 @@ C:\Users\salan\OneDrive\Documentos\Franco\Programacion II\BV\TPFinal\CantinaSarm
 C:\Users\salan\OneDrive\Documentos\Franco\Programacion II\BV\TPFinal\CantinaSarmiento\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.pdb
 C:\Users\salan\OneDrive\Documentos\Franco\Programacion II\BV\TPFinal\CantinaSarmiento\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.genruntimeconfig.cache
 C:\Users\salan\OneDrive\Documentos\Franco\Programacion II\BV\TPFinal\CantinaSarmiento\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\ref\CantinaSarmiento.dll
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\bin\Debug\net8.0-windows\CantinaSarmiento.exe
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\bin\Debug\net8.0-windows\CantinaSarmiento.deps.json
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\bin\Debug\net8.0-windows\CantinaSarmiento.runtimeconfig.json
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\bin\Debug\net8.0-windows\CantinaSarmiento.dll
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\bin\Debug\net8.0-windows\CantinaSarmiento.pdb
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.Form1.resources
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.Resources.resources
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.vbproj.GenerateResource.cache
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.AssemblyInfoInputs.cache
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.AssemblyInfo.vb
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.vbproj.CoreCompileInputs.cache
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.sourcelink.json
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.dll
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\refint\CantinaSarmiento.dll
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.pdb
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.genruntimeconfig.cache
+C:\Users\tutiv\source\repos\Grupo4-eetp681\CantinaSarmiento\CantinaSarmiento\obj\Debug\net8.0-windows\ref\CantinaSarmiento.dll
