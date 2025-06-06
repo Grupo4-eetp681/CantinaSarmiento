@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Security.Policy
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form1
@@ -53,36 +54,27 @@ Public Class Form1
         End If
     End Function
 
-    Private Sub TextPago_TextChanged(sender As Object, e As EventArgs) Handles TextPago.TextChanged
-        'Funcion para aplicar formato de $ x.xxx.xxx'
-        Dim textoSinSimbolo As String = TextPago.Text.Replace("$", "").Replace(".", "").Trim()
-
-        If IsNumeric(textoSinSimbolo) Then
-            Dim valor As Decimal = Decimal.Parse(textoSinSimbolo)
-            TextPago.Text = "$ " & Format(valor, "#,##0")
-            TextPago.SelectionStart = TextPago.Text.Length ' Mueve el cursor al final
-        ElseIf TextPago.Text.Length <= 2 Then
-            TextPago.Text = "$ "
-            TextPago.SelectionStart = TextPago.Text.Length
-        End If
-    End Sub
-
-    Private Sub TextPago_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextPago.KeyPress
-        If Char.IsDigit(e.KeyChar) Then
-            e.Handled = False
-        ElseIf Char.IsControl(e.KeyChar) Then
-            e.Handled = False
+    Private Sub BotonMenu_Click(sender As Object, e As EventArgs) Handles BotonMenu.Click
+        If PanelMargenI.Width = 30 Then
+            PanelMargenI.Width = 70
+            PanelBotonesAcciones.Visible = True
+            Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechahorizontal.png")
+            BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)
+            BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
         Else
-            e.Handled = True
+            PanelMargenI.Width = 30
+            PanelBotonesAcciones.Visible = False
+            Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechavertical.png")
+            BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)
+            BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
         End If
     End Sub
 
-    Private Sub TextPago_KeyDown(sender As Object, e As KeyEventArgs) Handles TextPago.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            e.SuppressKeyPress = True ' Evita que suene el 'beep' o se pase al siguiente control
-            ' Si se presiona Enter, se agrega la lógica para procesar el pago
-            Dim valor As Integer = ObtenerValorNumerico(TextPago.Text)
-            LabelVuelto.Text = "Vuelto: $ " & Format(valor - 1000, "#,##0")
+    Private Sub ButtonMaximizarApp_Click(sender As Object, e As EventArgs) Handles ButtonMaximizarApp.Click
+        If WindowState = FormWindowState.Normal Then
+            WindowState = FormWindowState.Maximized
+        Else
+            WindowState = FormWindowState.Normal
         End If
     End Sub
 End Class
