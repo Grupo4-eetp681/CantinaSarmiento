@@ -27,44 +27,36 @@ Partial Class Form1
         PanelBarraSuperior = New Panel()
         LogoSuperiorIzquierda = New PictureBox()
         PanelBotonesVentana = New Panel()
+        ButtonMaximizarApp = New Button()
         ButtonMinimizarApp = New Button()
         ButtonCierreApp = New Button()
         PanelSuperiorAcciones = New Panel()
         PanelBotonesAcciones = New Panel()
         BotonCancelar = New Button()
-        BotonExportar = New Button()
         BotonImportar = New Button()
-        GenerarPDF = New Button()
-        PanelInferiorAcciones = New Panel()
-        LabelPago = New Label()
-        PanelBotonesVentas = New Panel()
-        BotonRegistrar = New Button()
-        BotonTicket = New Button()
-        BotonFactura = New Button()
-        TextPago = New TextBox()
-        Button5 = New Button()
-        LabelVuelto = New Label()
-        LabelTotal = New Label()
+        BotonExportar = New Button()
         PanelMargenI = New Panel()
+        SubPanelIzquierdo = New Panel()
+        PanelBotonMenu = New Panel()
+        BotonMenu = New Button()
         PanelBarraInferior = New Panel()
         PanelHora = New Panel()
         LabelHORA = New Label()
         TimerHORA = New Timer(components)
         ContenidoGeneral = New Panel()
         LogoMarcaAgua = New PictureBox()
-        PanelPagoVuelto = New Panel()
+        PanelMargenDerecho = New Panel()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
-        PanelSuperiorAcciones.SuspendLayout()
         PanelBotonesAcciones.SuspendLayout()
-        PanelInferiorAcciones.SuspendLayout()
-        PanelBotonesVentas.SuspendLayout()
+        PanelMargenI.SuspendLayout()
+        SubPanelIzquierdo.SuspendLayout()
+        PanelBotonMenu.SuspendLayout()
         PanelBarraInferior.SuspendLayout()
         PanelHora.SuspendLayout()
         ContenidoGeneral.SuspendLayout()
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).BeginInit()
-        PanelPagoVuelto.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelBarraSuperior
@@ -75,7 +67,7 @@ Partial Class Form1
         PanelBarraSuperior.Dock = DockStyle.Top
         PanelBarraSuperior.Location = New Point(0, 0)
         PanelBarraSuperior.Name = "PanelBarraSuperior"
-        PanelBarraSuperior.Size = New Size(700, 25)
+        PanelBarraSuperior.Size = New Size(960, 30)
         PanelBarraSuperior.TabIndex = 0
         ' 
         ' LogoSuperiorIzquierda
@@ -83,7 +75,7 @@ Partial Class Form1
         LogoSuperiorIzquierda.Image = CType(resources.GetObject("LogoSuperiorIzquierda.Image"), Image)
         LogoSuperiorIzquierda.Location = New Point(0, 0)
         LogoSuperiorIzquierda.Name = "LogoSuperiorIzquierda"
-        LogoSuperiorIzquierda.Size = New Size(20, 20)
+        LogoSuperiorIzquierda.Size = New Size(25, 25)
         LogoSuperiorIzquierda.SizeMode = PictureBoxSizeMode.StretchImage
         LogoSuperiorIzquierda.TabIndex = 3
         LogoSuperiorIzquierda.TabStop = False
@@ -91,12 +83,26 @@ Partial Class Form1
         ' PanelBotonesVentana
         ' 
         PanelBotonesVentana.Anchor = AnchorStyles.Top Or AnchorStyles.Right
+        PanelBotonesVentana.Controls.Add(ButtonMaximizarApp)
         PanelBotonesVentana.Controls.Add(ButtonMinimizarApp)
         PanelBotonesVentana.Controls.Add(ButtonCierreApp)
-        PanelBotonesVentana.Location = New Point(644, 0)
+        PanelBotonesVentana.Location = New Point(875, 2)
         PanelBotonesVentana.Name = "PanelBotonesVentana"
-        PanelBotonesVentana.Size = New Size(56, 25)
+        PanelBotonesVentana.Size = New Size(85, 25)
         PanelBotonesVentana.TabIndex = 2
+        ' 
+        ' ButtonMaximizarApp
+        ' 
+        ButtonMaximizarApp.BackColor = SystemColors.ControlDarkDark
+        ButtonMaximizarApp.BackgroundImage = CType(resources.GetObject("ButtonMaximizarApp.BackgroundImage"), Image)
+        ButtonMaximizarApp.BackgroundImageLayout = ImageLayout.Stretch
+        ButtonMaximizarApp.FlatStyle = FlatStyle.Flat
+        ButtonMaximizarApp.ForeColor = SystemColors.ControlDarkDark
+        ButtonMaximizarApp.Location = New Point(30, 0)
+        ButtonMaximizarApp.Name = "ButtonMaximizarApp"
+        ButtonMaximizarApp.Size = New Size(25, 25)
+        ButtonMaximizarApp.TabIndex = 1
+        ButtonMaximizarApp.UseVisualStyleBackColor = False
         ' 
         ' ButtonMinimizarApp
         ' 
@@ -118,7 +124,7 @@ Partial Class Form1
         ButtonCierreApp.BackgroundImageLayout = ImageLayout.Stretch
         ButtonCierreApp.FlatStyle = FlatStyle.Flat
         ButtonCierreApp.ForeColor = SystemColors.ControlDarkDark
-        ButtonCierreApp.Location = New Point(31, 0)
+        ButtonCierreApp.Location = New Point(60, 0)
         ButtonCierreApp.Name = "ButtonCierreApp"
         ButtonCierreApp.Size = New Size(25, 25)
         ButtonCierreApp.TabIndex = 0
@@ -126,204 +132,117 @@ Partial Class Form1
         ' 
         ' PanelSuperiorAcciones
         ' 
-        PanelSuperiorAcciones.Controls.Add(PanelBotonesAcciones)
-        PanelSuperiorAcciones.Controls.Add(GenerarPDF)
         PanelSuperiorAcciones.Dock = DockStyle.Top
-        PanelSuperiorAcciones.Location = New Point(25, 25)
+        PanelSuperiorAcciones.Location = New Point(30, 30)
         PanelSuperiorAcciones.Name = "PanelSuperiorAcciones"
-        PanelSuperiorAcciones.Size = New Size(675, 30)
+        PanelSuperiorAcciones.Size = New Size(900, 30)
         PanelSuperiorAcciones.TabIndex = 1
         ' 
         ' PanelBotonesAcciones
         ' 
         PanelBotonesAcciones.Controls.Add(BotonCancelar)
-        PanelBotonesAcciones.Controls.Add(BotonExportar)
         PanelBotonesAcciones.Controls.Add(BotonImportar)
-        PanelBotonesAcciones.Dock = DockStyle.Left
-        PanelBotonesAcciones.Location = New Point(0, 0)
+        PanelBotonesAcciones.Controls.Add(BotonExportar)
+        PanelBotonesAcciones.Location = New Point(20, 10)
         PanelBotonesAcciones.Name = "PanelBotonesAcciones"
-        PanelBotonesAcciones.Size = New Size(100, 30)
+        PanelBotonesAcciones.Size = New Size(30, 100)
         PanelBotonesAcciones.TabIndex = 2
+        PanelBotonesAcciones.Visible = False
         ' 
         ' BotonCancelar
         ' 
         BotonCancelar.BackColor = Color.Transparent
         BotonCancelar.BackgroundImage = CType(resources.GetObject("BotonCancelar.BackgroundImage"), Image)
         BotonCancelar.BackgroundImageLayout = ImageLayout.Stretch
-        BotonCancelar.Location = New Point(70, 0)
+        BotonCancelar.Location = New Point(0, 35)
         BotonCancelar.Name = "BotonCancelar"
         BotonCancelar.Size = New Size(30, 30)
         BotonCancelar.TabIndex = 3
         BotonCancelar.UseVisualStyleBackColor = False
-        ' 
-        ' BotonExportar
-        ' 
-        BotonExportar.BackColor = Color.Transparent
-        BotonExportar.BackgroundImage = CType(resources.GetObject("BotonExportar.BackgroundImage"), Image)
-        BotonExportar.BackgroundImageLayout = ImageLayout.Stretch
-        BotonExportar.Location = New Point(0, 0)
-        BotonExportar.Name = "BotonExportar"
-        BotonExportar.Size = New Size(30, 30)
-        BotonExportar.TabIndex = 2
-        BotonExportar.UseVisualStyleBackColor = False
         ' 
         ' BotonImportar
         ' 
         BotonImportar.BackColor = Color.Transparent
         BotonImportar.BackgroundImage = CType(resources.GetObject("BotonImportar.BackgroundImage"), Image)
         BotonImportar.BackgroundImageLayout = ImageLayout.Stretch
-        BotonImportar.Location = New Point(35, 0)
+        BotonImportar.Location = New Point(0, 70)
         BotonImportar.Name = "BotonImportar"
         BotonImportar.Size = New Size(30, 30)
         BotonImportar.TabIndex = 1
         BotonImportar.UseVisualStyleBackColor = False
         ' 
-        ' GenerarPDF
+        ' BotonExportar
         ' 
-        GenerarPDF.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        GenerarPDF.Location = New Point(575, 4)
-        GenerarPDF.Name = "GenerarPDF"
-        GenerarPDF.Size = New Size(97, 23)
-        GenerarPDF.TabIndex = 0
-        GenerarPDF.Text = "GENERAR PDF"
-        GenerarPDF.UseVisualStyleBackColor = True
-        ' 
-        ' PanelInferiorAcciones
-        ' 
-        PanelInferiorAcciones.Controls.Add(LabelPago)
-        PanelInferiorAcciones.Controls.Add(PanelBotonesVentas)
-        PanelInferiorAcciones.Controls.Add(TextPago)
-        PanelInferiorAcciones.Controls.Add(Button5)
-        PanelInferiorAcciones.Controls.Add(LabelVuelto)
-        PanelInferiorAcciones.Dock = DockStyle.Bottom
-        PanelInferiorAcciones.Location = New Point(25, 645)
-        PanelInferiorAcciones.Name = "PanelInferiorAcciones"
-        PanelInferiorAcciones.Size = New Size(675, 30)
-        PanelInferiorAcciones.TabIndex = 2
-        ' 
-        ' LabelPago
-        ' 
-        LabelPago.Anchor = AnchorStyles.Right
-        LabelPago.AutoSize = True
-        LabelPago.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelPago.Location = New Point(403, 5)
-        LabelPago.Name = "LabelPago"
-        LabelPago.Size = New Size(55, 21)
-        LabelPago.TabIndex = 8
-        LabelPago.Text = "Pago:"
-        LabelPago.TextAlign = ContentAlignment.MiddleRight
-        ' 
-        ' PanelBotonesVentas
-        ' 
-        PanelBotonesVentas.Controls.Add(BotonRegistrar)
-        PanelBotonesVentas.Controls.Add(BotonTicket)
-        PanelBotonesVentas.Controls.Add(BotonFactura)
-        PanelBotonesVentas.Dock = DockStyle.Left
-        PanelBotonesVentas.Location = New Point(0, 0)
-        PanelBotonesVentas.Name = "PanelBotonesVentas"
-        PanelBotonesVentas.Size = New Size(100, 30)
-        PanelBotonesVentas.TabIndex = 2
-        ' 
-        ' BotonRegistrar
-        ' 
-        BotonRegistrar.BackColor = Color.Transparent
-        BotonRegistrar.BackgroundImage = CType(resources.GetObject("BotonRegistrar.BackgroundImage"), Image)
-        BotonRegistrar.BackgroundImageLayout = ImageLayout.Zoom
-        BotonRegistrar.Location = New Point(70, 0)
-        BotonRegistrar.Name = "BotonRegistrar"
-        BotonRegistrar.Size = New Size(30, 30)
-        BotonRegistrar.TabIndex = 3
-        BotonRegistrar.UseVisualStyleBackColor = False
-        ' 
-        ' BotonTicket
-        ' 
-        BotonTicket.BackColor = Color.Transparent
-        BotonTicket.BackgroundImage = CType(resources.GetObject("BotonTicket.BackgroundImage"), Image)
-        BotonTicket.BackgroundImageLayout = ImageLayout.Stretch
-        BotonTicket.Location = New Point(0, 0)
-        BotonTicket.Name = "BotonTicket"
-        BotonTicket.Size = New Size(30, 30)
-        BotonTicket.TabIndex = 2
-        BotonTicket.UseVisualStyleBackColor = False
-        ' 
-        ' BotonFactura
-        ' 
-        BotonFactura.BackColor = Color.Transparent
-        BotonFactura.BackgroundImage = CType(resources.GetObject("BotonFactura.BackgroundImage"), Image)
-        BotonFactura.BackgroundImageLayout = ImageLayout.Stretch
-        BotonFactura.Location = New Point(35, 0)
-        BotonFactura.Name = "BotonFactura"
-        BotonFactura.Size = New Size(30, 30)
-        BotonFactura.TabIndex = 1
-        BotonFactura.UseVisualStyleBackColor = False
-        ' 
-        ' TextPago
-        ' 
-        TextPago.Location = New Point(460, 4)
-        TextPago.Name = "TextPago"
-        TextPago.Size = New Size(80, 23)
-        TextPago.TabIndex = 7
-        ' 
-        ' Button5
-        ' 
-        Button5.Anchor = AnchorStyles.Top Or AnchorStyles.Right
-        Button5.Location = New Point(1075, 4)
-        Button5.Name = "Button5"
-        Button5.Size = New Size(97, 23)
-        Button5.TabIndex = 0
-        Button5.Text = "GENERAR PDF"
-        Button5.UseVisualStyleBackColor = True
-        ' 
-        ' LabelVuelto
-        ' 
-        LabelVuelto.Anchor = AnchorStyles.Right
-        LabelVuelto.AutoSize = True
-        LabelVuelto.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelVuelto.Location = New Point(545, 5)
-        LabelVuelto.Name = "LabelVuelto"
-        LabelVuelto.Size = New Size(65, 21)
-        LabelVuelto.TabIndex = 4
-        LabelVuelto.Text = "Vuelto:"
-        LabelVuelto.TextAlign = ContentAlignment.MiddleRight
-        ' 
-        ' LabelTotal
-        ' 
-        LabelTotal.Anchor = AnchorStyles.Right
-        LabelTotal.AutoSize = True
-        LabelTotal.Font = New Font("Century Gothic", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelTotal.Location = New Point(626, 6)
-        LabelTotal.Name = "LabelTotal"
-        LabelTotal.Size = New Size(49, 21)
-        LabelTotal.TabIndex = 3
-        LabelTotal.Text = "Total"
-        LabelTotal.TextAlign = ContentAlignment.MiddleRight
+        BotonExportar.BackColor = Color.Transparent
+        BotonExportar.BackgroundImage = CType(resources.GetObject("BotonExportar.BackgroundImage"), Image)
+        BotonExportar.BackgroundImageLayout = ImageLayout.Stretch
+        BotonExportar.FlatAppearance.BorderSize = 0
+        BotonExportar.FlatAppearance.MouseDownBackColor = SystemColors.ButtonShadow
+        BotonExportar.FlatStyle = FlatStyle.Flat
+        BotonExportar.Location = New Point(0, 0)
+        BotonExportar.Name = "BotonExportar"
+        BotonExportar.Size = New Size(30, 30)
+        BotonExportar.TabIndex = 2
+        BotonExportar.UseVisualStyleBackColor = False
         ' 
         ' PanelMargenI
         ' 
         PanelMargenI.BackColor = SystemColors.ControlDarkDark
+        PanelMargenI.Controls.Add(SubPanelIzquierdo)
+        PanelMargenI.Controls.Add(PanelBotonMenu)
         PanelMargenI.Dock = DockStyle.Left
-        PanelMargenI.Location = New Point(0, 25)
+        PanelMargenI.Location = New Point(0, 30)
         PanelMargenI.Name = "PanelMargenI"
-        PanelMargenI.Size = New Size(25, 675)
+        PanelMargenI.Size = New Size(30, 480)
         PanelMargenI.TabIndex = 3
+        ' 
+        ' SubPanelIzquierdo
+        ' 
+        SubPanelIzquierdo.Controls.Add(PanelBotonesAcciones)
+        SubPanelIzquierdo.Dock = DockStyle.Fill
+        SubPanelIzquierdo.Location = New Point(0, 30)
+        SubPanelIzquierdo.Name = "SubPanelIzquierdo"
+        SubPanelIzquierdo.Size = New Size(30, 450)
+        SubPanelIzquierdo.TabIndex = 7
+        ' 
+        ' PanelBotonMenu
+        ' 
+        PanelBotonMenu.Controls.Add(BotonMenu)
+        PanelBotonMenu.Dock = DockStyle.Top
+        PanelBotonMenu.Location = New Point(0, 0)
+        PanelBotonMenu.Name = "PanelBotonMenu"
+        PanelBotonMenu.Size = New Size(30, 30)
+        PanelBotonMenu.TabIndex = 7
+        ' 
+        ' BotonMenu
+        ' 
+        BotonMenu.AutoSize = True
+        BotonMenu.BackgroundImage = CType(resources.GetObject("BotonMenu.BackgroundImage"), Image)
+        BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
+        BotonMenu.Dock = DockStyle.Fill
+        BotonMenu.Location = New Point(0, 0)
+        BotonMenu.Name = "BotonMenu"
+        BotonMenu.Size = New Size(30, 30)
+        BotonMenu.TabIndex = 7
+        BotonMenu.UseVisualStyleBackColor = True
         ' 
         ' PanelBarraInferior
         ' 
         PanelBarraInferior.BackColor = SystemColors.ControlDarkDark
         PanelBarraInferior.Controls.Add(PanelHora)
         PanelBarraInferior.Dock = DockStyle.Bottom
-        PanelBarraInferior.Location = New Point(25, 675)
+        PanelBarraInferior.Location = New Point(0, 510)
         PanelBarraInferior.Name = "PanelBarraInferior"
-        PanelBarraInferior.Size = New Size(675, 25)
+        PanelBarraInferior.Size = New Size(960, 30)
         PanelBarraInferior.TabIndex = 4
         ' 
         ' PanelHora
         ' 
         PanelHora.Controls.Add(LabelHORA)
         PanelHora.Dock = DockStyle.Right
-        PanelHora.Location = New Point(545, 0)
+        PanelHora.Location = New Point(830, 0)
         PanelHora.Name = "PanelHora"
-        PanelHora.Size = New Size(130, 25)
+        PanelHora.Size = New Size(130, 30)
         PanelHora.TabIndex = 6
         ' 
         ' LabelHORA
@@ -332,7 +251,7 @@ Partial Class Form1
         LabelHORA.Font = New Font("Century Gothic", 9F)
         LabelHORA.Location = New Point(0, 0)
         LabelHORA.Name = "LabelHORA"
-        LabelHORA.Size = New Size(130, 25)
+        LabelHORA.Size = New Size(130, 30)
         LabelHORA.TabIndex = 5
         LabelHORA.Text = "HORA"
         LabelHORA.TextAlign = ContentAlignment.MiddleRight
@@ -344,64 +263,65 @@ Partial Class Form1
         ' 
         ' ContenidoGeneral
         ' 
+        ContenidoGeneral.BackColor = SystemColors.ControlDark
         ContenidoGeneral.Controls.Add(LogoMarcaAgua)
         ContenidoGeneral.Dock = DockStyle.Fill
-        ContenidoGeneral.Location = New Point(25, 55)
+        ContenidoGeneral.Location = New Point(30, 60)
         ContenidoGeneral.Name = "ContenidoGeneral"
-        ContenidoGeneral.Size = New Size(675, 560)
+        ContenidoGeneral.Size = New Size(900, 450)
         ContenidoGeneral.TabIndex = 5
         ' 
         ' LogoMarcaAgua
         ' 
+        LogoMarcaAgua.Anchor = AnchorStyles.None
         LogoMarcaAgua.Image = CType(resources.GetObject("LogoMarcaAgua.Image"), Image)
-        LogoMarcaAgua.Location = New Point(212, 155)
+        LogoMarcaAgua.Location = New Point(350, 125)
         LogoMarcaAgua.Name = "LogoMarcaAgua"
-        LogoMarcaAgua.Size = New Size(250, 250)
+        LogoMarcaAgua.Size = New Size(200, 200)
         LogoMarcaAgua.SizeMode = PictureBoxSizeMode.StretchImage
         LogoMarcaAgua.TabIndex = 6
         LogoMarcaAgua.TabStop = False
+        LogoMarcaAgua.WaitOnLoad = True
         ' 
-        ' PanelPagoVuelto
+        ' PanelMargenDerecho
         ' 
-        PanelPagoVuelto.Controls.Add(LabelTotal)
-        PanelPagoVuelto.Dock = DockStyle.Bottom
-        PanelPagoVuelto.Location = New Point(25, 615)
-        PanelPagoVuelto.Name = "PanelPagoVuelto"
-        PanelPagoVuelto.Size = New Size(675, 30)
-        PanelPagoVuelto.TabIndex = 7
+        PanelMargenDerecho.BackColor = SystemColors.ControlDarkDark
+        PanelMargenDerecho.Dock = DockStyle.Right
+        PanelMargenDerecho.Location = New Point(930, 30)
+        PanelMargenDerecho.Name = "PanelMargenDerecho"
+        PanelMargenDerecho.Size = New Size(30, 480)
+        PanelMargenDerecho.TabIndex = 8
         ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.ControlDark
-        ClientSize = New Size(700, 700)
+        ClientSize = New Size(960, 540)
         Controls.Add(ContenidoGeneral)
-        Controls.Add(PanelPagoVuelto)
-        Controls.Add(PanelInferiorAcciones)
-        Controls.Add(PanelBarraInferior)
         Controls.Add(PanelSuperiorAcciones)
         Controls.Add(PanelMargenI)
+        Controls.Add(PanelMargenDerecho)
         Controls.Add(PanelBarraSuperior)
+        Controls.Add(PanelBarraInferior)
         FormBorderStyle = FormBorderStyle.None
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "Form1"
         StartPosition = FormStartPosition.CenterScreen
         Text = "Form1"
+        WindowState = FormWindowState.Maximized
         PanelBarraSuperior.ResumeLayout(False)
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).EndInit()
         PanelBotonesVentana.ResumeLayout(False)
-        PanelSuperiorAcciones.ResumeLayout(False)
         PanelBotonesAcciones.ResumeLayout(False)
-        PanelInferiorAcciones.ResumeLayout(False)
-        PanelInferiorAcciones.PerformLayout()
-        PanelBotonesVentas.ResumeLayout(False)
+        PanelMargenI.ResumeLayout(False)
+        SubPanelIzquierdo.ResumeLayout(False)
+        PanelBotonMenu.ResumeLayout(False)
+        PanelBotonMenu.PerformLayout()
         PanelBarraInferior.ResumeLayout(False)
         PanelHora.ResumeLayout(False)
         ContenidoGeneral.ResumeLayout(False)
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).EndInit()
-        PanelPagoVuelto.ResumeLayout(False)
-        PanelPagoVuelto.PerformLayout()
         ResumeLayout(False)
     End Sub
 
@@ -410,29 +330,22 @@ Partial Class Form1
     Friend WithEvents PanelBotonesVentana As Panel
     Friend WithEvents ButtonMinimizarApp As Button
     Friend WithEvents PanelSuperiorAcciones As Panel
-    Friend WithEvents GenerarPDF As Button
     Friend WithEvents BotonImportar As Button
     Friend WithEvents BotonCancelar As Button
     Friend WithEvents BotonExportar As Button
     Friend WithEvents PanelBotonesAcciones As Panel
-    Friend WithEvents PanelInferiorAcciones As Panel
-    Friend WithEvents PanelBotonesVentas As Panel
-    Friend WithEvents BotonRegistrar As Button
-    Friend WithEvents BotonTicket As Button
-    Friend WithEvents BotonFactura As Button
-    Friend WithEvents Button5 As Button
     Friend WithEvents LogoSuperiorIzquierda As PictureBox
     Friend WithEvents PanelMargenI As Panel
     Friend WithEvents PanelBarraInferior As Panel
     Friend WithEvents LabelHORA As Label
     Friend WithEvents TimerHORA As Timer
     Friend WithEvents PanelHora As Panel
-    Friend WithEvents LabelTotal As Label
     Friend WithEvents ContenidoGeneral As Panel
     Friend WithEvents LogoMarcaAgua As PictureBox
-    Friend WithEvents PanelPagoVuelto As Panel
-    Friend WithEvents TextPago As TextBox
-    Friend WithEvents LabelVuelto As Label
-    Friend WithEvents LabelPago As Label
+    Friend WithEvents PanelMargenDerecho As Panel
+    Friend WithEvents BotonMenu As Button
+    Friend WithEvents PanelBotonMenu As Panel
+    Friend WithEvents SubPanelIzquierdo As Panel
+    Friend WithEvents ButtonMaximizarApp As Button
 
 End Class
