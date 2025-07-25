@@ -25,4 +25,15 @@ Public Class LogicaCantina
         End Using
     End Function
 
+    Public Sub registrarDivision(division As String, contraseña As String)
+        Using SQLiteConnection As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "INSERT INTO usuarios (Division, Contraseña) VALUES (@Division, @Contraseña)"
+            Using command As New SQLiteCommand(query, SQLiteConnection)
+                command.Parameters.AddWithValue("@Division", division)
+                command.Parameters.AddWithValue("@Contraseña", contraseña)
+                command.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
 End Class
