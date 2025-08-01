@@ -29,6 +29,7 @@ Public Class Form1
         'Evitar que el usuario pueda usar el tab en los botones de cierre y minimizar'
         ButtonCierreApp.TabStop = False
         ButtonMinimizarApp.TabStop = False
+        formLOGIN.ShowDialog()
     End Sub
 
     Private Sub ButtonCierreApp_Click(sender As Object, e As EventArgs) Handles ButtonCierreApp.Click
