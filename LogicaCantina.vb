@@ -57,4 +57,40 @@ Public Class LogicaCantina
             Return (False, "Error al registrar la división: " & ex.Message)
         End Try
     End Function
+
+    Public Function ObtenerTodosLosProductos() As DataTable
+        Dim dt As New DataTable()
+        Try
+            Using conn As SQLiteConnection = ObtenerConexion()
+                Dim query As String = "SELECT * FROM Producto"
+                Using cmd As New SQLiteCommand(query, conn)
+                    Using da As New SQLiteDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+
+        End Try
+        Return dt
+    End Function
+
+    Public Function FiltrarProductosPorNombre(nombre As String) As DataTable
+        Dim dt As New DataTable()
+        Try
+            Using conn As SQLiteConnection = ObtenerConexion()
+                Dim query As String = "SELECT * FROM Producto WHERE Descripcione LIKE @Descripcion"
+                Using cmd As New SQLiteCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@Descripcion", "%" & nombre & "%")
+                    Using da As New SQLiteDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+
+        End Try
+        Return dt
+    End Function
+
 End Class
