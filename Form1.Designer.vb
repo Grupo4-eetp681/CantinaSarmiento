@@ -30,9 +30,7 @@ Partial Class Form1
         ButtonMaximizarApp = New Button()
         ButtonMinimizarApp = New Button()
         ButtonCierreApp = New Button()
-        PanelSuperiorAcciones = New Panel()
         PanelBotonesAcciones = New Panel()
-        BotonCancelar = New Button()
         BotonImportar = New Button()
         BotonExportar = New Button()
         PanelMargenI = New Panel()
@@ -130,42 +128,23 @@ Partial Class Form1
         ButtonCierreApp.TabIndex = 0
         ButtonCierreApp.UseVisualStyleBackColor = False
         ' 
-        ' PanelSuperiorAcciones
-        ' 
-        PanelSuperiorAcciones.Dock = DockStyle.Top
-        PanelSuperiorAcciones.Location = New Point(30, 30)
-        PanelSuperiorAcciones.Name = "PanelSuperiorAcciones"
-        PanelSuperiorAcciones.Size = New Size(900, 30)
-        PanelSuperiorAcciones.TabIndex = 1
-        ' 
         ' PanelBotonesAcciones
         ' 
-        PanelBotonesAcciones.Controls.Add(BotonCancelar)
+        PanelBotonesAcciones.Anchor = AnchorStyles.Top
         PanelBotonesAcciones.Controls.Add(BotonImportar)
         PanelBotonesAcciones.Controls.Add(BotonExportar)
-        PanelBotonesAcciones.Location = New Point(20, 10)
+        PanelBotonesAcciones.Location = New Point(0, 6)
         PanelBotonesAcciones.Name = "PanelBotonesAcciones"
-        PanelBotonesAcciones.Size = New Size(30, 100)
+        PanelBotonesAcciones.Size = New Size(30, 70)
         PanelBotonesAcciones.TabIndex = 2
         PanelBotonesAcciones.Visible = False
-        ' 
-        ' BotonCancelar
-        ' 
-        BotonCancelar.BackColor = Color.Transparent
-        BotonCancelar.BackgroundImage = CType(resources.GetObject("BotonCancelar.BackgroundImage"), Image)
-        BotonCancelar.BackgroundImageLayout = ImageLayout.Stretch
-        BotonCancelar.Location = New Point(0, 35)
-        BotonCancelar.Name = "BotonCancelar"
-        BotonCancelar.Size = New Size(30, 30)
-        BotonCancelar.TabIndex = 3
-        BotonCancelar.UseVisualStyleBackColor = False
         ' 
         ' BotonImportar
         ' 
         BotonImportar.BackColor = Color.Transparent
         BotonImportar.BackgroundImage = CType(resources.GetObject("BotonImportar.BackgroundImage"), Image)
         BotonImportar.BackgroundImageLayout = ImageLayout.Stretch
-        BotonImportar.Location = New Point(0, 70)
+        BotonImportar.Location = New Point(0, 40)
         BotonImportar.Name = "BotonImportar"
         BotonImportar.Size = New Size(30, 30)
         BotonImportar.TabIndex = 1
@@ -178,7 +157,6 @@ Partial Class Form1
         BotonExportar.BackgroundImageLayout = ImageLayout.Stretch
         BotonExportar.FlatAppearance.BorderSize = 0
         BotonExportar.FlatAppearance.MouseDownBackColor = SystemColors.ButtonShadow
-        BotonExportar.FlatStyle = FlatStyle.Flat
         BotonExportar.Location = New Point(0, 0)
         BotonExportar.Name = "BotonExportar"
         BotonExportar.Size = New Size(30, 30)
@@ -216,10 +194,10 @@ Partial Class Form1
         ' 
         ' BotonMenu
         ' 
+        BotonMenu.Anchor = AnchorStyles.None
         BotonMenu.AutoSize = True
         BotonMenu.BackgroundImage = CType(resources.GetObject("BotonMenu.BackgroundImage"), Image)
         BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
-        BotonMenu.Dock = DockStyle.Fill
         BotonMenu.Location = New Point(0, 0)
         BotonMenu.Name = "BotonMenu"
         BotonMenu.Size = New Size(30, 30)
@@ -266,16 +244,16 @@ Partial Class Form1
         ContenidoGeneral.BackColor = SystemColors.ControlDark
         ContenidoGeneral.Controls.Add(LogoMarcaAgua)
         ContenidoGeneral.Dock = DockStyle.Fill
-        ContenidoGeneral.Location = New Point(30, 60)
+        ContenidoGeneral.Location = New Point(30, 30)
         ContenidoGeneral.Name = "ContenidoGeneral"
-        ContenidoGeneral.Size = New Size(900, 450)
+        ContenidoGeneral.Size = New Size(900, 480)
         ContenidoGeneral.TabIndex = 5
         ' 
         ' LogoMarcaAgua
         ' 
         LogoMarcaAgua.Anchor = AnchorStyles.None
         LogoMarcaAgua.Image = CType(resources.GetObject("LogoMarcaAgua.Image"), Image)
-        LogoMarcaAgua.Location = New Point(350, 125)
+        LogoMarcaAgua.Location = New Point(350, 140)
         LogoMarcaAgua.Name = "LogoMarcaAgua"
         LogoMarcaAgua.Size = New Size(200, 200)
         LogoMarcaAgua.SizeMode = PictureBoxSizeMode.StretchImage
@@ -299,7 +277,6 @@ Partial Class Form1
         BackColor = SystemColors.ControlDark
         ClientSize = New Size(960, 540)
         Controls.Add(ContenidoGeneral)
-        Controls.Add(PanelSuperiorAcciones)
         Controls.Add(PanelMargenI)
         Controls.Add(PanelMargenDerecho)
         Controls.Add(PanelBarraSuperior)
@@ -329,9 +306,7 @@ Partial Class Form1
     Friend WithEvents ButtonCierreApp As Button
     Friend WithEvents PanelBotonesVentana As Panel
     Friend WithEvents ButtonMinimizarApp As Button
-    Friend WithEvents PanelSuperiorAcciones As Panel
     Friend WithEvents BotonImportar As Button
-    Friend WithEvents BotonCancelar As Button
     Friend WithEvents BotonExportar As Button
     Friend WithEvents PanelBotonesAcciones As Panel
     Friend WithEvents LogoSuperiorIzquierda As PictureBox

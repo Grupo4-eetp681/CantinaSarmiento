@@ -40,16 +40,20 @@ Partial Class FormularioRegister
         TextBoxContraseña1 = New TextBox()
         TextBoxSubdivision = New TextBox()
         Timer1 = New Timer(components)
+        FondoDeColor = New Panel()
+        PanelContenedor = New Panel()
         PanelSuperiorLogoRegister.SuspendLayout()
         CType(LogoSarmientoLogin, ComponentModel.ISupportInitialize).BeginInit()
         PanelInferiorRegister.SuspendLayout()
         PanelInfo.SuspendLayout()
         PanelCentralRegister.SuspendLayout()
+        FondoDeColor.SuspendLayout()
+        PanelContenedor.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelSuperiorLogoRegister
         ' 
-        PanelSuperiorLogoRegister.BackColor = SystemColors.ActiveBorder
+        PanelSuperiorLogoRegister.BackColor = SystemColors.ControlDark
         PanelSuperiorLogoRegister.Controls.Add(LogoSarmientoLogin)
         PanelSuperiorLogoRegister.Dock = DockStyle.Top
         PanelSuperiorLogoRegister.Location = New Point(0, 0)
@@ -71,7 +75,7 @@ Partial Class FormularioRegister
         ' 
         ' PanelInferiorRegister
         ' 
-        PanelInferiorRegister.BackColor = SystemColors.ActiveBorder
+        PanelInferiorRegister.BackColor = SystemColors.ControlDark
         PanelInferiorRegister.Controls.Add(PanelInfo)
         PanelInferiorRegister.Controls.Add(BotonAceptarRegister)
         PanelInferiorRegister.Controls.Add(BotonCancelarRegister)
@@ -142,7 +146,7 @@ Partial Class FormularioRegister
         ' 
         ' PanelCentralRegister
         ' 
-        PanelCentralRegister.BackColor = SystemColors.ActiveBorder
+        PanelCentralRegister.BackColor = SystemColors.ControlDark
         PanelCentralRegister.Controls.Add(LabelRepetirContraseñaRegister)
         PanelCentralRegister.Controls.Add(LabelContraseñaRegister)
         PanelCentralRegister.Controls.Add(LabelSubdivisiónRegister)
@@ -211,16 +215,36 @@ Partial Class FormularioRegister
         Timer1.Enabled = True
         Timer1.Interval = 2000
         ' 
+        ' FondoDeColor
+        ' 
+        FondoDeColor.BackColor = Color.Gold
+        FondoDeColor.Controls.Add(PanelContenedor)
+        FondoDeColor.Dock = DockStyle.Fill
+        FondoDeColor.Location = New Point(0, 0)
+        FondoDeColor.Name = "FondoDeColor"
+        FondoDeColor.Size = New Size(286, 406)
+        FondoDeColor.TabIndex = 3
+        ' 
+        ' PanelContenedor
+        ' 
+        PanelContenedor.Anchor = AnchorStyles.None
+        PanelContenedor.Controls.Add(PanelCentralRegister)
+        PanelContenedor.Controls.Add(PanelInferiorRegister)
+        PanelContenedor.Controls.Add(PanelSuperiorLogoRegister)
+        PanelContenedor.Location = New Point(3, 3)
+        PanelContenedor.Name = "PanelContenedor"
+        PanelContenedor.Size = New Size(280, 400)
+        PanelContenedor.TabIndex = 3
+        ' 
         ' FormularioRegister
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(280, 400)
-        Controls.Add(PanelCentralRegister)
-        Controls.Add(PanelInferiorRegister)
-        Controls.Add(PanelSuperiorLogoRegister)
+        ClientSize = New Size(286, 406)
+        Controls.Add(FondoDeColor)
         FormBorderStyle = FormBorderStyle.None
         Name = "FormularioRegister"
+        StartPosition = FormStartPosition.CenterScreen
         Text = "Form2"
         PanelSuperiorLogoRegister.ResumeLayout(False)
         CType(LogoSarmientoLogin, ComponentModel.ISupportInitialize).EndInit()
@@ -229,6 +253,8 @@ Partial Class FormularioRegister
         PanelInfo.PerformLayout()
         PanelCentralRegister.ResumeLayout(False)
         PanelCentralRegister.PerformLayout()
+        FondoDeColor.ResumeLayout(False)
+        PanelContenedor.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -248,4 +274,6 @@ Partial Class FormularioRegister
     Friend WithEvents PanelInfo As Panel
     Friend WithEvents info As Label
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents FondoDeColor As Panel
+    Friend WithEvents PanelContenedor As Panel
 End Class

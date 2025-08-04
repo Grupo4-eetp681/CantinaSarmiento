@@ -3,7 +3,7 @@
     Dim logica As New LogicaCantina
 
     Private Sub BotonCancelarRegister_Click(sender As Object, e As EventArgs) Handles BotonCancelarRegister.Click
-        Me.Close()
+        Me.Dispose()
         formLOGIN.Show()
 
     End Sub
@@ -27,8 +27,8 @@
         Else
             Dim resultado = logica.registrarDivision(division, contraseña)
             If resultado.Exito Then
-                Me.Close()
                 formLOGIN.Show()
+                Me.Dispose()
             End If
             If Not resultado.Exito Then
                 info.Text = resultado.Motivo

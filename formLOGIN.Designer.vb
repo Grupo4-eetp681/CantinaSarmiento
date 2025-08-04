@@ -46,7 +46,7 @@ Partial Class formLOGIN
         ' 
         ' PanelSuperior
         ' 
-        PanelSuperior.BackColor = SystemColors.ActiveBorder
+        PanelSuperior.BackColor = SystemColors.ControlDark
         PanelSuperior.Controls.Add(LogoSarmientoLogin)
         PanelSuperior.Dock = DockStyle.Top
         PanelSuperior.Location = New Point(0, 0)
@@ -68,7 +68,7 @@ Partial Class formLOGIN
         ' 
         ' PanelInferior
         ' 
-        PanelInferior.BackColor = SystemColors.ActiveBorder
+        PanelInferior.BackColor = SystemColors.ControlDark
         PanelInferior.Controls.Add(PanelInfo)
         PanelInferior.Controls.Add(BotonRegister)
         PanelInferior.Controls.Add(BotonLogin)
@@ -80,6 +80,7 @@ Partial Class formLOGIN
         ' 
         ' PanelInfo
         ' 
+        PanelInfo.BackColor = SystemColors.ControlDark
         PanelInfo.Controls.Add(info)
         PanelInfo.Dock = DockStyle.Fill
         PanelInfo.Location = New Point(0, 0)
@@ -129,7 +130,7 @@ Partial Class formLOGIN
         ' 
         ' PanelCentral
         ' 
-        PanelCentral.BackColor = SystemColors.ActiveBorder
+        PanelCentral.BackColor = SystemColors.ControlDark
         PanelCentral.Controls.Add(LabelSubdivision)
         PanelCentral.Controls.Add(LabelContraseña)
         PanelCentral.Controls.Add(TextBoxContra)
@@ -192,6 +193,7 @@ Partial Class formLOGIN
         FormBorderStyle = FormBorderStyle.None
         Name = "formLOGIN"
         ShowInTaskbar = False
+        StartPosition = FormStartPosition.CenterScreen
         Text = "formLOGIN"
         PanelSuperior.ResumeLayout(False)
         CType(LogoSarmientoLogin, ComponentModel.ISupportInitialize).EndInit()

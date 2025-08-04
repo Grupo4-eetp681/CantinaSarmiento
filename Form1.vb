@@ -3,6 +3,7 @@ Imports System.Security.Policy
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form1
+    Public desplegado As Boolean = False
     ' Esta función le dice a Windows que libere el control del mouse
     <DllImport("user32.dll", EntryPoint:="ReleaseCapture")>
     Private Shared Sub LiberarCapturaMouse()
@@ -29,7 +30,7 @@ Public Class Form1
         'Evitar que el usuario pueda usar el tab en los botones de cierre y minimizar'
         ButtonCierreApp.TabStop = False
         ButtonMinimizarApp.TabStop = False
-        formLOGIN.ShowDialog()
+        formLOGIN.Show()
     End Sub
 
     Private Sub ButtonCierreApp_Click(sender As Object, e As EventArgs) Handles ButtonCierreApp.Click
@@ -56,14 +57,13 @@ Public Class Form1
     End Function
 
     Private Sub BotonMenu_Click(sender As Object, e As EventArgs) Handles BotonMenu.Click
-        If PanelMargenI.Width = 30 Then
-            PanelMargenI.Width = 70
+        If desplegado = False Then
             PanelBotonesAcciones.Visible = True
             Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechahorizontal.png")
             BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)
             BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
+            desplegado = True
         Else
-            PanelMargenI.Width = 30
             PanelBotonesAcciones.Visible = False
             Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechavertical.png")
             BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)

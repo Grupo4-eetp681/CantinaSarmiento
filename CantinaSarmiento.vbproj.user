@@ -7,7 +7,13 @@
     <Compile Update="Form2.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Form3.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="formLOGIN.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="ventas.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
