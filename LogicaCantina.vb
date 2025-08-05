@@ -79,7 +79,7 @@ Public Class LogicaCantina
         Dim dt As New DataTable()
         Try
             Using conn As SQLiteConnection = ObtenerConexion()
-                Dim query As String = "SELECT * FROM Producto WHERE Descripcione LIKE @Descripcion"
+                Dim query As String = "SELECT * FROM Producto WHERE Descripcion LIKE @Descripcion"
                 Using cmd As New SQLiteCommand(query, conn)
                     cmd.Parameters.AddWithValue("@Descripcion", "%" & nombre & "%")
                     Using da As New SQLiteDataAdapter(cmd)
