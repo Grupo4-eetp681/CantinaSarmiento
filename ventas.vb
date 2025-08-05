@@ -17,6 +17,11 @@
         DataGridView1.DataSource = tb
 
         PanelContenedorIZQ.Width = Form1.ContenidoGeneral.Width * 0.7
-    End Sub
 
+        DataGridView1.Dock = DockStyle.Fill
+        DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+
+
+
+    End Sub
 End Class

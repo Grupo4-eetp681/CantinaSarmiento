@@ -30,6 +30,10 @@ Public Class Form1
         'Evitar que el usuario pueda usar el tab en los botones de cierre y minimizar'
         ButtonCierreApp.TabStop = False
         ButtonMinimizarApp.TabStop = False
+        Dim altura As Int128 = FondoDeColor.AccessibilityObject.Bounds.Height
+        Dim anchura As Int128 = FondoDeColor.AccessibilityObject.Bounds.Width
+        ContenidoGeneral.Size = New Size(anchura - 6, altura - 6)
+        ContenidoGeneral.Location = New Point(3, 3)
         formLOGIN.Show()
     End Sub
 
@@ -68,6 +72,7 @@ Public Class Form1
             Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechavertical.png")
             BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)
             BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
+            desplegado = False
         End If
     End Sub
 

@@ -25,25 +25,28 @@ Partial Class ventas
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ventas))
         PanelVentas = New Panel()
         PanelContenedorDER = New Panel()
+        PanelContenedorVentas = New Panel()
+        PanelDataVentas = New Panel()
         PanelTotales = New Panel()
-        Panel2 = New Panel()
+        PanelTotal = New Panel()
         LabelTotal = New Label()
         LabelPrecioTotal = New Label()
         PanelContenedorIZQ = New Panel()
         PanelDataGrid = New Panel()
         DataGridView1 = New DataGridView()
-        Panel1 = New Panel()
+        PanelContenedorBusqueda = New Panel()
         PanelBusqueda = New Panel()
         Busqueda = New TextBox()
         PictureBox1 = New PictureBox()
         PanelVentas.SuspendLayout()
         PanelContenedorDER.SuspendLayout()
+        PanelContenedorVentas.SuspendLayout()
         PanelTotales.SuspendLayout()
-        Panel2.SuspendLayout()
+        PanelTotal.SuspendLayout()
         PanelContenedorIZQ.SuspendLayout()
         PanelDataGrid.SuspendLayout()
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
-        Panel1.SuspendLayout()
+        PanelContenedorBusqueda.SuspendLayout()
         PanelBusqueda.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -61,6 +64,7 @@ Partial Class ventas
         ' PanelContenedorDER
         ' 
         PanelContenedorDER.BackColor = SystemColors.ControlDark
+        PanelContenedorDER.Controls.Add(PanelContenedorVentas)
         PanelContenedorDER.Controls.Add(PanelTotales)
         PanelContenedorDER.Dock = DockStyle.Fill
         PanelContenedorDER.Location = New Point(550, 0)
@@ -68,25 +72,43 @@ Partial Class ventas
         PanelContenedorDER.Size = New Size(250, 450)
         PanelContenedorDER.TabIndex = 5
         ' 
+        ' PanelContenedorVentas
+        ' 
+        PanelContenedorVentas.Controls.Add(PanelDataVentas)
+        PanelContenedorVentas.Dock = DockStyle.Fill
+        PanelContenedorVentas.Location = New Point(0, 50)
+        PanelContenedorVentas.Name = "PanelContenedorVentas"
+        PanelContenedorVentas.Size = New Size(250, 400)
+        PanelContenedorVentas.TabIndex = 4
+        ' 
+        ' PanelDataVentas
+        ' 
+        PanelDataVentas.AllowDrop = True
+        PanelDataVentas.BackColor = SystemColors.MenuHighlight
+        PanelDataVentas.Location = New Point(25, 25)
+        PanelDataVentas.Name = "PanelDataVentas"
+        PanelDataVentas.Size = New Size(200, 200)
+        PanelDataVentas.TabIndex = 5
+        ' 
         ' PanelTotales
         ' 
-        PanelTotales.BackColor = Color.Gold
-        PanelTotales.Controls.Add(Panel2)
+        PanelTotales.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        PanelTotales.Controls.Add(PanelTotal)
         PanelTotales.Dock = DockStyle.Top
         PanelTotales.Location = New Point(0, 0)
         PanelTotales.Name = "PanelTotales"
         PanelTotales.Size = New Size(250, 50)
         PanelTotales.TabIndex = 3
         ' 
-        ' Panel2
+        ' PanelTotal
         ' 
-        Panel2.Anchor = AnchorStyles.None
-        Panel2.Controls.Add(LabelTotal)
-        Panel2.Controls.Add(LabelPrecioTotal)
-        Panel2.Location = New Point(55, 14)
-        Panel2.Name = "Panel2"
-        Panel2.Size = New Size(140, 23)
-        Panel2.TabIndex = 4
+        PanelTotal.Anchor = AnchorStyles.None
+        PanelTotal.Controls.Add(LabelTotal)
+        PanelTotal.Controls.Add(LabelPrecioTotal)
+        PanelTotal.Location = New Point(55, 14)
+        PanelTotal.Name = "PanelTotal"
+        PanelTotal.Size = New Size(140, 23)
+        PanelTotal.TabIndex = 4
         ' 
         ' LabelTotal
         ' 
@@ -110,7 +132,7 @@ Partial Class ventas
         ' PanelContenedorIZQ
         ' 
         PanelContenedorIZQ.Controls.Add(PanelDataGrid)
-        PanelContenedorIZQ.Controls.Add(Panel1)
+        PanelContenedorIZQ.Controls.Add(PanelContenedorBusqueda)
         PanelContenedorIZQ.Dock = DockStyle.Left
         PanelContenedorIZQ.Location = New Point(0, 0)
         PanelContenedorIZQ.Name = "PanelContenedorIZQ"
@@ -128,7 +150,7 @@ Partial Class ventas
         ' 
         ' DataGridView1
         ' 
-        DataGridView1.BackgroundColor = Color.Gold
+        DataGridView1.BorderStyle = BorderStyle.None
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
@@ -136,15 +158,15 @@ Partial Class ventas
         DataGridView1.Size = New Size(550, 400)
         DataGridView1.TabIndex = 0
         ' 
-        ' Panel1
+        ' PanelContenedorBusqueda
         ' 
-        Panel1.BackColor = SystemColors.ControlDark
-        Panel1.Controls.Add(PanelBusqueda)
-        Panel1.Dock = DockStyle.Top
-        Panel1.Location = New Point(0, 0)
-        Panel1.Name = "Panel1"
-        Panel1.Size = New Size(550, 50)
-        Panel1.TabIndex = 1
+        PanelContenedorBusqueda.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        PanelContenedorBusqueda.Controls.Add(PanelBusqueda)
+        PanelContenedorBusqueda.Dock = DockStyle.Top
+        PanelContenedorBusqueda.Location = New Point(0, 0)
+        PanelContenedorBusqueda.Name = "PanelContenedorBusqueda"
+        PanelContenedorBusqueda.Size = New Size(550, 50)
+        PanelContenedorBusqueda.TabIndex = 1
         ' 
         ' PanelBusqueda
         ' 
@@ -186,13 +208,14 @@ Partial Class ventas
         Text = "ventas"
         PanelVentas.ResumeLayout(False)
         PanelContenedorDER.ResumeLayout(False)
+        PanelContenedorVentas.ResumeLayout(False)
         PanelTotales.ResumeLayout(False)
-        Panel2.ResumeLayout(False)
-        Panel2.PerformLayout()
+        PanelTotal.ResumeLayout(False)
+        PanelTotal.PerformLayout()
         PanelContenedorIZQ.ResumeLayout(False)
         PanelDataGrid.ResumeLayout(False)
         CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
-        Panel1.ResumeLayout(False)
+        PanelContenedorBusqueda.ResumeLayout(False)
         PanelBusqueda.ResumeLayout(False)
         PanelBusqueda.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
@@ -206,10 +229,12 @@ Partial Class ventas
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents PanelTotales As Panel
     Friend WithEvents PanelContenedorIZQ As Panel
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents PanelContenedorBusqueda As Panel
     Friend WithEvents PanelContenedorDER As Panel
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents Busqueda As TextBox
     Friend WithEvents PanelBusqueda As Panel
-    Friend WithEvents Panel2 As Panel
+    Friend WithEvents PanelTotal As Panel
+    Friend WithEvents PanelContenedorVentas As Panel
+    Friend WithEvents PanelDataVentas As Panel
 End Class

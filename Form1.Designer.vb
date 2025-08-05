@@ -44,6 +44,7 @@ Partial Class Form1
         ContenidoGeneral = New Panel()
         LogoMarcaAgua = New PictureBox()
         PanelMargenDerecho = New Panel()
+        FondoDeColor = New Panel()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -55,6 +56,7 @@ Partial Class Form1
         PanelHora.SuspendLayout()
         ContenidoGeneral.SuspendLayout()
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).BeginInit()
+        FondoDeColor.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelBarraSuperior
@@ -226,10 +228,10 @@ Partial Class Form1
         ' LabelHORA
         ' 
         LabelHORA.Dock = DockStyle.Right
-        LabelHORA.Font = New Font("Century Gothic", 9F)
-        LabelHORA.Location = New Point(0, 0)
+        LabelHORA.Font = New Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelHORA.Location = New Point(-120, 0)
         LabelHORA.Name = "LabelHORA"
-        LabelHORA.Size = New Size(130, 30)
+        LabelHORA.Size = New Size(250, 30)
         LabelHORA.TabIndex = 5
         LabelHORA.Text = "HORA"
         LabelHORA.TextAlign = ContentAlignment.MiddleRight
@@ -243,17 +245,16 @@ Partial Class Form1
         ' 
         ContenidoGeneral.BackColor = SystemColors.ControlDark
         ContenidoGeneral.Controls.Add(LogoMarcaAgua)
-        ContenidoGeneral.Dock = DockStyle.Fill
-        ContenidoGeneral.Location = New Point(30, 30)
+        ContenidoGeneral.Location = New Point(3, 3)
         ContenidoGeneral.Name = "ContenidoGeneral"
-        ContenidoGeneral.Size = New Size(900, 480)
+        ContenidoGeneral.Size = New Size(894, 474)
         ContenidoGeneral.TabIndex = 5
         ' 
         ' LogoMarcaAgua
         ' 
         LogoMarcaAgua.Anchor = AnchorStyles.None
         LogoMarcaAgua.Image = CType(resources.GetObject("LogoMarcaAgua.Image"), Image)
-        LogoMarcaAgua.Location = New Point(350, 140)
+        LogoMarcaAgua.Location = New Point(347, 137)
         LogoMarcaAgua.Name = "LogoMarcaAgua"
         LogoMarcaAgua.Size = New Size(200, 200)
         LogoMarcaAgua.SizeMode = PictureBoxSizeMode.StretchImage
@@ -270,13 +271,23 @@ Partial Class Form1
         PanelMargenDerecho.Size = New Size(30, 480)
         PanelMargenDerecho.TabIndex = 8
         ' 
+        ' FondoDeColor
+        ' 
+        FondoDeColor.BackColor = Color.Gold
+        FondoDeColor.Controls.Add(ContenidoGeneral)
+        FondoDeColor.Dock = DockStyle.Fill
+        FondoDeColor.Location = New Point(30, 30)
+        FondoDeColor.Name = "FondoDeColor"
+        FondoDeColor.Size = New Size(900, 480)
+        FondoDeColor.TabIndex = 9
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.ControlDark
         ClientSize = New Size(960, 540)
-        Controls.Add(ContenidoGeneral)
+        Controls.Add(FondoDeColor)
         Controls.Add(PanelMargenI)
         Controls.Add(PanelMargenDerecho)
         Controls.Add(PanelBarraSuperior)
@@ -299,6 +310,7 @@ Partial Class Form1
         PanelHora.ResumeLayout(False)
         ContenidoGeneral.ResumeLayout(False)
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).EndInit()
+        FondoDeColor.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -322,5 +334,6 @@ Partial Class Form1
     Friend WithEvents PanelBotonMenu As Panel
     Friend WithEvents SubPanelIzquierdo As Panel
     Friend WithEvents ButtonMaximizarApp As Button
+    Friend WithEvents FondoDeColor As Panel
 
 End Class
