@@ -58,14 +58,14 @@ Partial Class FormularioRegister
         PanelSuperiorLogoRegister.Dock = DockStyle.Top
         PanelSuperiorLogoRegister.Location = New Point(0, 0)
         PanelSuperiorLogoRegister.Name = "PanelSuperiorLogoRegister"
-        PanelSuperiorLogoRegister.Size = New Size(280, 100)
+        PanelSuperiorLogoRegister.Size = New Size(280, 105)
         PanelSuperiorLogoRegister.TabIndex = 0
         ' 
         ' LogoSarmientoLogin
         ' 
         LogoSarmientoLogin.Anchor = AnchorStyles.None
         LogoSarmientoLogin.Image = CType(resources.GetObject("LogoSarmientoLogin.Image"), Image)
-        LogoSarmientoLogin.Location = New Point(90, 0)
+        LogoSarmientoLogin.Location = New Point(90, 5)
         LogoSarmientoLogin.Name = "LogoSarmientoLogin"
         LogoSarmientoLogin.Size = New Size(100, 100)
         LogoSarmientoLogin.SizeMode = PictureBoxSizeMode.StretchImage
@@ -81,9 +81,9 @@ Partial Class FormularioRegister
         PanelInferiorRegister.Controls.Add(BotonCancelarRegister)
         PanelInferiorRegister.Controls.Add(Button1)
         PanelInferiorRegister.Dock = DockStyle.Bottom
-        PanelInferiorRegister.Location = New Point(0, 372)
+        PanelInferiorRegister.Location = New Point(0, 370)
         PanelInferiorRegister.Name = "PanelInferiorRegister"
-        PanelInferiorRegister.Size = New Size(280, 28)
+        PanelInferiorRegister.Size = New Size(280, 30)
         PanelInferiorRegister.TabIndex = 1
         ' 
         ' PanelInfo
@@ -92,7 +92,7 @@ Partial Class FormularioRegister
         PanelInfo.Dock = DockStyle.Fill
         PanelInfo.Location = New Point(0, 0)
         PanelInfo.Name = "PanelInfo"
-        PanelInfo.Size = New Size(280, 28)
+        PanelInfo.Size = New Size(280, 30)
         PanelInfo.TabIndex = 5
         PanelInfo.Visible = False
         ' 
@@ -100,10 +100,11 @@ Partial Class FormularioRegister
         ' 
         info.AutoSize = True
         info.Dock = DockStyle.Fill
-        info.Font = New Font("Candara", 12F, FontStyle.Bold)
+        info.Font = New Font("Candara", 11.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        info.ForeColor = Color.FromArgb(CByte(34), CByte(34), CByte(34))
         info.Location = New Point(0, 0)
         info.Name = "info"
-        info.Size = New Size(51, 19)
+        info.Size = New Size(47, 18)
         info.TabIndex = 0
         info.Text = "Label1"
         info.TextAlign = ContentAlignment.MiddleCenter
@@ -111,26 +112,26 @@ Partial Class FormularioRegister
         ' 
         ' BotonAceptarRegister
         ' 
-        BotonAceptarRegister.BackColor = Color.Yellow
+        BotonAceptarRegister.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         BotonAceptarRegister.FlatStyle = FlatStyle.Flat
         BotonAceptarRegister.Font = New Font("Candara", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         BotonAceptarRegister.ForeColor = SystemColors.ActiveCaptionText
-        BotonAceptarRegister.Location = New Point(146, 3)
+        BotonAceptarRegister.Location = New Point(152, 0)
         BotonAceptarRegister.Name = "BotonAceptarRegister"
-        BotonAceptarRegister.Size = New Size(78, 23)
+        BotonAceptarRegister.Size = New Size(80, 25)
         BotonAceptarRegister.TabIndex = 2
         BotonAceptarRegister.Text = "ACEPTAR"
         BotonAceptarRegister.UseVisualStyleBackColor = False
         ' 
         ' BotonCancelarRegister
         ' 
-        BotonCancelarRegister.BackColor = Color.Yellow
+        BotonCancelarRegister.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         BotonCancelarRegister.FlatStyle = FlatStyle.Flat
         BotonCancelarRegister.Font = New Font("Candara", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         BotonCancelarRegister.ForeColor = SystemColors.ActiveCaptionText
-        BotonCancelarRegister.Location = New Point(56, 3)
+        BotonCancelarRegister.Location = New Point(50, 0)
         BotonCancelarRegister.Name = "BotonCancelarRegister"
-        BotonCancelarRegister.Size = New Size(78, 23)
+        BotonCancelarRegister.Size = New Size(80, 25)
         BotonCancelarRegister.TabIndex = 1
         BotonCancelarRegister.Text = "CANCELAR"
         BotonCancelarRegister.UseVisualStyleBackColor = False
@@ -154,16 +155,17 @@ Partial Class FormularioRegister
         PanelCentralRegister.Controls.Add(TextBoxContraseña1)
         PanelCentralRegister.Controls.Add(TextBoxSubdivision)
         PanelCentralRegister.Dock = DockStyle.Fill
-        PanelCentralRegister.Location = New Point(0, 100)
+        PanelCentralRegister.Location = New Point(0, 105)
         PanelCentralRegister.Name = "PanelCentralRegister"
-        PanelCentralRegister.Size = New Size(280, 272)
+        PanelCentralRegister.Size = New Size(280, 265)
         PanelCentralRegister.TabIndex = 2
         ' 
         ' LabelRepetirContraseñaRegister
         ' 
         LabelRepetirContraseñaRegister.AutoSize = True
         LabelRepetirContraseñaRegister.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelRepetirContraseñaRegister.Location = New Point(58, 182)
+        LabelRepetirContraseñaRegister.ForeColor = Color.FromArgb(CByte(34), CByte(34), CByte(34))
+        LabelRepetirContraseñaRegister.Location = New Point(58, 176)
         LabelRepetirContraseñaRegister.Name = "LabelRepetirContraseñaRegister"
         LabelRepetirContraseñaRegister.Size = New Size(165, 19)
         LabelRepetirContraseñaRegister.TabIndex = 5
@@ -173,7 +175,8 @@ Partial Class FormularioRegister
         ' 
         LabelContraseñaRegister.AutoSize = True
         LabelContraseñaRegister.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelContraseñaRegister.Location = New Point(88, 117)
+        LabelContraseñaRegister.ForeColor = Color.FromArgb(CByte(34), CByte(34), CByte(34))
+        LabelContraseñaRegister.Location = New Point(88, 111)
         LabelContraseñaRegister.Name = "LabelContraseñaRegister"
         LabelContraseñaRegister.Size = New Size(105, 19)
         LabelContraseñaRegister.TabIndex = 4
@@ -183,7 +186,8 @@ Partial Class FormularioRegister
         ' 
         LabelSubdivisiónRegister.AutoSize = True
         LabelSubdivisiónRegister.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelSubdivisiónRegister.Location = New Point(91, 46)
+        LabelSubdivisiónRegister.ForeColor = Color.FromArgb(CByte(34), CByte(34), CByte(34))
+        LabelSubdivisiónRegister.Location = New Point(91, 40)
         LabelSubdivisiónRegister.Name = "LabelSubdivisiónRegister"
         LabelSubdivisiónRegister.Size = New Size(99, 19)
         LabelSubdivisiónRegister.TabIndex = 3
@@ -191,21 +195,21 @@ Partial Class FormularioRegister
         ' 
         ' TextBoxContraseña2
         ' 
-        TextBoxContraseña2.Location = New Point(50, 204)
+        TextBoxContraseña2.Location = New Point(50, 198)
         TextBoxContraseña2.Name = "TextBoxContraseña2"
         TextBoxContraseña2.Size = New Size(180, 23)
         TextBoxContraseña2.TabIndex = 2
         ' 
         ' TextBoxContraseña1
         ' 
-        TextBoxContraseña1.Location = New Point(50, 139)
+        TextBoxContraseña1.Location = New Point(50, 133)
         TextBoxContraseña1.Name = "TextBoxContraseña1"
         TextBoxContraseña1.Size = New Size(180, 23)
         TextBoxContraseña1.TabIndex = 1
         ' 
         ' TextBoxSubdivision
         ' 
-        TextBoxSubdivision.Location = New Point(50, 68)
+        TextBoxSubdivision.Location = New Point(50, 62)
         TextBoxSubdivision.Name = "TextBoxSubdivision"
         TextBoxSubdivision.Size = New Size(180, 23)
         TextBoxSubdivision.TabIndex = 0
@@ -217,7 +221,7 @@ Partial Class FormularioRegister
         ' 
         ' FondoDeColor
         ' 
-        FondoDeColor.BackColor = Color.Gold
+        FondoDeColor.BackColor = Color.FromArgb(CByte(68), CByte(68), CByte(68))
         FondoDeColor.Controls.Add(PanelContenedor)
         FondoDeColor.Dock = DockStyle.Fill
         FondoDeColor.Location = New Point(0, 0)

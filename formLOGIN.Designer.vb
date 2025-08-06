@@ -37,11 +37,15 @@ Partial Class formLOGIN
         TextBoxContra = New TextBox()
         TextBoxSubdivision = New TextBox()
         Timer1 = New Timer(components)
+        PanelContenedor = New Panel()
+        FondoDeColor = New Panel()
         PanelSuperior.SuspendLayout()
         CType(LogoSarmientoLogin, ComponentModel.ISupportInitialize).BeginInit()
         PanelInferior.SuspendLayout()
         PanelInfo.SuspendLayout()
         PanelCentral.SuspendLayout()
+        PanelContenedor.SuspendLayout()
+        FondoDeColor.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelSuperior
@@ -51,14 +55,14 @@ Partial Class formLOGIN
         PanelSuperior.Dock = DockStyle.Top
         PanelSuperior.Location = New Point(0, 0)
         PanelSuperior.Name = "PanelSuperior"
-        PanelSuperior.Size = New Size(270, 100)
+        PanelSuperior.Size = New Size(280, 105)
         PanelSuperior.TabIndex = 0
         ' 
         ' LogoSarmientoLogin
         ' 
         LogoSarmientoLogin.Anchor = AnchorStyles.None
         LogoSarmientoLogin.Image = CType(resources.GetObject("LogoSarmientoLogin.Image"), Image)
-        LogoSarmientoLogin.Location = New Point(85, 0)
+        LogoSarmientoLogin.Location = New Point(90, 5)
         LogoSarmientoLogin.Name = "LogoSarmientoLogin"
         LogoSarmientoLogin.Size = New Size(100, 100)
         LogoSarmientoLogin.SizeMode = PictureBoxSizeMode.StretchImage
@@ -73,9 +77,9 @@ Partial Class formLOGIN
         PanelInferior.Controls.Add(BotonRegister)
         PanelInferior.Controls.Add(BotonLogin)
         PanelInferior.Dock = DockStyle.Bottom
-        PanelInferior.Location = New Point(0, 372)
+        PanelInferior.Location = New Point(0, 370)
         PanelInferior.Name = "PanelInferior"
-        PanelInferior.Size = New Size(270, 28)
+        PanelInferior.Size = New Size(280, 30)
         PanelInferior.TabIndex = 1
         ' 
         ' PanelInfo
@@ -85,7 +89,7 @@ Partial Class formLOGIN
         PanelInfo.Dock = DockStyle.Fill
         PanelInfo.Location = New Point(0, 0)
         PanelInfo.Name = "PanelInfo"
-        PanelInfo.Size = New Size(270, 28)
+        PanelInfo.Size = New Size(280, 30)
         PanelInfo.TabIndex = 4
         PanelInfo.Visible = False
         ' 
@@ -104,26 +108,25 @@ Partial Class formLOGIN
         ' 
         ' BotonRegister
         ' 
-        BotonRegister.BackColor = Color.Yellow
+        BotonRegister.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         BotonRegister.FlatStyle = FlatStyle.Flat
         BotonRegister.Font = New Font("Candara", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        BotonRegister.ForeColor = Color.Black
-        BotonRegister.Location = New Point(143, 3)
+        BotonRegister.Location = New Point(150, 0)
         BotonRegister.Name = "BotonRegister"
-        BotonRegister.Size = New Size(75, 23)
+        BotonRegister.Size = New Size(80, 25)
         BotonRegister.TabIndex = 1
         BotonRegister.Text = "REGISTER"
         BotonRegister.UseVisualStyleBackColor = False
         ' 
         ' BotonLogin
         ' 
-        BotonLogin.BackColor = Color.Yellow
+        BotonLogin.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         BotonLogin.FlatStyle = FlatStyle.Flat
         BotonLogin.Font = New Font("Candara", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         BotonLogin.ForeColor = SystemColors.ActiveCaptionText
-        BotonLogin.Location = New Point(54, 3)
+        BotonLogin.Location = New Point(50, 0)
         BotonLogin.Name = "BotonLogin"
-        BotonLogin.Size = New Size(75, 23)
+        BotonLogin.Size = New Size(80, 25)
         BotonLogin.TabIndex = 0
         BotonLogin.Text = "LOGIN"
         BotonLogin.UseVisualStyleBackColor = False
@@ -131,21 +134,23 @@ Partial Class formLOGIN
         ' PanelCentral
         ' 
         PanelCentral.BackColor = SystemColors.ControlDark
+        PanelCentral.Controls.Add(PanelSuperior)
         PanelCentral.Controls.Add(LabelSubdivision)
+        PanelCentral.Controls.Add(PanelInferior)
         PanelCentral.Controls.Add(LabelContraseña)
         PanelCentral.Controls.Add(TextBoxContra)
         PanelCentral.Controls.Add(TextBoxSubdivision)
         PanelCentral.Dock = DockStyle.Fill
-        PanelCentral.Location = New Point(0, 100)
+        PanelCentral.Location = New Point(0, 0)
         PanelCentral.Name = "PanelCentral"
-        PanelCentral.Size = New Size(270, 272)
+        PanelCentral.Size = New Size(280, 400)
         PanelCentral.TabIndex = 2
         ' 
         ' LabelSubdivision
         ' 
         LabelSubdivision.AutoSize = True
         LabelSubdivision.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelSubdivision.Location = New Point(86, 77)
+        LabelSubdivision.Location = New Point(91, 180)
         LabelSubdivision.Name = "LabelSubdivision"
         LabelSubdivision.Size = New Size(99, 19)
         LabelSubdivision.TabIndex = 3
@@ -155,7 +160,7 @@ Partial Class formLOGIN
         ' 
         LabelContraseña.AutoSize = True
         LabelContraseña.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelContraseña.Location = New Point(83, 148)
+        LabelContraseña.Location = New Point(88, 251)
         LabelContraseña.Name = "LabelContraseña"
         LabelContraseña.Size = New Size(105, 19)
         LabelContraseña.TabIndex = 2
@@ -163,18 +168,16 @@ Partial Class formLOGIN
         ' 
         ' TextBoxContra
         ' 
-        TextBoxContra.Location = New Point(45, 169)
-        TextBoxContra.Multiline = True
+        TextBoxContra.Location = New Point(50, 272)
         TextBoxContra.Name = "TextBoxContra"
-        TextBoxContra.Size = New Size(180, 26)
+        TextBoxContra.Size = New Size(180, 23)
         TextBoxContra.TabIndex = 1
         ' 
         ' TextBoxSubdivision
         ' 
-        TextBoxSubdivision.Location = New Point(45, 99)
-        TextBoxSubdivision.Multiline = True
+        TextBoxSubdivision.Location = New Point(50, 202)
         TextBoxSubdivision.Name = "TextBoxSubdivision"
-        TextBoxSubdivision.Size = New Size(180, 26)
+        TextBoxSubdivision.Size = New Size(180, 23)
         TextBoxSubdivision.TabIndex = 0
         ' 
         ' Timer1
@@ -182,14 +185,30 @@ Partial Class formLOGIN
         Timer1.Enabled = True
         Timer1.Interval = 2000
         ' 
+        ' PanelContenedor
+        ' 
+        PanelContenedor.Controls.Add(PanelCentral)
+        PanelContenedor.Location = New Point(3, 3)
+        PanelContenedor.Name = "PanelContenedor"
+        PanelContenedor.Size = New Size(280, 400)
+        PanelContenedor.TabIndex = 3
+        ' 
+        ' FondoDeColor
+        ' 
+        FondoDeColor.BackColor = Color.FromArgb(CByte(68), CByte(68), CByte(68))
+        FondoDeColor.Controls.Add(PanelContenedor)
+        FondoDeColor.Dock = DockStyle.Fill
+        FondoDeColor.Location = New Point(0, 0)
+        FondoDeColor.Name = "FondoDeColor"
+        FondoDeColor.Size = New Size(286, 406)
+        FondoDeColor.TabIndex = 4
+        ' 
         ' formLOGIN
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(270, 400)
-        Controls.Add(PanelCentral)
-        Controls.Add(PanelInferior)
-        Controls.Add(PanelSuperior)
+        ClientSize = New Size(286, 406)
+        Controls.Add(FondoDeColor)
         FormBorderStyle = FormBorderStyle.None
         Name = "formLOGIN"
         ShowInTaskbar = False
@@ -202,6 +221,8 @@ Partial Class formLOGIN
         PanelInfo.PerformLayout()
         PanelCentral.ResumeLayout(False)
         PanelCentral.PerformLayout()
+        PanelContenedor.ResumeLayout(False)
+        FondoDeColor.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -218,4 +239,6 @@ Partial Class formLOGIN
     Friend WithEvents PanelInfo As Panel
     Friend WithEvents info As Label
     Friend WithEvents Timer1 As Timer
+    Friend WithEvents PanelContenedor As Panel
+    Friend WithEvents FondoDeColor As Panel
 End Class

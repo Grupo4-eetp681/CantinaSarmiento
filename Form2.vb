@@ -4,8 +4,6 @@
 
     Private Sub BotonCancelarRegister_Click(sender As Object, e As EventArgs) Handles BotonCancelarRegister.Click
         Me.Dispose()
-        formLOGIN.Show()
-
     End Sub
 
     Private Sub BotonAceptarRegister_Click(sender As Object, e As EventArgs) Handles BotonAceptarRegister.Click
@@ -27,7 +25,6 @@
         Else
             Dim resultado = logica.registrarDivision(division, contraseña)
             If resultado.Exito Then
-                formLOGIN.Show()
                 Me.Dispose()
             End If
             If Not resultado.Exito Then

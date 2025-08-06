@@ -40,7 +40,7 @@
     End Sub
 
     Private Sub BotonRegister_Click(sender As Object, e As EventArgs) Handles BotonRegister.Click
-        FormularioRegister.Show()
-        Me.Dispose()
+        FormularioRegister.ShowDialog()
     End Sub
+
 End Class
