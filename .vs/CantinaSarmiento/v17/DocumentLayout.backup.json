@@ -1,21 +1,38 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\",
+  "WorkspaceRootPath": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\salan\\source\\repos\\CantinaSarmiento\\CantinaSarmiento\\FormularioLogin.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\ventas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:ventas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{373078F1-7268-4492-949F-A654CDFB74CA}|CantinaSarmiento\\CantinaSarmiento.vbproj|c:\\users\\mamad\\source\\repos\\grupo4-eetp681\\cantinasarmiento\\cantinasarmiento\\logicacantina.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
-      "RelativeMoniker": "D:0:0:{373078F1-7268-4492-949F-A654CDFB74CA}|CantinaSarmiento\\CantinaSarmiento.vbproj|solutionrelative:cantinasarmiento\\logicacantina.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\ventas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:ventas.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{373078F1-7268-4492-949F-A654CDFB74CA}|CantinaSarmiento\\CantinaSarmiento.vbproj|c:\\users\\mamad\\source\\repos\\grupo4-eetp681\\cantinasarmiento\\cantinasarmiento\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
-      "RelativeMoniker": "D:0:0:{373078F1-7268-4492-949F-A654CDFB74CA}|CantinaSarmiento\\CantinaSarmiento.vbproj|solutionrelative:cantinasarmiento\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{373078F1-7268-4492-949F-A654CDFB74CA}|CantinaSarmiento\\CantinaSarmiento.vbproj|c:\\users\\mamad\\source\\repos\\grupo4-eetp681\\cantinasarmiento\\cantinasarmiento\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
-      "RelativeMoniker": "D:0:0:{373078F1-7268-4492-949F-A654CDFB74CA}|CantinaSarmiento\\CantinaSarmiento.vbproj|solutionrelative:cantinasarmiento\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\formlogin.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:formlogin.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\formlogin.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:formlogin.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\form2.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:form2.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\form2.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:form2.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|c:\\users\\tutiv\\source\\repos\\cantinasarmiento\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{3C9C23B3-6B17-458B-98A2-957E26504515}|CantinaSarmiento.vbproj|solutionrelative:form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
     }
   ],
   "DocumentGroupContainers": [
@@ -25,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -37,55 +54,109 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LogicaCantina.vb",
-              "DocumentMoniker": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\LogicaCantina.vb",
-              "RelativeDocumentMoniker": "CantinaSarmiento\\LogicaCantina.vb",
-              "ToolTip": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\LogicaCantina.vb",
-              "RelativeToolTip": "CantinaSarmiento\\LogicaCantina.vb",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAMAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "formLOGIN.vb",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\formLOGIN.vb",
+              "RelativeDocumentMoniker": "formLOGIN.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\formLOGIN.vb*",
+              "RelativeToolTip": "formLOGIN.vb*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2025-07-25T15:55:16.989Z"
+              "WhenOpened": "2025-08-06T19:58:19.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "formLOGIN.vb [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\formLOGIN.vb",
+              "RelativeDocumentMoniker": "formLOGIN.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\formLOGIN.vb [Dise\u00F1o]*",
+              "RelativeToolTip": "formLOGIN.vb [Dise\u00F1o]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-08-06T16:22:47.449Z",
+              "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "FormularioLogin.vb [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\salan\\source\\repos\\CantinaSarmiento\\CantinaSarmiento\\FormularioLogin.vb",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\salan\\source\\repos\\CantinaSarmiento\\CantinaSarmiento\\FormularioLogin.vb",
-              "ToolTip": "C:\\Users\\salan\\source\\repos\\CantinaSarmiento\\CantinaSarmiento\\FormularioLogin.vb [Dise\u00F1o]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\salan\\source\\repos\\CantinaSarmiento\\CantinaSarmiento\\FormularioLogin.vb [Dise\u00F1o]",
+              "Title": "ventas.vb",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\ventas.vb",
+              "RelativeDocumentMoniker": "ventas.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\ventas.vb*",
+              "RelativeToolTip": "ventas.vb*",
+              "ViewState": "AgIAABgAAAAAAAAAAAAUwBwAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2025-06-06T16:15:48.013Z",
+              "WhenOpened": "2025-08-06T16:09:48.32Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ventas.vb [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\ventas.vb",
+              "RelativeDocumentMoniker": "ventas.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\ventas.vb [Dise\u00F1o]*",
+              "RelativeToolTip": "ventas.vb [Dise\u00F1o]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-08-06T16:08:52.587Z",
               "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Form1.vb",
-              "DocumentMoniker": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\Form1.vb",
-              "RelativeDocumentMoniker": "CantinaSarmiento\\Form1.vb",
-              "ToolTip": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\Form1.vb",
-              "RelativeToolTip": "CantinaSarmiento\\Form1.vb",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAAAD4AAABBAAAAAAAAAA==",
+              "Title": "Form1.vb [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form1.vb",
+              "RelativeDocumentMoniker": "Form1.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form1.vb [Dise\u00F1o]",
+              "RelativeToolTip": "Form1.vb [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2025-05-14T12:35:06.231Z"
+              "WhenOpened": "2025-08-06T16:06:32.67Z",
+              "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Form1.vb [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\Form1.vb",
-              "RelativeDocumentMoniker": "CantinaSarmiento\\Form1.vb",
-              "ToolTip": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\Form1.vb [Dise\u00F1o]",
-              "RelativeToolTip": "CantinaSarmiento\\Form1.vb [Dise\u00F1o]",
+              "DocumentIndex": 5,
+              "Title": "Form2.vb [Design]",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form2.vb",
+              "RelativeDocumentMoniker": "Form2.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form2.vb [Design]",
+              "RelativeToolTip": "Form2.vb [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2025-05-14T12:34:21.818Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2025-08-06T16:06:28.296Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Form2.vb",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form2.vb",
+              "RelativeDocumentMoniker": "Form2.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form2.vb",
+              "RelativeToolTip": "Form2.vb",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-08-06T16:03:23.887Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Form1.vb",
+              "DocumentMoniker": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form1.vb",
+              "RelativeDocumentMoniker": "Form1.vb",
+              "ToolTip": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\Form1.vb",
+              "RelativeToolTip": "Form1.vb",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAWwFYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-08-06T16:02:28.311Z"
             }
           ]
         }

@@ -114,7 +114,7 @@ Partial Class formLOGIN
         BotonRegister.Location = New Point(150, 0)
         BotonRegister.Name = "BotonRegister"
         BotonRegister.Size = New Size(80, 25)
-        BotonRegister.TabIndex = 1
+        BotonRegister.TabIndex = 4
         BotonRegister.Text = "REGISTER"
         BotonRegister.UseVisualStyleBackColor = False
         ' 
@@ -127,7 +127,7 @@ Partial Class formLOGIN
         BotonLogin.Location = New Point(50, 0)
         BotonLogin.Name = "BotonLogin"
         BotonLogin.Size = New Size(80, 25)
-        BotonLogin.TabIndex = 0
+        BotonLogin.TabIndex = 3
         BotonLogin.Text = "LOGIN"
         BotonLogin.UseVisualStyleBackColor = False
         ' 
@@ -171,14 +171,14 @@ Partial Class formLOGIN
         TextBoxContra.Location = New Point(50, 272)
         TextBoxContra.Name = "TextBoxContra"
         TextBoxContra.Size = New Size(180, 23)
-        TextBoxContra.TabIndex = 1
+        TextBoxContra.TabIndex = 2
         ' 
         ' TextBoxSubdivision
         ' 
         TextBoxSubdivision.Location = New Point(50, 202)
         TextBoxSubdivision.Name = "TextBoxSubdivision"
         TextBoxSubdivision.Size = New Size(180, 23)
-        TextBoxSubdivision.TabIndex = 0
+        TextBoxSubdivision.TabIndex = 1
         ' 
         ' Timer1
         ' 

@@ -26,7 +26,23 @@ Partial Class ventas
         PanelVentas = New Panel()
         PanelContenedorDER = New Panel()
         PanelContenedorVentas = New Panel()
+        PanelDerechaINFVueltoYPago = New Panel()
+        PanelPago = New Panel()
+        PanelCentrarPago = New Panel()
+        TXTPago = New TextBox()
+        LabelPago = New Label()
+        PanelVuelto = New Panel()
+        PanelCentrarVuelto = New Panel()
+        LabelNUMVuelto = New Label()
+        LabelVuelto = New Label()
+        Panel10PX2 = New Panel()
+        PanelDerechaINFButton = New Panel()
+        PanelContenedorButtonVentas = New Panel()
+        BotonTicket = New Button()
+        BotonFactura = New Button()
+        BotonRegistro = New Button()
         PanelDataVentas = New Panel()
+        DataGridVentas = New DataGridView()
         PanelTotales = New Panel()
         PanelTotal = New Panel()
         LabelTotal = New Label()
@@ -38,9 +54,19 @@ Partial Class ventas
         PanelBusqueda = New Panel()
         Busqueda = New TextBox()
         PictureBox1 = New PictureBox()
+        Panel10PX = New Panel()
         PanelVentas.SuspendLayout()
         PanelContenedorDER.SuspendLayout()
         PanelContenedorVentas.SuspendLayout()
+        PanelDerechaINFVueltoYPago.SuspendLayout()
+        PanelPago.SuspendLayout()
+        PanelCentrarPago.SuspendLayout()
+        PanelVuelto.SuspendLayout()
+        PanelCentrarVuelto.SuspendLayout()
+        PanelDerechaINFButton.SuspendLayout()
+        PanelContenedorButtonVentas.SuspendLayout()
+        PanelDataVentas.SuspendLayout()
+        CType(DataGridVentas, ComponentModel.ISupportInitialize).BeginInit()
         PanelTotales.SuspendLayout()
         PanelTotal.SuspendLayout()
         PanelContenedorIZQ.SuspendLayout()
@@ -55,10 +81,11 @@ Partial Class ventas
         ' 
         PanelVentas.Controls.Add(PanelContenedorDER)
         PanelVentas.Controls.Add(PanelContenedorIZQ)
+        PanelVentas.Controls.Add(Panel10PX)
         PanelVentas.Dock = DockStyle.Fill
         PanelVentas.Location = New Point(0, 0)
         PanelVentas.Name = "PanelVentas"
-        PanelVentas.Size = New Size(800, 450)
+        PanelVentas.Size = New Size(850, 500)
         PanelVentas.TabIndex = 0
         ' 
         ' PanelContenedorDER
@@ -69,25 +96,193 @@ Partial Class ventas
         PanelContenedorDER.Dock = DockStyle.Fill
         PanelContenedorDER.Location = New Point(550, 0)
         PanelContenedorDER.Name = "PanelContenedorDER"
-        PanelContenedorDER.Size = New Size(250, 450)
+        PanelContenedorDER.Size = New Size(300, 490)
         PanelContenedorDER.TabIndex = 5
         ' 
         ' PanelContenedorVentas
         ' 
+        PanelContenedorVentas.Controls.Add(PanelDerechaINFVueltoYPago)
+        PanelContenedorVentas.Controls.Add(Panel10PX2)
+        PanelContenedorVentas.Controls.Add(PanelDerechaINFButton)
         PanelContenedorVentas.Controls.Add(PanelDataVentas)
         PanelContenedorVentas.Dock = DockStyle.Fill
         PanelContenedorVentas.Location = New Point(0, 50)
         PanelContenedorVentas.Name = "PanelContenedorVentas"
-        PanelContenedorVentas.Size = New Size(250, 400)
+        PanelContenedorVentas.Size = New Size(300, 440)
         PanelContenedorVentas.TabIndex = 4
+        ' 
+        ' PanelDerechaINFVueltoYPago
+        ' 
+        PanelDerechaINFVueltoYPago.BackColor = Color.Transparent
+        PanelDerechaINFVueltoYPago.Controls.Add(PanelPago)
+        PanelDerechaINFVueltoYPago.Controls.Add(PanelVuelto)
+        PanelDerechaINFVueltoYPago.Dock = DockStyle.Bottom
+        PanelDerechaINFVueltoYPago.Location = New Point(0, 330)
+        PanelDerechaINFVueltoYPago.Name = "PanelDerechaINFVueltoYPago"
+        PanelDerechaINFVueltoYPago.Size = New Size(300, 60)
+        PanelDerechaINFVueltoYPago.TabIndex = 7
+        ' 
+        ' PanelPago
+        ' 
+        PanelPago.Controls.Add(PanelCentrarPago)
+        PanelPago.Dock = DockStyle.Fill
+        PanelPago.Location = New Point(0, 0)
+        PanelPago.Name = "PanelPago"
+        PanelPago.Size = New Size(300, 30)
+        PanelPago.TabIndex = 5
+        ' 
+        ' PanelCentrarPago
+        ' 
+        PanelCentrarPago.Anchor = AnchorStyles.None
+        PanelCentrarPago.Controls.Add(TXTPago)
+        PanelCentrarPago.Controls.Add(LabelPago)
+        PanelCentrarPago.Location = New Point(25, 0)
+        PanelCentrarPago.Name = "PanelCentrarPago"
+        PanelCentrarPago.Size = New Size(245, 30)
+        PanelCentrarPago.TabIndex = 8
+        ' 
+        ' TXTPago
+        ' 
+        TXTPago.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TXTPago.Location = New Point(85, 2)
+        TXTPago.Name = "TXTPago"
+        TXTPago.Size = New Size(150, 27)
+        TXTPago.TabIndex = 2
+        TXTPago.Text = "$ "
+        ' 
+        ' LabelPago
+        ' 
+        LabelPago.Font = New Font("Candara", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelPago.Location = New Point(0, 3)
+        LabelPago.Name = "LabelPago"
+        LabelPago.Size = New Size(70, 25)
+        LabelPago.TabIndex = 3
+        LabelPago.Text = "PAGO:"
+        ' 
+        ' PanelVuelto
+        ' 
+        PanelVuelto.Controls.Add(PanelCentrarVuelto)
+        PanelVuelto.Dock = DockStyle.Bottom
+        PanelVuelto.Location = New Point(0, 30)
+        PanelVuelto.Name = "PanelVuelto"
+        PanelVuelto.Size = New Size(300, 30)
+        PanelVuelto.TabIndex = 4
+        ' 
+        ' PanelCentrarVuelto
+        ' 
+        PanelCentrarVuelto.Anchor = AnchorStyles.None
+        PanelCentrarVuelto.BackColor = Color.Transparent
+        PanelCentrarVuelto.Controls.Add(LabelNUMVuelto)
+        PanelCentrarVuelto.Controls.Add(LabelVuelto)
+        PanelCentrarVuelto.Location = New Point(25, 0)
+        PanelCentrarVuelto.Name = "PanelCentrarVuelto"
+        PanelCentrarVuelto.Size = New Size(245, 30)
+        PanelCentrarVuelto.TabIndex = 9
+        ' 
+        ' LabelNUMVuelto
+        ' 
+        LabelNUMVuelto.AutoSize = True
+        LabelNUMVuelto.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        LabelNUMVuelto.Location = New Point(129, 3)
+        LabelNUMVuelto.Name = "LabelNUMVuelto"
+        LabelNUMVuelto.Size = New Size(56, 23)
+        LabelNUMVuelto.TabIndex = 2
+        LabelNUMVuelto.Text = "$0.00"
+        ' 
+        ' LabelVuelto
+        ' 
+        LabelVuelto.Font = New Font("Candara", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        LabelVuelto.Location = New Point(0, 3)
+        LabelVuelto.Name = "LabelVuelto"
+        LabelVuelto.Size = New Size(90, 25)
+        LabelVuelto.TabIndex = 1
+        LabelVuelto.Text = "VUELTO:"
+        ' 
+        ' Panel10PX2
+        ' 
+        Panel10PX2.Dock = DockStyle.Bottom
+        Panel10PX2.Location = New Point(0, 390)
+        Panel10PX2.Name = "Panel10PX2"
+        Panel10PX2.Size = New Size(300, 10)
+        Panel10PX2.TabIndex = 7
+        ' 
+        ' PanelDerechaINFButton
+        ' 
+        PanelDerechaINFButton.Controls.Add(PanelContenedorButtonVentas)
+        PanelDerechaINFButton.Dock = DockStyle.Bottom
+        PanelDerechaINFButton.Location = New Point(0, 400)
+        PanelDerechaINFButton.Name = "PanelDerechaINFButton"
+        PanelDerechaINFButton.Size = New Size(300, 40)
+        PanelDerechaINFButton.TabIndex = 6
+        ' 
+        ' PanelContenedorButtonVentas
+        ' 
+        PanelContenedorButtonVentas.Anchor = AnchorStyles.None
+        PanelContenedorButtonVentas.Controls.Add(BotonTicket)
+        PanelContenedorButtonVentas.Controls.Add(BotonFactura)
+        PanelContenedorButtonVentas.Controls.Add(BotonRegistro)
+        PanelContenedorButtonVentas.Location = New Point(30, 0)
+        PanelContenedorButtonVentas.Name = "PanelContenedorButtonVentas"
+        PanelContenedorButtonVentas.Size = New Size(240, 40)
+        PanelContenedorButtonVentas.TabIndex = 7
+        ' 
+        ' BotonTicket
+        ' 
+        BotonTicket.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonTicket.BackgroundImage = CType(resources.GetObject("BotonTicket.BackgroundImage"), Image)
+        BotonTicket.BackgroundImageLayout = ImageLayout.Stretch
+        BotonTicket.FlatStyle = FlatStyle.Flat
+        BotonTicket.ForeColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonTicket.Location = New Point(200, 0)
+        BotonTicket.Name = "BotonTicket"
+        BotonTicket.Size = New Size(40, 40)
+        BotonTicket.TabIndex = 5
+        BotonTicket.UseVisualStyleBackColor = False
+        ' 
+        ' BotonFactura
+        ' 
+        BotonFactura.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonFactura.BackgroundImage = CType(resources.GetObject("BotonFactura.BackgroundImage"), Image)
+        BotonFactura.BackgroundImageLayout = ImageLayout.Stretch
+        BotonFactura.FlatStyle = FlatStyle.Flat
+        BotonFactura.ForeColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonFactura.Location = New Point(100, 0)
+        BotonFactura.Name = "BotonFactura"
+        BotonFactura.Size = New Size(40, 40)
+        BotonFactura.TabIndex = 4
+        BotonFactura.UseVisualStyleBackColor = False
+        ' 
+        ' BotonRegistro
+        ' 
+        BotonRegistro.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonRegistro.BackgroundImage = CType(resources.GetObject("BotonRegistro.BackgroundImage"), Image)
+        BotonRegistro.BackgroundImageLayout = ImageLayout.Stretch
+        BotonRegistro.FlatStyle = FlatStyle.Flat
+        BotonRegistro.ForeColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonRegistro.Location = New Point(0, 0)
+        BotonRegistro.Name = "BotonRegistro"
+        BotonRegistro.Size = New Size(40, 40)
+        BotonRegistro.TabIndex = 3
+        BotonRegistro.UseVisualStyleBackColor = False
         ' 
         ' PanelDataVentas
         ' 
-        PanelDataVentas.BackColor = SystemColors.MenuHighlight
+        PanelDataVentas.BackColor = Color.Transparent
+        PanelDataVentas.Controls.Add(DataGridVentas)
         PanelDataVentas.Location = New Point(25, 25)
         PanelDataVentas.Name = "PanelDataVentas"
         PanelDataVentas.Size = New Size(200, 200)
         PanelDataVentas.TabIndex = 5
+        ' 
+        ' DataGridVentas
+        ' 
+        DataGridVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridVentas.Dock = DockStyle.Fill
+        DataGridVentas.Location = New Point(0, 0)
+        DataGridVentas.Name = "DataGridVentas"
+        DataGridVentas.Size = New Size(200, 200)
+        DataGridVentas.TabIndex = 0
+        DataGridVentas.TabStop = False
         ' 
         ' PanelTotales
         ' 
@@ -96,7 +291,7 @@ Partial Class ventas
         PanelTotales.Dock = DockStyle.Top
         PanelTotales.Location = New Point(0, 0)
         PanelTotales.Name = "PanelTotales"
-        PanelTotales.Size = New Size(250, 50)
+        PanelTotales.Size = New Size(300, 50)
         PanelTotales.TabIndex = 3
         ' 
         ' PanelTotal
@@ -104,7 +299,7 @@ Partial Class ventas
         PanelTotal.Anchor = AnchorStyles.None
         PanelTotal.Controls.Add(LabelTotal)
         PanelTotal.Controls.Add(LabelPrecioTotal)
-        PanelTotal.Location = New Point(55, 14)
+        PanelTotal.Location = New Point(80, 14)
         PanelTotal.Name = "PanelTotal"
         PanelTotal.Size = New Size(140, 23)
         PanelTotal.TabIndex = 4
@@ -135,7 +330,7 @@ Partial Class ventas
         PanelContenedorIZQ.Dock = DockStyle.Left
         PanelContenedorIZQ.Location = New Point(0, 0)
         PanelContenedorIZQ.Name = "PanelContenedorIZQ"
-        PanelContenedorIZQ.Size = New Size(550, 450)
+        PanelContenedorIZQ.Size = New Size(550, 490)
         PanelContenedorIZQ.TabIndex = 4
         ' 
         ' PanelDataGrid
@@ -144,7 +339,7 @@ Partial Class ventas
         PanelDataGrid.Dock = DockStyle.Fill
         PanelDataGrid.Location = New Point(0, 50)
         PanelDataGrid.Name = "PanelDataGrid"
-        PanelDataGrid.Size = New Size(550, 400)
+        PanelDataGrid.Size = New Size(550, 440)
         PanelDataGrid.TabIndex = 0
         ' 
         ' DataGridView1
@@ -154,8 +349,9 @@ Partial Class ventas
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
-        DataGridView1.Size = New Size(550, 400)
+        DataGridView1.Size = New Size(550, 440)
         DataGridView1.TabIndex = 0
+        DataGridView1.TabStop = False
         ' 
         ' PanelContenedorBusqueda
         ' 
@@ -195,12 +391,21 @@ Partial Class ventas
         PictureBox1.TabIndex = 0
         PictureBox1.TabStop = False
         ' 
+        ' Panel10PX
+        ' 
+        Panel10PX.BackColor = SystemColors.ControlDark
+        Panel10PX.Dock = DockStyle.Bottom
+        Panel10PX.Location = New Point(0, 490)
+        Panel10PX.Name = "Panel10PX"
+        Panel10PX.Size = New Size(850, 10)
+        Panel10PX.TabIndex = 8
+        ' 
         ' ventas
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.ActiveBorder
-        ClientSize = New Size(800, 450)
+        ClientSize = New Size(850, 500)
         Controls.Add(PanelVentas)
         FormBorderStyle = FormBorderStyle.None
         Name = "ventas"
@@ -208,6 +413,17 @@ Partial Class ventas
         PanelVentas.ResumeLayout(False)
         PanelContenedorDER.ResumeLayout(False)
         PanelContenedorVentas.ResumeLayout(False)
+        PanelDerechaINFVueltoYPago.ResumeLayout(False)
+        PanelPago.ResumeLayout(False)
+        PanelCentrarPago.ResumeLayout(False)
+        PanelCentrarPago.PerformLayout()
+        PanelVuelto.ResumeLayout(False)
+        PanelCentrarVuelto.ResumeLayout(False)
+        PanelCentrarVuelto.PerformLayout()
+        PanelDerechaINFButton.ResumeLayout(False)
+        PanelContenedorButtonVentas.ResumeLayout(False)
+        PanelDataVentas.ResumeLayout(False)
+        CType(DataGridVentas, ComponentModel.ISupportInitialize).EndInit()
         PanelTotales.ResumeLayout(False)
         PanelTotal.ResumeLayout(False)
         PanelTotal.PerformLayout()
@@ -236,4 +452,21 @@ Partial Class ventas
     Friend WithEvents PanelTotal As Panel
     Friend WithEvents PanelContenedorVentas As Panel
     Friend WithEvents PanelDataVentas As Panel
+    Friend WithEvents DataGridVentas As DataGridView
+    Friend WithEvents PanelDerechaINFButton As Panel
+    Friend WithEvents PanelContenedorButtonVentas As Panel
+    Friend WithEvents BotonTicket As Button
+    Friend WithEvents BotonFactura As Button
+    Friend WithEvents BotonRegistro As Button
+    Friend WithEvents PanelDerechaINFVueltoYPago As Panel
+    Friend WithEvents LabelNUMVuelto As Label
+    Friend WithEvents LabelPago As Label
+    Friend WithEvents LabelVuelto As Label
+    Friend WithEvents TXTPago As TextBox
+    Friend WithEvents Panel10PX As Panel
+    Friend WithEvents PanelCentrarPago As Panel
+    Friend WithEvents PanelPago As Panel
+    Friend WithEvents PanelVuelto As Panel
+    Friend WithEvents PanelCentrarVuelto As Panel
+    Friend WithEvents Panel10PX2 As Panel
 End Class

@@ -25,6 +25,7 @@
     End Sub
 
     Private Sub formLOGIN_Load(sender As Object, e As EventArgs) Handles Me.Load
+
         PanelInfo.Visible = False
         info.Visible = False
     End Sub
@@ -43,4 +44,7 @@
         FormularioRegister.ShowDialog()
     End Sub
 
+    Private Sub formLOGIN_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        TextBoxSubdivision.Focus()
+    End Sub
 End Class
