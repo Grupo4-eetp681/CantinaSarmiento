@@ -83,7 +83,6 @@ Partial Class ventas
         ' 
         ' PanelDataVentas
         ' 
-        PanelDataVentas.AllowDrop = True
         PanelDataVentas.BackColor = SystemColors.MenuHighlight
         PanelDataVentas.Location = New Point(25, 25)
         PanelDataVentas.Name = "PanelDataVentas"

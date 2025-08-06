@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "BKeJmoQTcs0=",
+  "dgSpecHash": "3DPxuXTcLoA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mamad\\source\\repos\\Grupo4-eetp681\\CantinaSarmiento\\CantinaSarmiento\\CantinaSarmiento.vbproj",
+  "projectFilePath": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\CantinaSarmiento.vbproj",
   "expectedPackageFiles": [
-    "C:\\Users\\mamad\\.nuget\\packages\\stub.system.data.sqlite.core.netstandard\\1.0.119\\stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
-    "C:\\Users\\mamad\\.nuget\\packages\\system.data.sqlite.core\\1.0.119\\system.data.sqlite.core.1.0.119.nupkg.sha512"
+    "C:\\Users\\tutiv\\.nuget\\packages\\stub.system.data.sqlite.core.netstandard\\1.0.119\\stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
+    "C:\\Users\\tutiv\\.nuget\\packages\\system.data.sqlite.core\\1.0.119\\system.data.sqlite.core.1.0.119.nupkg.sha512"
   ],
   "logs": []
 }

@@ -12,7 +12,7 @@
     End Sub
 
     Private Sub BotonLogin_Click(sender As Object, e As EventArgs) Handles BotonLogin.Click
-        Dim resultado = logica.ValidarLogin(TextBoxSubdivision.Text, TextBoxContra.Text)
+        Dim resultado = logica.ValidarLogin(TextBoxSubdivision.Text.ToLower(), TextBoxContra.Text)
         If resultado.Exito Then
             AbrirVentasEnPanel()
             Me.Dispose()

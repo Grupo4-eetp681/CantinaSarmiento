@@ -20,8 +20,18 @@
 
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridView1.RowHeadersVisible = False
 
 
+    End Sub
 
+    Private Sub ventas_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        Dim altura As Integer = PanelContenedorVentas.Height
+        Dim ancho As Integer = PanelContenedorVentas.Width
+
+        PanelDataVentas.Height = altura / 2
+        PanelDataVentas.Width = ancho - 50
+        PanelDataVentas.Location = New Point(25, 25)
+        PanelDataVentas.BringToFront()
     End Sub
 End Class

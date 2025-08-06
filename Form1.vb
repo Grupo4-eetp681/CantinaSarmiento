@@ -34,7 +34,7 @@ Public Class Form1
         Dim anchura As Int128 = FondoDeColor.AccessibilityObject.Bounds.Width
         ContenidoGeneral.Size = New Size(anchura - 6, altura - 6)
         ContenidoGeneral.Location = New Point(3, 3)
-        formLOGIN.Show()
+        formLOGIN.ShowDialog()
     End Sub
 
     Private Sub ButtonCierreApp_Click(sender As Object, e As EventArgs) Handles ButtonCierreApp.Click

@@ -23,6 +23,7 @@
             info.Visible = True
             Timer1.Start()
         Else
+            division = division.ToLower()
             Dim resultado = logica.registrarDivision(division, contraseña)
             If resultado.Exito Then
                 Me.Dispose()
