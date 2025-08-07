@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\CantinaSarmiento.vbproj": {}
+    "C:\\Users\\tutiv\\Source\\Repos\\CantinaSarmiento\\CantinaSarmiento.vbproj": {}
   },
   "projects": {
-    "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\CantinaSarmiento.vbproj": {
+    "C:\\Users\\tutiv\\Source\\Repos\\CantinaSarmiento\\CantinaSarmiento.vbproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\CantinaSarmiento.vbproj",
+        "projectUniqueName": "C:\\Users\\tutiv\\Source\\Repos\\CantinaSarmiento\\CantinaSarmiento.vbproj",
         "projectName": "CantinaSarmiento",
-        "projectPath": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\CantinaSarmiento.vbproj",
+        "projectPath": "C:\\Users\\tutiv\\Source\\Repos\\CantinaSarmiento\\CantinaSarmiento.vbproj",
         "packagesPath": "C:\\Users\\tutiv\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\tutiv\\source\\repos\\CantinaSarmiento\\obj\\",
         "projectStyle": "PackageReference",

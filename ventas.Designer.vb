@@ -276,6 +276,7 @@ Partial Class ventas
         ' 
         ' DataGridVentas
         ' 
+        DataGridVentas.BorderStyle = BorderStyle.None
         DataGridVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         DataGridVentas.Dock = DockStyle.Fill
         DataGridVentas.Location = New Point(0, 0)
@@ -299,9 +300,9 @@ Partial Class ventas
         PanelTotal.Anchor = AnchorStyles.None
         PanelTotal.Controls.Add(LabelTotal)
         PanelTotal.Controls.Add(LabelPrecioTotal)
-        PanelTotal.Location = New Point(80, 14)
+        PanelTotal.Location = New Point(30, 14)
         PanelTotal.Name = "PanelTotal"
-        PanelTotal.Size = New Size(140, 23)
+        PanelTotal.Size = New Size(240, 23)
         PanelTotal.TabIndex = 4
         ' 
         ' LabelTotal
@@ -317,7 +318,7 @@ Partial Class ventas
         ' 
         LabelPrecioTotal.AutoSize = True
         LabelPrecioTotal.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelPrecioTotal.Location = New Point(84, 0)
+        LabelPrecioTotal.Location = New Point(184, 0)
         LabelPrecioTotal.Name = "LabelPrecioTotal"
         LabelPrecioTotal.Size = New Size(56, 23)
         LabelPrecioTotal.TabIndex = 2

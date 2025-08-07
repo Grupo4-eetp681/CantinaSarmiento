@@ -48,16 +48,23 @@
             .AllowUserToOrderColumns = False
             .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             .MultiSelect = False
-            .ReadOnly = True
+
 
             ' Desactiva el resaltado de selección
             .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
             .DefaultCellStyle.SelectionForeColor = .DefaultCellStyle.ForeColor
 
-            ' Opcional: desactiva la edición de celdas (aunque .ReadOnly ya lo hace)
-            .EditMode = DataGridViewEditMode.EditProgrammatically
+            .Columns.Clear()
+            .Columns.Add("Descripcion", "Descripción")
+            .Columns.Add("Cantidad", "Cantidad")
+            .Columns.Add("Subtotal", "Subtotal")
+            .AllowUserToAddRows = False
+            .RowHeadersVisible = False
+            .SelectionMode = DataGridViewSelectionMode.FullRowSelect
+            .MultiSelect = False
+            .Columns("Descripcion").ReadOnly = True
+            .Columns("Subtotal").ReadOnly = True
         End With
-
         TXTPago.Text = "$ "
     End Sub
 
@@ -72,10 +79,9 @@
         TXTPago.Location = New Point(LabelPago.Location.X + LabelPago.Width + 15, TXTPago.Location.Y)
 
         ' --- BLOQUE VUELTO ---
-        Dim anchoVuelto As Integer = (LabelNUMVuelto.Location.X + LabelNUMVuelto.Width) - LabelVuelto.Location.X
-        Dim nuevaXVuelto As Integer = centroEspacioDisponible - (anchoVuelto \ 2)
-        LabelVuelto.Location = New Point(nuevaXVuelto, LabelVuelto.Location.Y)
-        LabelNUMVuelto.Location = New Point(LabelVuelto.Location.X + LabelVuelto.Width + 15, LabelNUMVuelto.Location.Y)
+        LabelVuelto.Location = New Point(nuevaXPago, LabelVuelto.Location.Y)
+        Dim posicionXVuelto As Integer = TXTPago.Location.X + TXTPago.Width - LabelNUMVuelto.Width
+        LabelNUMVuelto.Location = New Point(posicionXVuelto, LabelNUMVuelto.Location.Y)
     End Sub
 
 
@@ -166,7 +172,83 @@
             LabelNUMVuelto.Text = "$ " & vuelto.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
             TXTPago.Text = "$ "
 
+            acomodarPagoYVuelto()
             BotonRegistro.Focus()
         End If
     End Sub
+
+    Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
+        If e.RowIndex >= 0 Then
+            Dim filaSeleccionada As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+
+            Dim descripcion As String = filaSeleccionada.Cells("Descripción").Value.ToString()
+            Dim precioUnitario As Long = Convert.ToInt64(filaSeleccionada.Cells("Precio_Unitario").Value)
+
+            Dim encontrado As Boolean = False
+
+            For Each filaVenta As DataGridViewRow In DataGridVentas.Rows
+                If filaVenta.Cells("Descripcion").Value.ToString() = descripcion Then
+                    ' Producto ya existe en la grilla de ventas
+                    Dim cantidadActual As Integer = Convert.ToInt32(filaVenta.Cells("Cantidad").Value)
+                    cantidadActual += 1
+                    filaVenta.Cells("Cantidad").Value = cantidadActual
+                    filaVenta.Cells("Subtotal").Value = cantidadActual * precioUnitario
+                    encontrado = True
+                    Exit For
+                End If
+            Next
+
+            If Not encontrado Then
+                ' Producto no está, lo agregamos nuevo
+                DataGridVentas.Rows.Add(descripcion, 1, precioUnitario)
+            End If
+        End If
+
+        ActualizarTotal()
+    End Sub
+    Private Sub DataGridVentas_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellEndEdit
+        If e.RowIndex >= 0 AndAlso e.ColumnIndex = DataGridVentas.Columns("Cantidad").Index Then
+            Dim fila As DataGridViewRow = DataGridVentas.Rows(e.RowIndex)
+
+            Dim cantidad As Integer
+            If Not Integer.TryParse(fila.Cells("Cantidad").Value.ToString(), cantidad) Then
+                cantidad = 1 ' Por si ponen texto inválido
+                fila.Cells("Cantidad").Value = cantidad
+            End If
+
+            ' Buscamos el precio original del producto
+            Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+
+            ' Lo buscás en el DataGridView1 (productos) para obtener el precio
+            For Each filaProducto As DataGridViewRow In DataGridView1.Rows
+                If filaProducto.Cells("Descripción").Value.ToString() = descripcion Then
+                    Dim precioUnitario As Long = Convert.ToInt64(filaProducto.Cells("Precio_Unitario").Value)
+                    fila.Cells("Subtotal").Value = cantidad * precioUnitario
+                    Exit For
+                End If
+            Next
+        End If
+        ActualizarTotal()
+    End Sub
+    Private Sub ActualizarTotal()
+
+        Dim anchoAntes As Integer = LabelPrecioTotal.Width
+        Dim posicionAntes As Integer = LabelPrecioTotal.Location.X
+
+        Dim total As Long = 0
+
+        For Each fila As DataGridViewRow In DataGridVentas.Rows
+            If fila.Cells("Subtotal").Value IsNot Nothing Then
+                total += Convert.ToInt64(fila.Cells("Subtotal").Value)
+            End If
+        Next
+
+        LabelPrecioTotal.Text = $"$ {total}"
+
+        Dim anchoDespues As Integer = LabelPrecioTotal.Width
+        Dim posicionDespues As Integer = posicionAntes - (anchoDespues - anchoAntes)
+        LabelPrecioTotal.Location = New Point(posicionDespues, LabelPrecioTotal.Location.Y)
+    End Sub
+
+
 End Class

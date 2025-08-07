@@ -16,7 +16,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("CantinaSarmiento"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+722712f955476b16b4736f52b194a4c8d1ce92bd"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8381f21bcb5f5c9439a93fae93b9daef545fe4b"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("CantinaSarmiento"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("CantinaSarmiento"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _
