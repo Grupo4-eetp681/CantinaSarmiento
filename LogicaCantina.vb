@@ -2,9 +2,39 @@
 Imports System.IO
 
 Public Class LogicaCantina
+    Public subdivision As String = String.Empty
     Public programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
     Public cantinaSarmientoPath As String = Path.Combine(programDataPath, "CantinaSarmiento")
-    Public baseDeDatos As String = Path.Combine(cantinaSarmientoPath, "CantinaSarmiento.db")
+    Public baseDeDatosUsuarios = Path.Combine(cantinaSarmientoPath, "CantinaSarmiento.db")
+    Public baseDeDatos As String = Path.Combine(cantinaSarmientoPath, subdivision, "_CantinaSarmiento.db")
+
+    Public Sub cargarSubdivision(division As String)
+        subdivision = division
+        verificarBaseDeDatos()
+    End Sub
+
+    Private Sub verificarBaseDeDatos()
+        If Not Directory.Exists(cantinaSarmientoPath) Then
+            Directory.CreateDirectory(cantinaSarmientoPath)
+        End If
+        Dim subdivisionPath As String = Path.Combine(cantinaSarmientoPath, subdivision)
+        If Not Directory.Exists(subdivisionPath) Then
+            Directory.CreateDirectory(subdivisionPath)
+        End If
+        If Not File.Exists(baseDeDatos) Then
+            SQLiteConnection.CreateFile(baseDeDatos)
+            Using conn As SQLiteConnection = ObtenerConexion()
+                Dim createUsuariosTable As String = "CREATE TABLE IF NOT EXISTS usuarios (Id INTEGER PRIMARY KEY AUTOINCREMENT, Division TEXT UNIQUE, Contraseña TEXT)"
+                Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
+                Using cmd As New SQLiteCommand(createUsuariosTable, conn)
+                    cmd.ExecuteNonQuery()
+                End Using
+                Using cmd As New SQLiteCommand(createProductoTable, conn)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+        End If
+    End Sub
 
     Public Function ObtenerConexion() As SQLiteConnection
         Dim connectionString As String = $"Data Source={baseDeDatos};Version=3;"
@@ -13,9 +43,16 @@ Public Class LogicaCantina
         Return conn
     End Function
 
+    Public Function ObtenerConexionUsuario() As SQLiteConnection
+        Dim connectionString As String = $"Data Source={baseDeDatosUsuarios};Version=3;"
+        Dim conn As New SQLiteConnection(connectionString)
+        conn.Open()
+        Return conn
+    End Function
+
     Public Function ValidarLogin(division As String, contraseña As String) As (Exito As Boolean, Motivo As String)
         Try
-            Using SQLiteConnection As SQLiteConnection = ObtenerConexion()
+            Using SQLiteConnection As SQLiteConnection = ObtenerConexionUsuario()
                 Dim query As String = "SELECT COUNT(*) FROM usuarios WHERE Division = @Division AND Contraseña = @Contraseña"
                 Using command As New SQLiteCommand(query, SQLiteConnection)
                     command.Parameters.AddWithValue("@Division", division)
@@ -36,7 +73,7 @@ Public Class LogicaCantina
 
     Public Function registrarDivision(division As String, contraseña As String) As (Exito As Boolean, Motivo As String)
         Try
-            Using SQLiteConnection As SQLiteConnection = ObtenerConexion()
+            Using SQLiteConnection As SQLiteConnection = ObtenerConexionUsuario()
                 Dim query As String = "SELECT COUNT(*) FROM usuarios WHERE Division = @Division"
                 Using command As New SQLiteCommand(query, SQLiteConnection)
                     command.Parameters.AddWithValue("@Division", division)

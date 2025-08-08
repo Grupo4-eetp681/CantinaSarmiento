@@ -1,6 +1,6 @@
 ﻿Public Class ventas
     Dim logica As New LogicaCantina
-
+    Dim calcularVuelto As Boolean = False
     Private Sub Busqueda_TextChanged(sender As Object, e As EventArgs) Handles Busqueda.TextChanged
         If Busqueda.Text() = "" Then
             Dim tb = logica.ObtenerTodosLosProductos()
@@ -77,7 +77,32 @@
             .MultiSelect = False
             .Columns("Descripcion").ReadOnly = True
             .Columns("Subtotal").ReadOnly = True
+
+
+            ' Agregar columna botón solo si no existe aún
+            If Not .Columns.Contains("Eliminar") Then
+                Dim btnEliminar As New DataGridViewButtonColumn()
+                With btnEliminar
+                    .HeaderText = ""
+                    .Name = "Eliminar"
+                    .Text = "🗑️"
+                    .UseColumnTextForButtonValue = True
+                    .Width = 40
+                    .FlatStyle = FlatStyle.Flat
+                End With
+                .Columns.Add(btnEliminar)
+            End If
+
+            .Columns("Eliminar").ReadOnly = True
+
         End With
+
+        'Acomodar Botones'
+        Dim anchoConjunto As Integer = PanelContenedorButtonVentas.Width
+        Dim centroEspacioDisponible As Integer = PanelDerechaINFButton.Width / 2
+        Dim nuevaX As Integer = centroEspacioDisponible - (anchoConjunto \ 2)
+        PanelContenedorButtonVentas.Location = New Point(nuevaX, PanelContenedorButtonVentas.Location.Y)
+
         TXTPago.Text = "$ "
     End Sub
 
@@ -85,16 +110,13 @@
         Dim anchoDisponible As Integer = PanelDerechaINFVueltoYPago.Width
 
         ' --- BLOQUE PAGO ---
-        Dim anchoPago As Integer = (TXTPago.Location.X + TXTPago.Width) - LabelPago.Location.X
-        Dim centroEspacioDisponible As Integer = anchoDisponible \ 2
-        Dim nuevaXPago As Integer = centroEspacioDisponible - (anchoPago \ 2)
-        LabelPago.Location = New Point(nuevaXPago, LabelPago.Location.Y)
-        TXTPago.Location = New Point(LabelPago.Location.X + LabelPago.Width + 15, TXTPago.Location.Y)
+        Dim anchoConjunto As Integer = PanelCentrarPago.Width
+        Dim centroEspacioDisponible As Integer = PanelDerechaINFVueltoYPago.Width / 2
+        Dim nuevaX As Integer = centroEspacioDisponible - (anchoConjunto \ 2)
+        PanelCentrarPago.Location = New Point(nuevaX, PanelContenedorButtonVentas.Location.Y)
 
         ' --- BLOQUE VUELTO ---
-        LabelVuelto.Location = New Point(nuevaXPago, LabelVuelto.Location.Y)
-        Dim posicionXVuelto As Integer = TXTPago.Location.X + TXTPago.Width - LabelNUMVuelto.Width
-        LabelNUMVuelto.Location = New Point(posicionXVuelto, LabelNUMVuelto.Location.Y)
+        PanelCentrarVuelto.Location = New Point(nuevaX, PanelCentrarVuelto.Location.Y)
     End Sub
 
 
@@ -108,12 +130,9 @@
         PanelDataVentas.Location = New Point(25, 0)
         PanelDataVentas.BringToFront()
 
-        PanelCentrarPago.Width = ancho - 50
-        PanelCentrarVuelto.Width = ancho - 50
-        PanelCentrarPago.Location = New Point(25, 0)
-        PanelCentrarVuelto.Location = New Point(25, 0)
-
         TXTPago.Width = PanelDerechaINFVueltoYPago.Width * 0.3
+        PanelCentrarPago.Width = (TXTPago.Location.X + TXTPago.Width)
+        PanelCentrarVuelto.Width = PanelCentrarPago.Width
 
         acomodarPagoYVuelto()
 
@@ -174,8 +193,13 @@
             Dim textoLimpio As String = TXTPago.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim()
             Dim montoPago As Long = 0
             Long.TryParse(textoLimpio, montoPago)
+            If montoPago > 0 Then
+                calcularVuelto = True
+            Else
+                calcularVuelto = False
+            End If
 
-            'Obtener el totl'
+            'Obtener el total'
             Dim textoTotal As String = LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim()
             Dim montoTotal As Long = 0
             Long.TryParse(textoTotal, montoTotal)
@@ -257,6 +281,19 @@
     End Sub
     Private Sub ActualizarTotal()
 
+        'Obtener el vuelto'
+        Dim textoLimpio As String = LabelNUMVuelto.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim()
+        Dim montoPago As Long = 0
+        Long.TryParse(textoLimpio, montoPago)
+
+        'Obtener el total'
+        Dim textoTotal As String = LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim()
+        Dim montoTotal As Long = 0
+        Long.TryParse(textoTotal, montoTotal)
+
+        'Calcular el pago'
+        Dim pago As Long = montoPago + montoTotal
+
         Dim anchoAntes As Integer = LabelPrecioTotal.Width
         Dim posicionAntes As Integer = LabelPrecioTotal.Location.X
 
@@ -274,7 +311,17 @@
         Dim posicionDespues As Integer = posicionAntes - (anchoDespues - anchoAntes)
         LabelPrecioTotal.Location = New Point(posicionDespues, LabelPrecioTotal.Location.Y)
 
+        If calcularVuelto Then
+            'Calcular el vuelto'
+            Dim vuelto As Long = pago - total
+            LabelNUMVuelto.Text = "$ " & vuelto.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
+            TXTPago.Text = "$ "
+
+            acomodarPagoYVuelto()
+        End If
+
     End Sub
+
 
 
 
@@ -290,5 +337,24 @@
             DataGridVentas.ClearSelection()
             DataGridVentas.Rows(e.RowIndex).Selected = True
         End If
+    End Sub
+
+    Private Sub DataGridVentas_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellContentClick
+        If e.RowIndex >= 0 AndAlso DataGridVentas.Columns(e.ColumnIndex).Name = "Eliminar" Then
+            DataGridVentas.Rows.RemoveAt(e.RowIndex)
+            ActualizarTotal()
+        End If
+    End Sub
+
+    Private Sub BotonRegistro_Click(sender As Object, e As EventArgs) Handles BotonRegistro.Click
+        calcularVuelto = False
+    End Sub
+
+    Private Sub BotonFactura_Click(sender As Object, e As EventArgs) Handles BotonFactura.Click
+        calcularVuelto = False
+    End Sub
+
+    Private Sub BotonTicket_Click(sender As Object, e As EventArgs) Handles BotonTicket.Click
+        calcularVuelto = False
     End Sub
 End Class

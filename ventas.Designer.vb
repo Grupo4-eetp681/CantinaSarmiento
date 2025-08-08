@@ -105,6 +105,7 @@ Partial Class ventas
         ' 
         ' PanelContenedorVentas
         ' 
+        PanelContenedorVentas.BackColor = Color.Transparent
         PanelContenedorVentas.Controls.Add(PanelDerechaINFVueltoYPago)
         PanelContenedorVentas.Controls.Add(Panel10PX2)
         PanelContenedorVentas.Controls.Add(PanelDerechaINFButton)
@@ -142,7 +143,7 @@ Partial Class ventas
         PanelCentrarPago.Controls.Add(LabelPago)
         PanelCentrarPago.Location = New Point(25, 0)
         PanelCentrarPago.Name = "PanelCentrarPago"
-        PanelCentrarPago.Size = New Size(245, 30)
+        PanelCentrarPago.Size = New Size(235, 30)
         PanelCentrarPago.TabIndex = 8
         ' 
         ' TXTPago
@@ -180,18 +181,20 @@ Partial Class ventas
         PanelCentrarVuelto.Controls.Add(LabelVuelto)
         PanelCentrarVuelto.Location = New Point(25, 0)
         PanelCentrarVuelto.Name = "PanelCentrarVuelto"
-        PanelCentrarVuelto.Size = New Size(245, 30)
+        PanelCentrarVuelto.Size = New Size(235, 30)
         PanelCentrarVuelto.TabIndex = 9
         ' 
         ' LabelNUMVuelto
         ' 
         LabelNUMVuelto.AutoSize = True
+        LabelNUMVuelto.Dock = DockStyle.Right
         LabelNUMVuelto.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelNUMVuelto.Location = New Point(129, 3)
+        LabelNUMVuelto.Location = New Point(179, 0)
         LabelNUMVuelto.Name = "LabelNUMVuelto"
         LabelNUMVuelto.Size = New Size(56, 23)
         LabelNUMVuelto.TabIndex = 2
         LabelNUMVuelto.Text = "$0.00"
+        LabelNUMVuelto.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' LabelVuelto
         ' 
@@ -212,6 +215,7 @@ Partial Class ventas
         ' 
         ' PanelDerechaINFButton
         ' 
+        PanelDerechaINFButton.BackColor = Color.Transparent
         PanelDerechaINFButton.Controls.Add(PanelContenedorButtonVentas)
         PanelDerechaINFButton.Dock = DockStyle.Bottom
         PanelDerechaINFButton.Location = New Point(0, 400)
@@ -232,11 +236,11 @@ Partial Class ventas
         ' 
         ' BotonTicket
         ' 
-        BotonTicket.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonTicket.BackColor = Color.Transparent
         BotonTicket.BackgroundImage = CType(resources.GetObject("BotonTicket.BackgroundImage"), Image)
         BotonTicket.BackgroundImageLayout = ImageLayout.Stretch
-        BotonTicket.FlatStyle = FlatStyle.Flat
-        BotonTicket.ForeColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonTicket.FlatStyle = FlatStyle.Popup
+        BotonTicket.ForeColor = Color.Transparent
         BotonTicket.Location = New Point(200, 0)
         BotonTicket.Name = "BotonTicket"
         BotonTicket.Size = New Size(40, 40)
@@ -245,10 +249,10 @@ Partial Class ventas
         ' 
         ' BotonFactura
         ' 
-        BotonFactura.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonFactura.BackColor = Color.Transparent
         BotonFactura.BackgroundImage = CType(resources.GetObject("BotonFactura.BackgroundImage"), Image)
         BotonFactura.BackgroundImageLayout = ImageLayout.Stretch
-        BotonFactura.FlatStyle = FlatStyle.Flat
+        BotonFactura.FlatStyle = FlatStyle.Popup
         BotonFactura.ForeColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
         BotonFactura.Location = New Point(100, 0)
         BotonFactura.Name = "BotonFactura"
@@ -258,11 +262,11 @@ Partial Class ventas
         ' 
         ' BotonRegistro
         ' 
-        BotonRegistro.BackColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonRegistro.BackColor = Color.Transparent
         BotonRegistro.BackgroundImage = CType(resources.GetObject("BotonRegistro.BackgroundImage"), Image)
         BotonRegistro.BackgroundImageLayout = ImageLayout.Stretch
-        BotonRegistro.FlatStyle = FlatStyle.Flat
-        BotonRegistro.ForeColor = Color.FromArgb(CByte(217), CByte(217), CByte(217))
+        BotonRegistro.FlatStyle = FlatStyle.Popup
+        BotonRegistro.ForeColor = Color.Transparent
         BotonRegistro.Location = New Point(0, 0)
         BotonRegistro.Name = "BotonRegistro"
         BotonRegistro.Size = New Size(40, 40)
@@ -409,12 +413,12 @@ Partial Class ventas
         ' 
         MenuVentas.Items.AddRange(New ToolStripItem() {EliminarProductoToolStripMenuItem})
         MenuVentas.Name = "MenuVentas"
-        MenuVentas.Size = New Size(181, 48)
+        MenuVentas.Size = New Size(170, 26)
         ' 
         ' EliminarProductoToolStripMenuItem
         ' 
         EliminarProductoToolStripMenuItem.Name = "EliminarProductoToolStripMenuItem"
-        EliminarProductoToolStripMenuItem.Size = New Size(180, 22)
+        EliminarProductoToolStripMenuItem.Size = New Size(169, 22)
         EliminarProductoToolStripMenuItem.Text = "Eliminar Producto"
         ' 
         ' ventas
