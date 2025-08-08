@@ -22,6 +22,7 @@ Partial Class ventas
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ventas))
         PanelVentas = New Panel()
         PanelContenedorDER = New Panel()
@@ -55,6 +56,8 @@ Partial Class ventas
         Busqueda = New TextBox()
         PictureBox1 = New PictureBox()
         Panel10PX = New Panel()
+        MenuVentas = New ContextMenuStrip(components)
+        EliminarProductoToolStripMenuItem = New ToolStripMenuItem()
         PanelVentas.SuspendLayout()
         PanelContenedorDER.SuspendLayout()
         PanelContenedorVentas.SuspendLayout()
@@ -75,6 +78,7 @@ Partial Class ventas
         PanelContenedorBusqueda.SuspendLayout()
         PanelBusqueda.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        MenuVentas.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelVentas
@@ -401,6 +405,18 @@ Partial Class ventas
         Panel10PX.Size = New Size(850, 10)
         Panel10PX.TabIndex = 8
         ' 
+        ' MenuVentas
+        ' 
+        MenuVentas.Items.AddRange(New ToolStripItem() {EliminarProductoToolStripMenuItem})
+        MenuVentas.Name = "MenuVentas"
+        MenuVentas.Size = New Size(181, 48)
+        ' 
+        ' EliminarProductoToolStripMenuItem
+        ' 
+        EliminarProductoToolStripMenuItem.Name = "EliminarProductoToolStripMenuItem"
+        EliminarProductoToolStripMenuItem.Size = New Size(180, 22)
+        EliminarProductoToolStripMenuItem.Text = "Eliminar Producto"
+        ' 
         ' ventas
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -435,6 +451,7 @@ Partial Class ventas
         PanelBusqueda.ResumeLayout(False)
         PanelBusqueda.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        MenuVentas.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -470,4 +487,6 @@ Partial Class ventas
     Friend WithEvents PanelVuelto As Panel
     Friend WithEvents PanelCentrarVuelto As Panel
     Friend WithEvents Panel10PX2 As Panel
+    Friend WithEvents MenuVentas As ContextMenuStrip
+    Friend WithEvents EliminarProductoToolStripMenuItem As ToolStripMenuItem
 End Class

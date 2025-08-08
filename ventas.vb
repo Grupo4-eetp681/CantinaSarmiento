@@ -29,6 +29,13 @@
             .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             .MultiSelect = False
             .ReadOnly = True
+            .EnableHeadersVisualStyles = False
+            .BackColor = Color.LightGray
+            .ForeColor = Color.Black
+            .CurrentCell = Nothing
+            .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
+            .DefaultCellStyle.SelectionForeColor = .DefaultCellStyle.ForeColor
+            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
             ' Desactiva el resaltado de selección
             .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
@@ -48,7 +55,13 @@
             .AllowUserToOrderColumns = False
             .SelectionMode = DataGridViewSelectionMode.FullRowSelect
             .MultiSelect = False
-
+            .EnableHeadersVisualStyles = False
+            .BackColor = Color.LightGray
+            .ForeColor = Color.Black
+            .CurrentCell = Nothing
+            .DefaultCellStyle.SelectionBackColor = DataGridVentas.DefaultCellStyle.BackColor
+            .DefaultCellStyle.SelectionForeColor = DataGridVentas.DefaultCellStyle.ForeColor
+            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
 
             ' Desactiva el resaltado de selección
             .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
@@ -163,7 +176,7 @@
             Long.TryParse(textoLimpio, montoPago)
 
             'Obtener el totl'
-            Dim textoTotal As String = LabelTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim()
+            Dim textoTotal As String = LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim()
             Dim montoTotal As Long = 0
             Long.TryParse(textoTotal, montoTotal)
 
@@ -201,6 +214,11 @@
             If Not encontrado Then
                 ' Producto no está, lo agregamos nuevo
                 DataGridVentas.Rows.Add(descripcion, 1, precioUnitario)
+
+                Dim nuevaFilaIndex As Integer = DataGridVentas.Rows.Count - 1
+
+                DataGridVentas.CurrentCell = DataGridVentas.Rows(nuevaFilaIndex).Cells("Cantidad")
+                DataGridVentas.BeginEdit(True)
             End If
         End If
 
@@ -214,6 +232,13 @@
             If Not Integer.TryParse(fila.Cells("Cantidad").Value.ToString(), cantidad) Then
                 cantidad = 1 ' Por si ponen texto inválido
                 fila.Cells("Cantidad").Value = cantidad
+            End If
+
+            'Si es 0, eliminamos la fila'
+            If cantidad <= 0 Then
+                DataGridVentas.Rows.Remove(fila)
+                ActualizarTotal()
+                Return
             End If
 
             ' Buscamos el precio original del producto
@@ -243,12 +268,27 @@
             End If
         Next
 
-        LabelPrecioTotal.Text = $"$ {total}"
+        LabelPrecioTotal.Text = "$ " & total.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
 
         Dim anchoDespues As Integer = LabelPrecioTotal.Width
         Dim posicionDespues As Integer = posicionAntes - (anchoDespues - anchoAntes)
         LabelPrecioTotal.Location = New Point(posicionDespues, LabelPrecioTotal.Location.Y)
+
     End Sub
 
 
+
+    Private Sub EliminarProductoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EliminarProductoToolStripMenuItem.Click
+        If DataGridVentas.SelectedRows.Count > 0 Then
+            DataGridVentas.Rows.Remove(DataGridVentas.SelectedRows(0))
+            ActualizarTotal() ' Si tenés un método para recalcular el total
+        End If
+    End Sub
+
+    Private Sub DataGridVentas_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellDoubleClick
+        If e.RowIndex >= 0 Then
+            DataGridVentas.ClearSelection()
+            DataGridVentas.Rows(e.RowIndex).Selected = True
+        End If
+    End Sub
 End Class
