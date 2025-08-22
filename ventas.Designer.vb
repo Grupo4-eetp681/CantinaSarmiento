@@ -39,6 +39,8 @@ Partial Class ventas
         Panel10PX2 = New Panel()
         PanelDerechaINFButton = New Panel()
         PanelContenedorButtonVentas = New Panel()
+        PanelLabel = New Panel()
+        LabelMensage = New Label()
         BotonTicket = New Button()
         BotonFactura = New Button()
         BotonRegistro = New Button()
@@ -58,6 +60,7 @@ Partial Class ventas
         Panel10PX = New Panel()
         MenuVentas = New ContextMenuStrip(components)
         EliminarProductoToolStripMenuItem = New ToolStripMenuItem()
+        TimerMensage = New Timer(components)
         PanelVentas.SuspendLayout()
         PanelContenedorDER.SuspendLayout()
         PanelContenedorVentas.SuspendLayout()
@@ -68,6 +71,7 @@ Partial Class ventas
         PanelCentrarVuelto.SuspendLayout()
         PanelDerechaINFButton.SuspendLayout()
         PanelContenedorButtonVentas.SuspendLayout()
+        PanelLabel.SuspendLayout()
         PanelDataVentas.SuspendLayout()
         CType(DataGridVentas, ComponentModel.ISupportInitialize).BeginInit()
         PanelTotales.SuspendLayout()
@@ -226,6 +230,7 @@ Partial Class ventas
         ' PanelContenedorButtonVentas
         ' 
         PanelContenedorButtonVentas.Anchor = AnchorStyles.None
+        PanelContenedorButtonVentas.Controls.Add(PanelLabel)
         PanelContenedorButtonVentas.Controls.Add(BotonTicket)
         PanelContenedorButtonVentas.Controls.Add(BotonFactura)
         PanelContenedorButtonVentas.Controls.Add(BotonRegistro)
@@ -233,6 +238,27 @@ Partial Class ventas
         PanelContenedorButtonVentas.Name = "PanelContenedorButtonVentas"
         PanelContenedorButtonVentas.Size = New Size(240, 40)
         PanelContenedorButtonVentas.TabIndex = 7
+        ' 
+        ' PanelLabel
+        ' 
+        PanelLabel.Controls.Add(LabelMensage)
+        PanelLabel.Dock = DockStyle.Fill
+        PanelLabel.Location = New Point(0, 0)
+        PanelLabel.Name = "PanelLabel"
+        PanelLabel.Size = New Size(240, 40)
+        PanelLabel.TabIndex = 8
+        PanelLabel.Visible = False
+        ' 
+        ' LabelMensage
+        ' 
+        LabelMensage.BackColor = Color.NavajoWhite
+        LabelMensage.Dock = DockStyle.Fill
+        LabelMensage.Location = New Point(0, 0)
+        LabelMensage.Name = "LabelMensage"
+        LabelMensage.Size = New Size(240, 40)
+        LabelMensage.TabIndex = 0
+        LabelMensage.Text = "Label1"
+        LabelMensage.Visible = False
         ' 
         ' BotonTicket
         ' 
@@ -421,6 +447,10 @@ Partial Class ventas
         EliminarProductoToolStripMenuItem.Size = New Size(169, 22)
         EliminarProductoToolStripMenuItem.Text = "Eliminar Producto"
         ' 
+        ' TimerMensage
+        ' 
+        TimerMensage.Interval = 2000
+        ' 
         ' ventas
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -443,6 +473,7 @@ Partial Class ventas
         PanelCentrarVuelto.PerformLayout()
         PanelDerechaINFButton.ResumeLayout(False)
         PanelContenedorButtonVentas.ResumeLayout(False)
+        PanelLabel.ResumeLayout(False)
         PanelDataVentas.ResumeLayout(False)
         CType(DataGridVentas, ComponentModel.ISupportInitialize).EndInit()
         PanelTotales.ResumeLayout(False)
@@ -493,4 +524,7 @@ Partial Class ventas
     Friend WithEvents Panel10PX2 As Panel
     Friend WithEvents MenuVentas As ContextMenuStrip
     Friend WithEvents EliminarProductoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents PanelLabel As Panel
+    Friend WithEvents LabelMensage As Label
+    Friend WithEvents TimerMensage As Timer
 End Class

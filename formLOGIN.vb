@@ -14,6 +14,7 @@
     Private Sub BotonLogin_Click(sender As Object, e As EventArgs) Handles BotonLogin.Click
         Dim resultado = logica.ValidarLogin(TextBoxSubdivision.Text.ToLower(), TextBoxContra.Text)
         If resultado.Exito Then
+            Form1.subdivision = TextBoxSubdivision.Text.ToLower()
             AbrirVentasEnPanel()
             Me.Dispose()
         ElseIf resultado.Motivo = "Los datos no coinciden con los registros" Then

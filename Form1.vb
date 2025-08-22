@@ -3,6 +3,7 @@ Imports System.Security.Policy
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form1
+    Public subdivision As String = String.Empty
     Public desplegado As Boolean = False
     ' Esta función le dice a Windows que libere el control del mouse
     <DllImport("user32.dll", EntryPoint:="ReleaseCapture")>

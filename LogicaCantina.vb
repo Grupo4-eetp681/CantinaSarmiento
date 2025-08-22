@@ -6,10 +6,11 @@ Public Class LogicaCantina
     Public programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
     Public cantinaSarmientoPath As String = Path.Combine(programDataPath, "CantinaSarmiento")
     Public baseDeDatosUsuarios = Path.Combine(cantinaSarmientoPath, "CantinaSarmiento.db")
-    Public baseDeDatos As String = Path.Combine(cantinaSarmientoPath, subdivision, "_CantinaSarmiento.db")
+    Public baseDeDatos As String = String.Empty
 
     Public Sub cargarSubdivision(division As String)
         subdivision = division
+        baseDeDatos = Path.Combine(cantinaSarmientoPath, $"{subdivision}_CantinaSarmiento.db")
         verificarBaseDeDatos()
     End Sub
 
@@ -17,21 +18,24 @@ Public Class LogicaCantina
         If Not Directory.Exists(cantinaSarmientoPath) Then
             Directory.CreateDirectory(cantinaSarmientoPath)
         End If
-        Dim subdivisionPath As String = Path.Combine(cantinaSarmientoPath, subdivision)
-        If Not Directory.Exists(subdivisionPath) Then
-            Directory.CreateDirectory(subdivisionPath)
-        End If
         If Not File.Exists(baseDeDatos) Then
             SQLiteConnection.CreateFile(baseDeDatos)
             Using conn As SQLiteConnection = ObtenerConexion()
-                Dim createUsuariosTable As String = "CREATE TABLE IF NOT EXISTS usuarios (Id INTEGER PRIMARY KEY AUTOINCREMENT, Division TEXT UNIQUE, Contraseña TEXT)"
                 Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
-                Using cmd As New SQLiteCommand(createUsuariosTable, conn)
-                    cmd.ExecuteNonQuery()
-                End Using
-                Using cmd As New SQLiteCommand(createProductoTable, conn)
-                    cmd.ExecuteNonQuery()
-                End Using
+                Dim createOperacionTable As String = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
+                Dim createInicioTable As String = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Hora time, Fecha date)"
+                Dim createVentasTable As String = "CREATE TABLE IF NOT EXISTS Ventas (IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, IdProducto INTEGER, Cantidad INTEGER, Fecha DATE, FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto))"
+                Dim tablas As String() = {
+                        createProductoTable,
+                        createOperacionTable,
+                        createInicioTable,
+                        createVentasTable
+                    }
+                For Each sql As String In tablas
+                    Using cmd As New SQLiteCommand(sql, conn)
+                        cmd.ExecuteNonQuery()
+                    End Using
+                Next
             End Using
         End If
     End Sub
@@ -129,5 +133,20 @@ Public Class LogicaCantina
         End Try
         Return dt
     End Function
+
+    Public Sub RegistrarVentas(filas As List(Of (Descripcion As String, Cantidad As Integer, Subtotal As Integer, Fecha As Date)))
+        Using conn As SQLiteConnection = ObtenerConexion()
+            For Each venta In filas
+                Dim query As String = "INSERT INTO Ventas (Descripcion, Cantidad, Subtotal, Fecha) VALUES (@Descripcion, @Cantidad, @Subtotal, @Fecha)"
+                Using cmd As New SQLiteCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@Descripcion", venta.Descripcion)
+                    cmd.Parameters.AddWithValue("@Cantidad", venta.Cantidad)
+                    cmd.Parameters.AddWithValue("@Subtotal", venta.Subtotal)
+                    cmd.Parameters.AddWithValue("@Fecha", venta.Fecha.ToString("yyyy-MM-dd"))
+                    cmd.ExecuteNonQuery()
+                End Using
+            Next
+        End Using
+    End Sub
 
 End Class

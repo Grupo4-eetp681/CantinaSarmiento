@@ -11,8 +11,8 @@
         End If
 
     End Sub
-
     Private Sub ventas_Load(sender As Object, e As EventArgs) Handles Me.Load
+        logica.cargarSubdivision(Form1.subdivision)
         Dim tb = logica.ObtenerTodosLosProductos()
         DataGridView1.DataSource = tb
 
@@ -346,15 +346,93 @@
         End If
     End Sub
 
+    Private Sub mostrar_mensaje()
+        PanelLabel.Visible = True
+        LabelMensage.Visible = True
+        TimerMensage.Start()
+    End Sub
+
+    Private Sub AjustarFuenteLabelMaximo(label As Label, texto As String)
+        Dim anchoMaximo As Integer = label.Width
+        Dim altoMaximo As Integer = label.Height
+        Dim fuenteBase As Font = label.Font
+        Dim tamañoFuente As Single = fuenteBase.Size
+
+        ' Prueba desde un tamaño grande hacia abajo
+        For size As Single = 48 To 8 Step -1
+            Using fuentePrueba As New Font(fuenteBase.FontFamily, size, fuenteBase.Style)
+                Dim tamañoTexto As Size = TextRenderer.MeasureText(texto, fuentePrueba, New Size(anchoMaximo, altoMaximo), TextFormatFlags.WordBreak)
+                If tamañoTexto.Width <= anchoMaximo AndAlso tamañoTexto.Height <= altoMaximo Then
+                    tamañoFuente = size
+                    Exit For
+                End If
+            End Using
+        Next
+
+        label.Font = New Font(fuenteBase.FontFamily, tamañoFuente, fuenteBase.Style)
+        label.Text = texto
+        label.TextAlign = ContentAlignment.MiddleCenter
+    End Sub
+
     Private Sub BotonRegistro_Click(sender As Object, e As EventArgs) Handles BotonRegistro.Click
         calcularVuelto = False
+        If DataGridVentas.Rows.Count = 0 Then
+            AjustarFuenteLabelMaximo(LabelMensage, "Lista de venta vacía")
+            mostrar_mensaje()
+            Return
+        End If
+
+        AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
+        mostrar_mensaje()
+        registrar_venta()
     End Sub
 
     Private Sub BotonFactura_Click(sender As Object, e As EventArgs) Handles BotonFactura.Click
         calcularVuelto = False
+        If DataGridVentas.Rows.Count = 0 Then
+            AjustarFuenteLabelMaximo(LabelMensage, "Lista de venta vacía")
+            mostrar_mensaje()
+            Return
+        End If
     End Sub
 
     Private Sub BotonTicket_Click(sender As Object, e As EventArgs) Handles BotonTicket.Click
         calcularVuelto = False
+        If DataGridVentas.Rows.Count = 0 Then
+            AjustarFuenteLabelMaximo(LabelMensage, "Lista de venta vacía")
+            mostrar_mensaje()
+            Return
+        End If
+    End Sub
+
+    Private Sub TimerMensage_Tick(sender As Object, e As EventArgs) Handles TimerMensage.Tick
+        PanelLabel.Visible = False
+        LabelMensage.Visible = False
+        TimerMensage.Stop()
+    End Sub
+
+    Private Sub registrar_venta()
+        ' 1. Extraer los datos del DataGridVentas
+        Dim ventasList As New List(Of (Descripcion As String, Cantidad As Integer, Subtotal As Integer, Fecha As Date))
+        For Each fila As DataGridViewRow In DataGridVentas.Rows
+            If fila.IsNewRow Then Continue For
+            Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+            Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
+            Dim subtotal As Integer = Convert.ToInt32(fila.Cells("Subtotal").Value)
+            Dim fecha As Date = Date.Now
+            ventasList.Add((descripcion, cantidad, subtotal, fecha))
+        Next
+
+        ' 2. Pasar los datos a LogicaCantina
+        logica.RegistrarVentas(ventasList)
+
+        ' 3. Borrar el contenido del DataGridVentas
+        DataGridVentas.Rows.Clear()
+
+        ' 4. Actualizar el total
+        ActualizarTotal()
+
+        ' 5. Reiniciar el vuelto
+        LabelNUMVuelto.Text = "$ 0"
     End Sub
 End Class
