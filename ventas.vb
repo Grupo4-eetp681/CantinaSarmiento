@@ -1,4 +1,9 @@
-﻿Public Class ventas
+﻿Imports System.IO
+Imports PdfSharp.Pdf
+Imports PdfSharp.Drawing
+Imports PdfSharp.Fonts
+
+Public Class ventas
     Dim logica As New LogicaCantina
     Dim calcularVuelto As Boolean = False
     Private Sub Busqueda_TextChanged(sender As Object, e As EventArgs) Handles Busqueda.TextChanged
@@ -12,6 +17,11 @@
 
     End Sub
     Private Sub ventas_Load(sender As Object, e As EventArgs) Handles Me.Load
+
+        If GlobalFontSettings.FontResolver Is Nothing Then
+            GlobalFontSettings.FontResolver = New CustomFontResolver()
+        End If
+
         logica.cargarSubdivision(Form1.subdivision)
         Dim tb = logica.ObtenerTodosLosProductos()
         DataGridView1.DataSource = tb
@@ -104,6 +114,9 @@
         PanelContenedorButtonVentas.Location = New Point(nuevaX, PanelContenedorButtonVentas.Location.Y)
 
         TXTPago.Text = "$ "
+
+        AjustarFuenteLabelMaximo(LabelPago, "PAGO:")
+        AjustarFuenteLabelMaximo(LabelVuelto, "VUELTO:")
     End Sub
 
     Private Sub acomodarPagoYVuelto()
@@ -157,7 +170,7 @@
         ' Quitar todo lo que no sea número
         Dim textoLimpio As String = New String(TXTPago.Text.Where(Function(c) Char.IsDigit(c)).ToArray())
 
-        ' Si está vacío, dejar solo el $
+        ' Si está vacío, dejar solo el $`
         If String.IsNullOrEmpty(textoLimpio) Then
             TXTPago.Text = "$ "
             TXTPago.SelectionStart = TXTPago.Text.Length
@@ -314,7 +327,8 @@
         If calcularVuelto Then
             'Calcular el vuelto'
             Dim vuelto As Long = pago - total
-            LabelNUMVuelto.Text = "$ " & vuelto.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
+            Dim texto As String = "$ " & vuelto.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
+            AjustarFuenteLabelMaximo(LabelNUMVuelto, texto)
             TXTPago.Text = "$ "
 
             acomodarPagoYVuelto()
@@ -394,6 +408,11 @@
             mostrar_mensaje()
             Return
         End If
+
+        AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
+        mostrar_mensaje()
+        EmitirFacturaTipoC()
+        registrar_venta()
     End Sub
 
     Private Sub BotonTicket_Click(sender As Object, e As EventArgs) Handles BotonTicket.Click
@@ -403,6 +422,11 @@
             mostrar_mensaje()
             Return
         End If
+
+        AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
+        mostrar_mensaje()
+        ImprimirTicketsIndividuales()
+        registrar_venta()
     End Sub
 
     Private Sub TimerMensage_Tick(sender As Object, e As EventArgs) Handles TimerMensage.Tick
@@ -435,4 +459,90 @@
         ' 5. Reiniciar el vuelto
         LabelNUMVuelto.Text = "$ 0"
     End Sub
+
+    Private Sub EmitirFacturaTipoC()
+        Dim doc As New PdfDocument()
+        doc.Info.Title = "Factura Tipo C"
+        Dim page As PdfPage = doc.AddPage()
+        Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
+        Dim font As New XFont("Roboto", 12, 0)
+
+        Dim y As Double = 40
+        gfx.DrawString("FACTURA TIPO C", font, XBrushes.Black, 40, y)
+        y += 25
+        gfx.DrawString("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), font, XBrushes.Black, 40, y)
+        y += 25
+        gfx.DrawString(New String("-"c, 40), font, XBrushes.Black, 40, y)
+        y += 25
+
+        For Each fila As DataGridViewRow In DataGridVentas.Rows
+            If fila.IsNewRow Then Continue For
+            Dim linea As String = $"{fila.Cells("Descripcion").Value} x{fila.Cells("Cantidad").Value} - ${fila.Cells("Subtotal").Value}"
+            gfx.DrawString(linea, font, XBrushes.Black, 40, y)
+            y += 20
+        Next
+
+        y += 10
+        gfx.DrawString(New String("-"c, 40), font, XBrushes.Black, 40, y)
+        y += 25
+        gfx.DrawString("TOTAL: " & LabelPrecioTotal.Text, font, XBrushes.Black, 40, y)
+
+        ' Guardar el PDF
+        Dim ruta As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"FacturaTipoC_{Date.Now:yyyyMMddHHmmssfff}.pdf")
+        doc.Save(ruta)
+        doc.Close()
+
+        AjustarFuenteLabelMaximo(LabelMensage, "Factura Genarada")
+        mostrar_mensaje()
+    End Sub
+
+    Private Sub ImprimirTicketsIndividuales()
+        For Each fila As DataGridViewRow In DataGridVentas.Rows
+            If fila.IsNewRow Then Continue For
+            Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+            Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
+            For i As Integer = 1 To cantidad
+                Dim doc As New PdfDocument()
+                doc.Info.Title = "Ticket de Retiro"
+                Dim page As PdfPage = doc.AddPage()
+                Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
+                Dim font As New XFont("Roboto", 12, 0)
+
+                Dim y As Double = 60
+                gfx.DrawString("TICKET DE RETIRO", font, XBrushes.Black, 40, y)
+                y += 30
+                gfx.DrawString("Producto: " & descripcion, font, XBrushes.Black, 40, y)
+                y += 30
+                gfx.DrawString("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), font, XBrushes.Black, 40, y)
+
+                Dim nombreArchivo As String = $"Ticket_{descripcion}_{Date.Now:yyyyMMddHHmmssfff}_{i}.pdf"
+                Dim ruta As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), nombreArchivo)
+                doc.Save(ruta)
+                doc.Close()
+            Next
+        Next
+        AjustarFuenteLabelMaximo(LabelMensage, "Tickets Generados")
+        mostrar_mensaje()
+    End Sub
+End Class
+
+Public Class CustomFontResolver
+    Implements IFontResolver
+
+    ' Este método debe aceptar solo un parámetro
+    Public Function GetFont(faceName As String) As Byte() Implements IFontResolver.GetFont
+        ' Asegúrate de que el nombre coincida con el que usas en ResolveTypeface
+        If faceName = "Roboto" Then
+            Dim fontPath As String = "C:\ProgramData\CantinaSarmiento\Roboto\static\Roboto-Regular.ttf"
+            Return File.ReadAllBytes(fontPath)
+        End If
+        Throw New FileNotFoundException("Fuente no encontrada: " & faceName)
+    End Function
+
+    Public Function ResolveTypeface(familyName As String, isBold As Boolean, isItalic As Boolean) As FontResolverInfo Implements IFontResolver.ResolveTypeface
+        If familyName.Equals("Roboto", StringComparison.OrdinalIgnoreCase) Then
+            Return New FontResolverInfo("Roboto")
+        End If
+        Return Nothing
+    End Function
 End Class

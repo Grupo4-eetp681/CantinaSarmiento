@@ -5,6 +5,10 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Public Class Form1
     Public subdivision As String = String.Empty
     Public desplegado As Boolean = False
+
+    Private dragging As Boolean = False
+    Private dragOffset As Point
+
     ' Esta función le dice a Windows que libere el control del mouse
     <DllImport("user32.dll", EntryPoint:="ReleaseCapture")>
     Private Shared Sub LiberarCapturaMouse()
@@ -24,6 +28,8 @@ Public Class Form1
         If e.Button = MouseButtons.Left Then
             LiberarCapturaMouse()
             EnviarMensajeVentana(Me.Handle, MENSAJE_CLICK_NO_CLIENTE, IDENTIFICADOR_BARRA_TITULO, 0)
+            dragging = True
+            dragOffset = New Point(e.X, e.Y)
         End If
     End Sub
 
@@ -84,4 +90,22 @@ Public Class Form1
             WindowState = FormWindowState.Normal
         End If
     End Sub
+
+    Private Sub PanelBarraSuperior_MouseMove(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseMove
+        If dragging Then
+            Dim screenPos As Point = PanelBarraSuperior.PointToScreen(e.Location)
+            Me.Location = New Point(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y)
+
+            ' Si el mouse está en la parte superior de la pantalla, maximiza
+            If screenPos.Y <= 0 Then
+                Me.WindowState = FormWindowState.Maximized
+                dragging = False
+            End If
+        End If
+    End Sub
+
+    Private Sub PanelBarraSuperior_MouseUp(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseUp
+        dragging = False
+    End Sub
+
 End Class

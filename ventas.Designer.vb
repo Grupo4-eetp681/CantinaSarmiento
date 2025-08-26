@@ -192,10 +192,10 @@ Partial Class ventas
         ' 
         LabelNUMVuelto.AutoSize = True
         LabelNUMVuelto.Dock = DockStyle.Right
-        LabelNUMVuelto.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelNUMVuelto.Location = New Point(179, 0)
+        LabelNUMVuelto.Font = New Font("Candara", 15.75F, FontStyle.Bold)
+        LabelNUMVuelto.Location = New Point(176, 0)
         LabelNUMVuelto.Name = "LabelNUMVuelto"
-        LabelNUMVuelto.Size = New Size(56, 23)
+        LabelNUMVuelto.Size = New Size(59, 26)
         LabelNUMVuelto.TabIndex = 2
         LabelNUMVuelto.Text = "$0.00"
         LabelNUMVuelto.TextAlign = ContentAlignment.MiddleRight
@@ -351,10 +351,10 @@ Partial Class ventas
         ' LabelPrecioTotal
         ' 
         LabelPrecioTotal.AutoSize = True
-        LabelPrecioTotal.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        LabelPrecioTotal.Location = New Point(184, 0)
+        LabelPrecioTotal.Font = New Font("Candara", 15.75F, FontStyle.Bold)
+        LabelPrecioTotal.Location = New Point(184, -2)
         LabelPrecioTotal.Name = "LabelPrecioTotal"
-        LabelPrecioTotal.Size = New Size(56, 23)
+        LabelPrecioTotal.Size = New Size(59, 26)
         LabelPrecioTotal.TabIndex = 2
         LabelPrecioTotal.Text = "$0.00"
         ' 

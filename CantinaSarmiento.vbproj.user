@@ -10,6 +10,9 @@
     <Compile Update="Form2.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="formINVENTARIO.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="formLOGIN.vb">
       <SubType>Form</SubType>
     </Compile>
