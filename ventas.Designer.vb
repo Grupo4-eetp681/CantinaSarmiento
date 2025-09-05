@@ -251,8 +251,9 @@ Partial Class ventas
         ' 
         ' LabelMensage
         ' 
-        LabelMensage.BackColor = Color.NavajoWhite
+        LabelMensage.BackColor = Color.Gold
         LabelMensage.Dock = DockStyle.Fill
+        LabelMensage.Font = New Font("Candara", 9F, FontStyle.Bold)
         LabelMensage.Location = New Point(0, 0)
         LabelMensage.Name = "LabelMensage"
         LabelMensage.Size = New Size(240, 40)

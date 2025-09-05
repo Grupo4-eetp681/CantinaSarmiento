@@ -40,6 +40,56 @@ Public Class LogicaCantina
         End If
     End Sub
 
+    Public Sub guardarSesion(division As String)
+        Using conn As SQLiteConnection = ObtenerConexionUsuario()
+            Dim deleteQuery As String = "DELETE FROM sesion"
+            Using deleteCmd As New SQLiteCommand(deleteQuery, conn)
+                deleteCmd.ExecuteNonQuery()
+            End Using
+            Dim insertQuery As String = "INSERT INTO sesion (division) VALUES (@division)"
+            Using insertCmd As New SQLiteCommand(insertQuery, conn)
+                insertCmd.Parameters.AddWithValue("@division", division)
+                insertCmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Function verificarSesion() As Boolean
+        Using conn As SQLiteConnection = ObtenerConexionUsuario()
+            Dim query As String = "SELECT division FROM sesion LIMIT 1"
+            Using cmd As New SQLiteCommand(query, conn)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing Then
+                    Dim division As String = result.ToString()
+                    cargarSubdivision(division)
+                    Form1.subdivision = division
+                    Return True
+                End If
+            End Using
+        End Using
+    End Function
+
+    Public Sub verificarBaseDeDatosUsuarios()
+        If Not Directory.Exists(cantinaSarmientoPath) Then
+            Directory.CreateDirectory(cantinaSarmientoPath)
+        End If
+        If Not File.Exists(baseDeDatosUsuarios) Then
+            SQLiteConnection.CreateFile(baseDeDatosUsuarios)
+            Using conn As SQLiteConnection = ObtenerConexionUsuario()
+                Dim createUsuarioTable As String = "CREATE TABLE IF NOT EXISTS usuarios (IdUsuario INTEGER PRIMARY KEY AUTOINCREMENT, Division TEXT, Contraseña INTEGER)"
+                Dim createSesionTable As String = "CREATE TABLE IF NOT EXISTS sesion (division TEXT)"
+                Dim tablas As String() = {
+                        createUsuarioTable,
+                        createSesionTable
+                    }
+                For Each sql As String In tablas
+                    Using cmd As New SQLiteCommand(sql, conn)
+                        cmd.ExecuteNonQuery()
+                    End Using
+                Next
+            End Using
+        End If
+    End Sub
     Public Function ObtenerConexion() As SQLiteConnection
         Dim connectionString As String = $"Data Source={baseDeDatos};Version=3;"
         Dim conn As New SQLiteConnection(connectionString)
@@ -48,6 +98,7 @@ Public Class LogicaCantina
     End Function
 
     Public Function ObtenerConexionUsuario() As SQLiteConnection
+        verificarBaseDeDatosUsuarios()
         Dim connectionString As String = $"Data Source={baseDeDatosUsuarios};Version=3;"
         Dim conn As New SQLiteConnection(connectionString)
         conn.Open()
@@ -146,6 +197,15 @@ Public Class LogicaCantina
                     cmd.ExecuteNonQuery()
                 End Using
             Next
+        End Using
+    End Sub
+
+    Public Sub cerrarSesion()
+        Using conn As SQLiteConnection = ObtenerConexionUsuario()
+            Dim deleteQuery As String = "DELETE FROM sesion"
+            Using deleteCmd As New SQLiteCommand(deleteQuery, conn)
+                deleteCmd.ExecuteNonQuery()
+            End Using
         End Using
     End Sub
 

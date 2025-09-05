@@ -5,7 +5,7 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Public Class Form1
     Public subdivision As String = String.Empty
     Public desplegado As Boolean = False
-
+    Private logica As New LogicaCantina
     Private dragging As Boolean = False
     Private dragOffset As Point
 
@@ -41,7 +41,12 @@ Public Class Form1
         Dim anchura As Int128 = FondoDeColor.AccessibilityObject.Bounds.Width
         ContenidoGeneral.Size = New Size(anchura - 6, altura - 6)
         ContenidoGeneral.Location = New Point(3, 3)
-        formLOGIN.ShowDialog()
+        Dim resultado = logica.verificarSesion()
+        If resultado Then
+            formLOGIN.AbrirVentasEnPanel()
+        Else
+            formLOGIN.ShowDialog()
+        End If
     End Sub
 
     Private Sub ButtonCierreApp_Click(sender As Object, e As EventArgs) Handles ButtonCierreApp.Click
@@ -108,4 +113,8 @@ Public Class Form1
         dragging = False
     End Sub
 
+    Private Sub CerrarSesion_Click(sender As Object, e As EventArgs) Handles CerrarSesion.Click
+        logica.cerrarSesion()
+        Dispose()
+    End Sub
 End Class

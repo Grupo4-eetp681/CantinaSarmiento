@@ -45,6 +45,7 @@ Partial Class Form1
         LogoMarcaAgua = New PictureBox()
         PanelMargenDerecho = New Panel()
         FondoDeColor = New Panel()
+        CerrarSesion = New Button()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -133,11 +134,12 @@ Partial Class Form1
         ' PanelBotonesAcciones
         ' 
         PanelBotonesAcciones.Anchor = AnchorStyles.Top
+        PanelBotonesAcciones.Controls.Add(CerrarSesion)
         PanelBotonesAcciones.Controls.Add(BotonImportar)
         PanelBotonesAcciones.Controls.Add(BotonExportar)
         PanelBotonesAcciones.Location = New Point(0, 6)
         PanelBotonesAcciones.Name = "PanelBotonesAcciones"
-        PanelBotonesAcciones.Size = New Size(30, 70)
+        PanelBotonesAcciones.Size = New Size(30, 110)
         PanelBotonesAcciones.TabIndex = 2
         PanelBotonesAcciones.Visible = False
         ' 
@@ -281,6 +283,17 @@ Partial Class Form1
         FondoDeColor.Size = New Size(900, 480)
         FondoDeColor.TabIndex = 9
         ' 
+        ' CerrarSesion
+        ' 
+        CerrarSesion.BackColor = Color.Transparent
+        CerrarSesion.BackgroundImage = CType(resources.GetObject("CerrarSesion.BackgroundImage"), Image)
+        CerrarSesion.BackgroundImageLayout = ImageLayout.Stretch
+        CerrarSesion.Location = New Point(0, 80)
+        CerrarSesion.Name = "CerrarSesion"
+        CerrarSesion.Size = New Size(30, 30)
+        CerrarSesion.TabIndex = 3
+        CerrarSesion.UseVisualStyleBackColor = False
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -335,5 +348,6 @@ Partial Class Form1
     Friend WithEvents SubPanelIzquierdo As Panel
     Friend WithEvents ButtonMaximizarApp As Button
     Friend WithEvents FondoDeColor As Panel
+    Friend WithEvents CerrarSesion As Button
 
 End Class
