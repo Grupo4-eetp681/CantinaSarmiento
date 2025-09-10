@@ -443,8 +443,8 @@ Public Class ventas
             Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
             Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
             Dim subtotal As Integer = Convert.ToInt32(fila.Cells("Subtotal").Value)
-            Dim fecha As Date = Date.Now
-            ventasList.Add((descripcion, cantidad, subtotal, fecha))
+            Dim fechaYhora As DateTime = DateTime.Now
+            ventasList.Add((descripcion, cantidad, subtotal, fechaYhora))
         Next
 
         ' 2. Pasar los datos a LogicaCantina

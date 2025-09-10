@@ -5,6 +5,7 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Public Class Form1
     Public subdivision As String = String.Empty
     Public desplegado As Boolean = False
+    Private formularioActual As Form = Nothing
     Private logica As New LogicaCantina
     Private dragging As Boolean = False
     Private dragOffset As Point
@@ -28,8 +29,7 @@ Public Class Form1
         If e.Button = MouseButtons.Left Then
             LiberarCapturaMouse()
             EnviarMensajeVentana(Me.Handle, MENSAJE_CLICK_NO_CLIENTE, IDENTIFICADOR_BARRA_TITULO, 0)
-            dragging = True
-            dragOffset = New Point(e.X, e.Y)
+            ' Ya no necesitas activar dragging ni dragOffset
         End If
     End Sub
 
@@ -44,6 +44,7 @@ Public Class Form1
         Dim resultado = logica.verificarSesion()
         If resultado Then
             formLOGIN.AbrirVentasEnPanel()
+            formularioActual = ventas
         Else
             formLOGIN.ShowDialog()
         End If
@@ -97,24 +98,50 @@ Public Class Form1
     End Sub
 
     Private Sub PanelBarraSuperior_MouseMove(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseMove
-        If dragging Then
-            Dim screenPos As Point = PanelBarraSuperior.PointToScreen(e.Location)
-            Me.Location = New Point(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y)
-
-            ' Si el mouse está en la parte superior de la pantalla, maximiza
-            If screenPos.Y <= 0 Then
-                Me.WindowState = FormWindowState.Maximized
-                dragging = False
-            End If
+        ' Si quieres maximizar al llegar arriba, puedes hacerlo así:
+        Dim screenPos As Point = PanelBarraSuperior.PointToScreen(e.Location)
+        If screenPos.Y <= 0 And Me.WindowState <> FormWindowState.Maximized Then
+            Me.WindowState = FormWindowState.Maximized
         End If
     End Sub
 
     Private Sub PanelBarraSuperior_MouseUp(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseUp
-        dragging = False
+        ' Ya no necesitas nada aquí
     End Sub
 
     Private Sub CerrarSesion_Click(sender As Object, e As EventArgs) Handles CerrarSesion.Click
         logica.cerrarSesion()
         Dispose()
+    End Sub
+
+    Public Sub AbrirFormularioEnPanel(f As Form)
+        If formularioActual IsNot Nothing Then
+            ' Si el formulario es del mismo tipo, no hacer nada
+            If formularioActual.GetType() Is f.GetType() Then
+                Return
+            End If
+            ' Cierra el formulario anterior
+            formularioActual.Dispose()
+        End If
+
+        ContenidoGeneral.Controls.Clear()
+        f.TopLevel = False
+        f.FormBorderStyle = FormBorderStyle.None
+        f.Dock = DockStyle.Fill
+        ContenidoGeneral.Controls.Add(f)
+        f.Show()
+        formularioActual = f
+    End Sub
+
+    Private Sub botonVentas_Click(sender As Object, e As EventArgs) Handles botonVentas.Click
+        AbrirFormularioEnPanel(New ventas())
+    End Sub
+
+    Private Sub botonCaja_Click(sender As Object, e As EventArgs) Handles botonCaja.Click
+        AbrirFormularioEnPanel(New CAJA())
+    End Sub
+
+    Private Sub botonInventario_Click(sender As Object, e As EventArgs) Handles botonInventario.Click
+        AbrirFormularioEnPanel(New formINVENTARIO())
     End Sub
 End Class

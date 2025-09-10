@@ -23,7 +23,7 @@ Public Class LogicaCantina
             Using conn As SQLiteConnection = ObtenerConexion()
                 Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
                 Dim createOperacionTable As String = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
-                Dim createInicioTable As String = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Hora time, Fecha date)"
+                Dim createInicioTable As String = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Plata REAL, Fecha date)"
                 Dim createVentasTable As String = "CREATE TABLE IF NOT EXISTS Ventas (IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, IdProducto INTEGER, Cantidad INTEGER, Fecha DATE, FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto))"
                 Dim tablas As String() = {
                         createProductoTable,
@@ -35,6 +35,80 @@ Public Class LogicaCantina
                     Using cmd As New SQLiteCommand(sql, conn)
                         cmd.ExecuteNonQuery()
                     End Using
+                Next
+            End Using
+        Else
+            ' Verificar que las tablas y columnas estén correctas
+            Using conn As SQLiteConnection = ObtenerConexion()
+                Dim tablasEsperadas As New Dictionary(Of String, String()) From {
+                    {"Producto", New String() {"IdProducto", "Descripcion", "PrecioVenta"}},
+                    {"Operacion", New String() {"IdOperacion", "Descripcion"}},
+                    {"Inicio", New String() {"Id", "Plata", "Fecha"}},
+                    {"Ventas", New String() {"IdVenta", "IdProducto", "Cantidad", "Fecha"}}
+                }
+                For Each tabla In tablasEsperadas
+                    Dim existeTabla As Boolean = False
+                    Dim queryTabla As String = "SELECT name FROM sqlite_master WHERE type='table' AND name=@tabla"
+                    Using cmd As New SQLiteCommand(queryTabla, conn)
+                        cmd.Parameters.AddWithValue("@tabla", tabla.Key)
+                        Using reader = cmd.ExecuteReader()
+                            existeTabla = reader.HasRows
+                        End Using
+                    End Using
+                    If Not existeTabla Then
+                        ' Crear la tabla si no existe
+                        Dim createTableSql As String = ""
+                        Select Case tabla.Key
+                            Case "Producto"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
+                            Case "Operacion"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
+                            Case "Inicio"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Hora time, Fecha date)"
+                            Case "Ventas"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Ventas (IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, IdProducto INTEGER, Cantidad INTEGER, Fecha DATE, FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto))"
+                        End Select
+                        Using cmd As New SQLiteCommand(createTableSql, conn)
+                            cmd.ExecuteNonQuery()
+                        End Using
+                    Else
+                        ' Verificar columnas
+                        Dim columnasFaltantes As New List(Of String)
+                        Dim queryColumnas As String = $"PRAGMA table_info({tabla.Key})"
+                        Dim columnasActuales As New List(Of String)
+                        Using cmd As New SQLiteCommand(queryColumnas, conn)
+                            Using reader = cmd.ExecuteReader()
+                                While reader.Read()
+                                    columnasActuales.Add(reader("name").ToString())
+                                End While
+                            End Using
+                        End Using
+                        For Each columnaEsperada In tabla.Value
+                            If Not columnasActuales.Contains(columnaEsperada) Then
+                                columnasFaltantes.Add(columnaEsperada)
+                            End If
+                        Next
+                        ' Si faltan columnas, puedes agregarlas aquí
+                        For Each columna In columnasFaltantes
+                            Dim tipoColumna As String = "TEXT"
+                            Select Case columna
+                                Case "IdProducto", "IdOperacion", "IdVenta", "Id"
+                                    tipoColumna = "INTEGER"
+                                Case "PrecioVenta", "Plata"
+                                    tipoColumna = "REAL"
+                                Case "Cantidad"
+                                    tipoColumna = "INTEGER"
+                                Case "Hora"
+                                    tipoColumna = "time"
+                                Case "Fecha"
+                                    tipoColumna = "date"
+                            End Select
+                            Dim alterSql As String = $"ALTER TABLE {tabla.Key} ADD COLUMN {columna} {tipoColumna}"
+                            Using cmd As New SQLiteCommand(alterSql, conn)
+                                cmd.ExecuteNonQuery()
+                            End Using
+                        Next
+                    End If
                 Next
             End Using
         End If
@@ -208,5 +282,34 @@ Public Class LogicaCantina
             End Using
         End Using
     End Sub
+
+    Public Function obtenerVentas() As DataTable
+        Dim dt As New DataTable()
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "SELECT p.Descripcion AS Producto, v.Cantidad, v.Fecha " &
+                                  "FROM Ventas v " &
+                                  "INNER JOIN Producto p ON v.IdProducto = p.IdProducto"
+            Using cmd As New SQLiteCommand(query, conn)
+                Using da As New SQLiteDataAdapter(cmd)
+                    da.Fill(dt)
+                End Using
+            End Using
+        End Using
+        Return dt
+    End Function
+
+    Public Function obtenerPlata() As Int128
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "SELECT plata FROM Inicio"
+            Using cmd As New SQLiteCommand(query, conn)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
+                    Return result
+                Else
+                    Return 0
+                End If
+            End Using
+        End Using
+    End Function
 
 End Class

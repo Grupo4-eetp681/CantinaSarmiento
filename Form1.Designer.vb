@@ -31,6 +31,7 @@ Partial Class Form1
         ButtonMinimizarApp = New Button()
         ButtonCierreApp = New Button()
         PanelBotonesAcciones = New Panel()
+        CerrarSesion = New Button()
         BotonImportar = New Button()
         BotonExportar = New Button()
         PanelMargenI = New Panel()
@@ -45,7 +46,10 @@ Partial Class Form1
         LogoMarcaAgua = New PictureBox()
         PanelMargenDerecho = New Panel()
         FondoDeColor = New Panel()
-        CerrarSesion = New Button()
+        PanelContenedorDeFormularios = New Panel()
+        botonInventario = New Button()
+        botonVentas = New Button()
+        botonCaja = New Button()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -57,7 +61,9 @@ Partial Class Form1
         PanelHora.SuspendLayout()
         ContenidoGeneral.SuspendLayout()
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).BeginInit()
+        PanelMargenDerecho.SuspendLayout()
         FondoDeColor.SuspendLayout()
+        PanelContenedorDeFormularios.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelBarraSuperior
@@ -142,6 +148,17 @@ Partial Class Form1
         PanelBotonesAcciones.Size = New Size(30, 110)
         PanelBotonesAcciones.TabIndex = 2
         PanelBotonesAcciones.Visible = False
+        ' 
+        ' CerrarSesion
+        ' 
+        CerrarSesion.BackColor = Color.Transparent
+        CerrarSesion.BackgroundImage = CType(resources.GetObject("CerrarSesion.BackgroundImage"), Image)
+        CerrarSesion.BackgroundImageLayout = ImageLayout.Stretch
+        CerrarSesion.Location = New Point(0, 80)
+        CerrarSesion.Name = "CerrarSesion"
+        CerrarSesion.Size = New Size(30, 30)
+        CerrarSesion.TabIndex = 3
+        CerrarSesion.UseVisualStyleBackColor = False
         ' 
         ' BotonImportar
         ' 
@@ -267,6 +284,7 @@ Partial Class Form1
         ' PanelMargenDerecho
         ' 
         PanelMargenDerecho.BackColor = SystemColors.ControlDarkDark
+        PanelMargenDerecho.Controls.Add(PanelContenedorDeFormularios)
         PanelMargenDerecho.Dock = DockStyle.Right
         PanelMargenDerecho.Location = New Point(930, 30)
         PanelMargenDerecho.Name = "PanelMargenDerecho"
@@ -283,16 +301,40 @@ Partial Class Form1
         FondoDeColor.Size = New Size(900, 480)
         FondoDeColor.TabIndex = 9
         ' 
-        ' CerrarSesion
+        ' PanelContenedorDeFormularios
         ' 
-        CerrarSesion.BackColor = Color.Transparent
-        CerrarSesion.BackgroundImage = CType(resources.GetObject("CerrarSesion.BackgroundImage"), Image)
-        CerrarSesion.BackgroundImageLayout = ImageLayout.Stretch
-        CerrarSesion.Location = New Point(0, 80)
-        CerrarSesion.Name = "CerrarSesion"
-        CerrarSesion.Size = New Size(30, 30)
-        CerrarSesion.TabIndex = 3
-        CerrarSesion.UseVisualStyleBackColor = False
+        PanelContenedorDeFormularios.Controls.Add(botonInventario)
+        PanelContenedorDeFormularios.Controls.Add(botonVentas)
+        PanelContenedorDeFormularios.Controls.Add(botonCaja)
+        PanelContenedorDeFormularios.Dock = DockStyle.Top
+        PanelContenedorDeFormularios.Location = New Point(0, 0)
+        PanelContenedorDeFormularios.Name = "PanelContenedorDeFormularios"
+        PanelContenedorDeFormularios.Size = New Size(30, 110)
+        PanelContenedorDeFormularios.TabIndex = 8
+        ' 
+        ' botonInventario
+        ' 
+        botonInventario.Location = New Point(0, 80)
+        botonInventario.Name = "botonInventario"
+        botonInventario.Size = New Size(30, 30)
+        botonInventario.TabIndex = 2
+        botonInventario.UseVisualStyleBackColor = True
+        ' 
+        ' botonVentas
+        ' 
+        botonVentas.Location = New Point(0, 0)
+        botonVentas.Name = "botonVentas"
+        botonVentas.Size = New Size(30, 30)
+        botonVentas.TabIndex = 0
+        botonVentas.UseVisualStyleBackColor = True
+        ' 
+        ' botonCaja
+        ' 
+        botonCaja.Location = New Point(0, 40)
+        botonCaja.Name = "botonCaja"
+        botonCaja.Size = New Size(30, 30)
+        botonCaja.TabIndex = 1
+        botonCaja.UseVisualStyleBackColor = True
         ' 
         ' Form1
         ' 
@@ -323,7 +365,9 @@ Partial Class Form1
         PanelHora.ResumeLayout(False)
         ContenidoGeneral.ResumeLayout(False)
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).EndInit()
+        PanelMargenDerecho.ResumeLayout(False)
         FondoDeColor.ResumeLayout(False)
+        PanelContenedorDeFormularios.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -349,5 +393,9 @@ Partial Class Form1
     Friend WithEvents ButtonMaximizarApp As Button
     Friend WithEvents FondoDeColor As Panel
     Friend WithEvents CerrarSesion As Button
+    Friend WithEvents PanelContenedorDeFormularios As Panel
+    Friend WithEvents botonInventario As Button
+    Friend WithEvents botonVentas As Button
+    Friend WithEvents botonCaja As Button
 
 End Class
