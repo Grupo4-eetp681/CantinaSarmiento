@@ -23,38 +23,29 @@ Partial Class formINVENTARIO
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim PanelInventarioContenedor As Panel
-        Panel1 = New Panel()
         PanelContenedorDataGridInventario = New Panel()
         DataGridViewInventario = New DataGridView()
-        ButtonAgregar = New Button()
-        ButtonEliminar = New Button()
+        PanelInferior = New Panel()
         PanelButtons = New Panel()
+        ButtonEliminar = New Button()
+        ButtonAgregar = New Button()
         PanelInventarioContenedor = New Panel()
         PanelInventarioContenedor.SuspendLayout()
-        Panel1.SuspendLayout()
         PanelContenedorDataGridInventario.SuspendLayout()
         CType(DataGridViewInventario, ComponentModel.ISupportInitialize).BeginInit()
+        PanelInferior.SuspendLayout()
         PanelButtons.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelInventarioContenedor
         ' 
         PanelInventarioContenedor.Controls.Add(PanelContenedorDataGridInventario)
-        PanelInventarioContenedor.Controls.Add(Panel1)
+        PanelInventarioContenedor.Controls.Add(PanelInferior)
         PanelInventarioContenedor.Dock = DockStyle.Fill
         PanelInventarioContenedor.Location = New Point(0, 0)
         PanelInventarioContenedor.Name = "PanelInventarioContenedor"
         PanelInventarioContenedor.Size = New Size(800, 450)
         PanelInventarioContenedor.TabIndex = 0
-        ' 
-        ' Panel1
-        ' 
-        Panel1.Controls.Add(PanelButtons)
-        Panel1.Dock = DockStyle.Bottom
-        Panel1.Location = New Point(0, 350)
-        Panel1.Name = "Panel1"
-        Panel1.Size = New Size(800, 100)
-        Panel1.TabIndex = 0
         ' 
         ' PanelContenedorDataGridInventario
         ' 
@@ -73,17 +64,24 @@ Partial Class formINVENTARIO
         DataGridViewInventario.Size = New Size(800, 350)
         DataGridViewInventario.TabIndex = 0
         ' 
-        ' ButtonAgregar
+        ' PanelInferior
         ' 
-        ButtonAgregar.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
-        ButtonAgregar.FlatStyle = FlatStyle.Flat
-        ButtonAgregar.Font = New Font("Candara", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ButtonAgregar.Location = New Point(160, 0)
-        ButtonAgregar.Name = "ButtonAgregar"
-        ButtonAgregar.Size = New Size(110, 35)
-        ButtonAgregar.TabIndex = 0
-        ButtonAgregar.Text = "AGREGAR"
-        ButtonAgregar.UseVisualStyleBackColor = False
+        PanelInferior.Controls.Add(PanelButtons)
+        PanelInferior.Dock = DockStyle.Bottom
+        PanelInferior.Location = New Point(0, 350)
+        PanelInferior.Name = "PanelInferior"
+        PanelInferior.Size = New Size(800, 100)
+        PanelInferior.TabIndex = 0
+        ' 
+        ' PanelButtons
+        ' 
+        PanelButtons.Anchor = AnchorStyles.None
+        PanelButtons.Controls.Add(ButtonEliminar)
+        PanelButtons.Controls.Add(ButtonAgregar)
+        PanelButtons.Location = New Point(265, 33)
+        PanelButtons.Name = "PanelButtons"
+        PanelButtons.Size = New Size(270, 35)
+        PanelButtons.TabIndex = 2
         ' 
         ' ButtonEliminar
         ' 
@@ -97,15 +95,17 @@ Partial Class formINVENTARIO
         ButtonEliminar.Text = "ELIMINAR"
         ButtonEliminar.UseVisualStyleBackColor = False
         ' 
-        ' PanelButtons
+        ' ButtonAgregar
         ' 
-        PanelButtons.Anchor = AnchorStyles.None
-        PanelButtons.Controls.Add(ButtonEliminar)
-        PanelButtons.Controls.Add(ButtonAgregar)
-        PanelButtons.Location = New Point(265, 33)
-        PanelButtons.Name = "PanelButtons"
-        PanelButtons.Size = New Size(270, 35)
-        PanelButtons.TabIndex = 2
+        ButtonAgregar.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
+        ButtonAgregar.FlatStyle = FlatStyle.Flat
+        ButtonAgregar.Font = New Font("Candara", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ButtonAgregar.Location = New Point(160, 0)
+        ButtonAgregar.Name = "ButtonAgregar"
+        ButtonAgregar.Size = New Size(110, 35)
+        ButtonAgregar.TabIndex = 0
+        ButtonAgregar.Text = "AGREGAR"
+        ButtonAgregar.UseVisualStyleBackColor = False
         ' 
         ' formINVENTARIO
         ' 
@@ -118,9 +118,9 @@ Partial Class formINVENTARIO
         Name = "formINVENTARIO"
         Text = "formINVENTARIO"
         PanelInventarioContenedor.ResumeLayout(False)
-        Panel1.ResumeLayout(False)
         PanelContenedorDataGridInventario.ResumeLayout(False)
         CType(DataGridViewInventario, ComponentModel.ISupportInitialize).EndInit()
+        PanelInferior.ResumeLayout(False)
         PanelButtons.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
@@ -128,7 +128,7 @@ Partial Class formINVENTARIO
     Friend WithEvents PanelInventarioContenedor As Panel
     Friend WithEvents PanelContenedorDataGridInventario As Panel
     Friend WithEvents DataGridViewInventario As DataGridView
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents PanelInferior As Panel
     Friend WithEvents ButtonAgregar As Button
     Friend WithEvents ButtonEliminar As Button
     Friend WithEvents PanelButtons As Panel

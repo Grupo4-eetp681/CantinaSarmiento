@@ -396,9 +396,12 @@ Public Class ventas
             Return
         End If
 
+        Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
+        logica.ActualizarCaja("Ventas", total)
         AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
         mostrar_mensaje()
         registrar_venta()
+
     End Sub
 
     Private Sub BotonFactura_Click(sender As Object, e As EventArgs) Handles BotonFactura.Click
@@ -409,10 +412,13 @@ Public Class ventas
             Return
         End If
 
+        Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
+        logica.ActualizarCaja("Ventas", total)
         AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
         mostrar_mensaje()
         EmitirFacturaTipoC()
         registrar_venta()
+
     End Sub
 
     Private Sub BotonTicket_Click(sender As Object, e As EventArgs) Handles BotonTicket.Click
@@ -423,10 +429,13 @@ Public Class ventas
             Return
         End If
 
+        Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
+        logica.ActualizarCaja("Ventas", total)
         AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
         mostrar_mensaje()
         ImprimirTicketsIndividuales()
         registrar_venta()
+
     End Sub
 
     Private Sub TimerMensage_Tick(sender As Object, e As EventArgs) Handles TimerMensage.Tick

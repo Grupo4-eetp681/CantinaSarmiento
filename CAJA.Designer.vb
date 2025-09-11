@@ -118,88 +118,88 @@ Partial Class CAJA
         ' LabelRetiro
         ' 
         LabelRetiro.BackColor = SystemColors.ControlDark
-        LabelRetiro.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelRetiro.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelRetiro.ForeColor = SystemColors.ActiveCaptionText
         LabelRetiro.Location = New Point(0, 150)
         LabelRetiro.Name = "LabelRetiro"
-        LabelRetiro.Size = New Size(85, 25)
+        LabelRetiro.Size = New Size(109, 25)
         LabelRetiro.TabIndex = 7
         LabelRetiro.Text = "RETIROS: "
         ' 
         ' LabelNUMRetiro
         ' 
         LabelNUMRetiro.BackColor = SystemColors.ControlDark
-        LabelNUMRetiro.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelNUMRetiro.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMRetiro.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMRetiro.Location = New Point(140, 150)
+        LabelNUMRetiro.Location = New Point(130, 150)
         LabelNUMRetiro.Name = "LabelNUMRetiro"
-        LabelNUMRetiro.Size = New Size(60, 25)
+        LabelNUMRetiro.Size = New Size(70, 25)
         LabelNUMRetiro.TabIndex = 6
         LabelNUMRetiro.Text = "$ 0.00"
         ' 
         ' LabelVentas
         ' 
         LabelVentas.BackColor = SystemColors.ControlDark
-        LabelVentas.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelVentas.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelVentas.ForeColor = SystemColors.ActiveCaptionText
         LabelVentas.Location = New Point(0, 75)
         LabelVentas.Name = "LabelVentas"
-        LabelVentas.Size = New Size(85, 25)
+        LabelVentas.Size = New Size(100, 25)
         LabelVentas.TabIndex = 5
         LabelVentas.Text = "VENTAS: "
         ' 
         ' LabelNUMInicio
         ' 
         LabelNUMInicio.BackColor = SystemColors.ControlDark
-        LabelNUMInicio.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelNUMInicio.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMInicio.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMInicio.Location = New Point(140, 0)
+        LabelNUMInicio.Location = New Point(130, 0)
         LabelNUMInicio.Name = "LabelNUMInicio"
-        LabelNUMInicio.Size = New Size(60, 25)
+        LabelNUMInicio.Size = New Size(70, 25)
         LabelNUMInicio.TabIndex = 3
         LabelNUMInicio.Text = "$ 0.00"
         ' 
         ' LabelCAJA
         ' 
         LabelCAJA.BackColor = SystemColors.ControlDark
-        LabelCAJA.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelCAJA.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelCAJA.ForeColor = SystemColors.ActiveCaptionText
         LabelCAJA.Location = New Point(0, 225)
         LabelCAJA.Name = "LabelCAJA"
-        LabelCAJA.Size = New Size(120, 25)
+        LabelCAJA.Size = New Size(137, 25)
         LabelCAJA.TabIndex = 4
         LabelCAJA.Text = "TOTAL CAJA:"
         ' 
         ' LabelNUMVentas
         ' 
         LabelNUMVentas.BackColor = SystemColors.ControlDark
-        LabelNUMVentas.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelNUMVentas.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMVentas.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMVentas.Location = New Point(140, 75)
+        LabelNUMVentas.Location = New Point(130, 75)
         LabelNUMVentas.Name = "LabelNUMVentas"
-        LabelNUMVentas.Size = New Size(60, 25)
+        LabelNUMVentas.Size = New Size(70, 25)
         LabelNUMVentas.TabIndex = 2
         LabelNUMVentas.Text = "$ 0.00"
         ' 
         ' LabelINICIO
         ' 
         LabelINICIO.BackColor = SystemColors.ControlDark
-        LabelINICIO.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelINICIO.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelINICIO.ForeColor = SystemColors.ActiveCaptionText
         LabelINICIO.Location = New Point(0, 0)
         LabelINICIO.Name = "LabelINICIO"
-        LabelINICIO.Size = New Size(70, 25)
+        LabelINICIO.Size = New Size(85, 25)
         LabelINICIO.TabIndex = 0
         LabelINICIO.Text = "INICIO:"
         ' 
         ' LabelNUMCaja
         ' 
         LabelNUMCaja.BackColor = SystemColors.ControlDark
-        LabelNUMCaja.Font = New Font("Candara", 14.25F, FontStyle.Bold)
+        LabelNUMCaja.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMCaja.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMCaja.Location = New Point(140, 225)
+        LabelNUMCaja.Location = New Point(130, 225)
         LabelNUMCaja.Name = "LabelNUMCaja"
-        LabelNUMCaja.Size = New Size(60, 25)
+        LabelNUMCaja.Size = New Size(70, 25)
         LabelNUMCaja.TabIndex = 1
         LabelNUMCaja.Text = "$ 0.00"
         ' 

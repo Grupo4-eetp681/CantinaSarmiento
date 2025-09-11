@@ -24,7 +24,12 @@ Public Class LogicaCantina
                 Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
                 Dim createOperacionTable As String = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
                 Dim createInicioTable As String = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Plata REAL, Fecha date)"
-                Dim createVentasTable As String = "CREATE TABLE IF NOT EXISTS Ventas (IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, IdProducto INTEGER, Cantidad INTEGER, Fecha DATE, FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto))"
+                Dim createVentasTable As String = "CREATE TABLE IF NOT EXISTS Ventas (" &
+                    "IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                    "Descripcion TEXT, " &
+                    "Cantidad INTEGER, " &
+                    "Subtotal INTEGER, " &
+                    "Fecha DATE)"
                 Dim tablas As String() = {
                         createProductoTable,
                         createOperacionTable,
@@ -38,14 +43,22 @@ Public Class LogicaCantina
                 Next
             End Using
         Else
-            ' Verificar que las tablas y columnas estén correctas
             Using conn As SQLiteConnection = ObtenerConexion()
+                ' Tablas esperadas con sus columnas
                 Dim tablasEsperadas As New Dictionary(Of String, String()) From {
                     {"Producto", New String() {"IdProducto", "Descripcion", "PrecioVenta"}},
                     {"Operacion", New String() {"IdOperacion", "Descripcion"}},
-                    {"Inicio", New String() {"Id", "Plata", "Fecha"}},
-                    {"Ventas", New String() {"IdVenta", "IdProducto", "Cantidad", "Fecha"}}
+                    {"Ventas", New String() {"IdVenta", "Descripcion", "Cantidad", "Subtotal", "Fecha"}},
+                    {"Advertencias", New String() {"IdAdvertencia", "Origen", "Mostrar"}},
+                    {"Caja", New String() {"Id", "Inicio", "Retiros", "Ventas", "Total"}}
                 }
+
+                ' Eliminar la tabla Inicio si existe (ya no la necesitamos)
+                Dim dropInicio As String = "DROP TABLE IF EXISTS Inicio"
+                Using cmdDrop As New SQLiteCommand(dropInicio, conn)
+                    cmdDrop.ExecuteNonQuery()
+                End Using
+
                 For Each tabla In tablasEsperadas
                     Dim existeTabla As Boolean = False
                     Dim queryTabla As String = "SELECT name FROM sqlite_master WHERE type='table' AND name=@tabla"
@@ -55,6 +68,7 @@ Public Class LogicaCantina
                             existeTabla = reader.HasRows
                         End Using
                     End Using
+
                     If Not existeTabla Then
                         ' Crear la tabla si no existe
                         Dim createTableSql As String = ""
@@ -63,10 +77,17 @@ Public Class LogicaCantina
                                 createTableSql = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
                             Case "Operacion"
                                 createTableSql = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
-                            Case "Inicio"
-                                createTableSql = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Hora time, Fecha date)"
                             Case "Ventas"
-                                createTableSql = "CREATE TABLE IF NOT EXISTS Ventas (IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, IdProducto INTEGER, Cantidad INTEGER, Fecha DATE, FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto))"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Ventas (" &
+                                    "IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                                    "Descripcion TEXT, " &
+                                    "Cantidad INTEGER, " &
+                                    "Subtotal INTEGER, " &
+                                    "Fecha DATE)"
+                            Case "Advertencias"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Advertencias (IdAdvertencia INTEGER PRIMARY KEY AUTOINCREMENT, Origen TEXT, Mostrar INTEGER)"
+                            Case "Caja"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Caja (Id INTEGER PRIMARY KEY AUTOINCREMENT, Inicio REAL, Retiros REAL, Ventas REAL, Total REAL)"
                         End Select
                         Using cmd As New SQLiteCommand(createTableSql, conn)
                             cmd.ExecuteNonQuery()
@@ -88,20 +109,19 @@ Public Class LogicaCantina
                                 columnasFaltantes.Add(columnaEsperada)
                             End If
                         Next
-                        ' Si faltan columnas, puedes agregarlas aquí
+
+                        ' Agregar las columnas faltantes
                         For Each columna In columnasFaltantes
-                            Dim tipoColumna As String = "TEXT"
+                            Dim tipoColumna As String = "REAL"
                             Select Case columna
-                                Case "IdProducto", "IdOperacion", "IdVenta", "Id"
+                                Case "Id", "IdProducto", "IdOperacion", "IdVenta", "IdAdvertencia"
                                     tipoColumna = "INTEGER"
-                                Case "PrecioVenta", "Plata"
-                                    tipoColumna = "REAL"
-                                Case "Cantidad"
-                                    tipoColumna = "INTEGER"
-                                Case "Hora"
-                                    tipoColumna = "time"
+                                Case "Descripcion", "Origen"
+                                    tipoColumna = "TEXT"
                                 Case "Fecha"
-                                    tipoColumna = "date"
+                                    tipoColumna = "DATE"
+                                Case "Mostrar"
+                                    tipoColumna = "INTEGER"
                             End Select
                             Dim alterSql As String = $"ALTER TABLE {tabla.Key} ADD COLUMN {columna} {tipoColumna}"
                             Using cmd As New SQLiteCommand(alterSql, conn)
@@ -112,6 +132,7 @@ Public Class LogicaCantina
                 Next
             End Using
         End If
+
     End Sub
 
     Public Sub guardarSesion(division As String)
@@ -262,12 +283,12 @@ Public Class LogicaCantina
     Public Sub RegistrarVentas(filas As List(Of (Descripcion As String, Cantidad As Integer, Subtotal As Integer, Fecha As Date)))
         Using conn As SQLiteConnection = ObtenerConexion()
             For Each venta In filas
-                Dim query As String = "INSERT INTO Ventas (Descripcion, Cantidad, Subtotal, Fecha) VALUES (@Descripcion, @Cantidad, @Subtotal, @Fecha)"
+                Dim query As String = "INSERT INTO Ventas (Descripcion, Cantidad, Subtotal, FechaYHora) VALUES (@Descripcion, @Cantidad, @Subtotal, @FechaYHora)"
                 Using cmd As New SQLiteCommand(query, conn)
                     cmd.Parameters.AddWithValue("@Descripcion", venta.Descripcion)
                     cmd.Parameters.AddWithValue("@Cantidad", venta.Cantidad)
                     cmd.Parameters.AddWithValue("@Subtotal", venta.Subtotal)
-                    cmd.Parameters.AddWithValue("@Fecha", venta.Fecha.ToString("yyyy-MM-dd"))
+                    cmd.Parameters.AddWithValue("@FechaYHora", venta.Fecha.ToString("yyyy-MM-dd : HH-mm-ss"))
                     cmd.ExecuteNonQuery()
                 End Using
             Next
@@ -286,9 +307,8 @@ Public Class LogicaCantina
     Public Function obtenerVentas() As DataTable
         Dim dt As New DataTable()
         Using conn As SQLiteConnection = ObtenerConexion()
-            Dim query As String = "SELECT p.Descripcion AS Producto, v.Cantidad, v.Fecha " &
-                                  "FROM Ventas v " &
-                                  "INNER JOIN Producto p ON v.IdProducto = p.IdProducto"
+            Dim query As String = "SELECT Descripcion, Cantidad, Subtotal, FechaYHora " &
+                                  "FROM Ventas v "
             Using cmd As New SQLiteCommand(query, conn)
                 Using da As New SQLiteDataAdapter(cmd)
                     da.Fill(dt)
@@ -298,18 +318,95 @@ Public Class LogicaCantina
         Return dt
     End Function
 
-    Public Function obtenerPlata() As Int128
+    ' Verifica si existe una advertencia registrada y devuelve el estado
+    Public Function ObtenerEstadoAdvertencia(origen As String) As Boolean
         Using conn As SQLiteConnection = ObtenerConexion()
-            Dim query As String = "SELECT plata FROM Inicio"
+            Dim query As String = "SELECT NoMostrar FROM Advertencias WHERE Origen = @origen"
             Using cmd As New SQLiteCommand(query, conn)
-                Dim result = cmd.ExecuteScalar()
-                If result IsNot DBNull.Value AndAlso result IsNot Nothing Then
-                    Return result
-                Else
-                    Return 0
+                cmd.Parameters.AddWithValue("@origen", origen)
+
+                Dim result As Object = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Convert.ToInt32(result) = 1 Then
+                    Return True ' No mostrar más
                 End If
             End Using
         End Using
+        Return False ' Por defecto, mostrar
+    End Function
+
+    ' Inserta o actualiza una advertencia
+    Public Sub GuardarEstadoAdvertencia(origen As String, noMostrar As Boolean)
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "
+                INSERT INTO Advertencias (Origen, NoMostrar)
+                VALUES (@origen, @noMostrar)
+                ON CONFLICT(Origen) DO UPDATE SET NoMostrar = excluded.NoMostrar;
+            "
+
+            Using cmd As New SQLiteCommand(query, conn)
+                cmd.Parameters.AddWithValue("@origen", origen)
+                cmd.Parameters.AddWithValue("@noMostrar", If(noMostrar, 1, 0))
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Sub ActualizarCaja(columna As String, valor As Double)
+        Using conn As SQLiteConnection = ObtenerConexion()
+
+            ' Primero verificamos si hay registro en Caja
+            Dim existeRegistro As Boolean = False
+            Dim idRegistro As Integer = -1
+            Using cmd As New SQLiteCommand("SELECT Id FROM Caja LIMIT 1", conn)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not DBNull.Value.Equals(result) Then
+                    existeRegistro = True
+                    idRegistro = Convert.ToInt32(result)
+                End If
+            End Using
+
+            ' Si no existe, lo creamos vacío
+            If Not existeRegistro Then
+                Dim insertSql As String = "INSERT INTO Caja (Inicio, Retiros, Ventas, Total) VALUES (0, 0, 0, 0)"
+                Using cmd As New SQLiteCommand(insertSql, conn)
+                    cmd.ExecuteNonQuery()
+                End Using
+                idRegistro = CInt(conn.LastInsertRowId)
+            End If
+
+            ' Actualizamos la columna sumando el valor
+            Dim updateSql As String = $"UPDATE Caja SET {columna} = IFNULL({columna}, 0) + @valor WHERE Id=@id"
+            Using cmd As New SQLiteCommand(updateSql, conn)
+                cmd.Parameters.AddWithValue("@valor", valor)
+                cmd.Parameters.AddWithValue("@id", idRegistro)
+                cmd.ExecuteNonQuery()
+            End Using
+
+            ' Recalcular el total
+            Dim recalcularSql As String = "UPDATE Caja SET Total = IFNULL(Inicio,0) - IFNULL(Retiros,0) + IFNULL(Ventas,0) WHERE Id=@id"
+            Using cmd As New SQLiteCommand(recalcularSql, conn)
+                cmd.Parameters.AddWithValue("@id", idRegistro)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Function obtenerCaja() As (Inicio As Double, Retiros As Double, Ventas As Double, Total As Double)
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "SELECT Inicio, Retiros, Ventas, Total FROM Caja LIMIT 1"
+            Using cmd As New SQLiteCommand(query, conn)
+                Using reader = cmd.ExecuteReader()
+                    If reader.Read() Then
+                        Dim inicio As Double = If(Not IsDBNull(reader("Inicio")), Convert.ToDouble(reader("Inicio")), 0)
+                        Dim retiros As Double = If(Not IsDBNull(reader("Retiros")), Convert.ToDouble(reader("Retiros")), 0)
+                        Dim ventas As Double = If(Not IsDBNull(reader("Ventas")), Convert.ToDouble(reader("Ventas")), 0)
+                        Dim total As Double = If(Not IsDBNull(reader("Total")), Convert.ToDouble(reader("Total")), 0)
+                        Return (inicio, retiros, ventas, total)
+                    End If
+                End Using
+            End Using
+        End Using
+        Return (0, 0, 0, 0)
     End Function
 
 End Class
