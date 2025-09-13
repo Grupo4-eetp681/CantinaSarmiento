@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormRetiro
+Partial Class PrioridadImportacion
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -22,11 +22,10 @@ Partial Class FormRetiro
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormRetiro))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrioridadImportacion))
         PanelContenedorRetiro = New Panel()
-        ButtonCancelar = New Button()
-        ButtonAceptar = New Button()
-        TextBoxPlata = New TextBox()
+        ButtonDestino = New Button()
+        ButtonOrigen = New Button()
         LabelTitulo = New Label()
         PanelContenedorRetiro.SuspendLayout()
         SuspendLayout()
@@ -34,79 +33,67 @@ Partial Class FormRetiro
         ' PanelContenedorRetiro
         ' 
         PanelContenedorRetiro.BackColor = SystemColors.ControlDark
-        PanelContenedorRetiro.Controls.Add(ButtonCancelar)
-        PanelContenedorRetiro.Controls.Add(ButtonAceptar)
-        PanelContenedorRetiro.Controls.Add(TextBoxPlata)
+        PanelContenedorRetiro.Controls.Add(ButtonDestino)
+        PanelContenedorRetiro.Controls.Add(ButtonOrigen)
         PanelContenedorRetiro.Controls.Add(LabelTitulo)
         PanelContenedorRetiro.Location = New Point(2, 2)
         PanelContenedorRetiro.Name = "PanelContenedorRetiro"
         PanelContenedorRetiro.Size = New Size(300, 150)
-        PanelContenedorRetiro.TabIndex = 0
+        PanelContenedorRetiro.TabIndex = 1
         ' 
-        ' ButtonCancelar
+        ' ButtonDestino
         ' 
-        ButtonCancelar.BackColor = Color.Gold
-        ButtonCancelar.FlatStyle = FlatStyle.Flat
-        ButtonCancelar.Font = New Font("Candara", 12F, FontStyle.Bold)
-        ButtonCancelar.Location = New Point(170, 110)
-        ButtonCancelar.Name = "ButtonCancelar"
-        ButtonCancelar.Size = New Size(95, 35)
-        ButtonCancelar.TabIndex = 3
-        ButtonCancelar.Text = "CANCELAR"
-        ButtonCancelar.UseVisualStyleBackColor = False
+        ButtonDestino.BackColor = Color.Gold
+        ButtonDestino.FlatStyle = FlatStyle.Flat
+        ButtonDestino.Font = New Font("Candara", 12F, FontStyle.Bold)
+        ButtonDestino.Location = New Point(169, 88)
+        ButtonDestino.Name = "ButtonDestino"
+        ButtonDestino.Size = New Size(95, 35)
+        ButtonDestino.TabIndex = 3
+        ButtonDestino.Text = "DESTINO"
+        ButtonDestino.UseVisualStyleBackColor = False
         ' 
-        ' ButtonAceptar
+        ' ButtonOrigen
         ' 
-        ButtonAceptar.BackColor = Color.Gold
-        ButtonAceptar.FlatStyle = FlatStyle.Flat
-        ButtonAceptar.Font = New Font("Candara", 12F, FontStyle.Bold)
-        ButtonAceptar.Location = New Point(35, 110)
-        ButtonAceptar.Name = "ButtonAceptar"
-        ButtonAceptar.Size = New Size(95, 35)
-        ButtonAceptar.TabIndex = 2
-        ButtonAceptar.Text = "ACEPTAR"
-        ButtonAceptar.UseVisualStyleBackColor = False
-        ' 
-        ' TextBoxPlata
-        ' 
-        TextBoxPlata.Font = New Font("Candara", 14F, FontStyle.Bold)
-        TextBoxPlata.Location = New Point(35, 60)
-        TextBoxPlata.Name = "TextBoxPlata"
-        TextBoxPlata.Size = New Size(230, 30)
-        TextBoxPlata.TabIndex = 1
-        TextBoxPlata.Text = "$"
+        ButtonOrigen.BackColor = Color.Gold
+        ButtonOrigen.FlatStyle = FlatStyle.Flat
+        ButtonOrigen.Font = New Font("Candara", 12F, FontStyle.Bold)
+        ButtonOrigen.Location = New Point(36, 88)
+        ButtonOrigen.Name = "ButtonOrigen"
+        ButtonOrigen.Size = New Size(95, 35)
+        ButtonOrigen.TabIndex = 2
+        ButtonOrigen.Text = "ORIGEN"
+        ButtonOrigen.UseVisualStyleBackColor = False
         ' 
         ' LabelTitulo
         ' 
         LabelTitulo.Anchor = AnchorStyles.Top
         LabelTitulo.Font = New Font("Candara", 14F, FontStyle.Bold)
-        LabelTitulo.Location = New Point(36, 7)
+        LabelTitulo.Location = New Point(36, 27)
         LabelTitulo.Name = "LabelTitulo"
         LabelTitulo.Size = New Size(228, 35)
         LabelTitulo.TabIndex = 0
-        LabelTitulo.Text = "¿CUANTO DESEA RETIRAR?"
+        LabelTitulo.Text = "ESTABLECER PRIORIDAD"
         LabelTitulo.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' FormRetiro
+        ' PrioridadImportacion
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = SystemColors.ControlDarkDark
+        BackColor = Color.Gold
         ClientSize = New Size(304, 154)
         Controls.Add(PanelContenedorRetiro)
         FormBorderStyle = FormBorderStyle.None
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
-        Name = "FormRetiro"
+        Name = "PrioridadImportacion"
         StartPosition = FormStartPosition.CenterScreen
-        Text = "FormRetiro"
+        Text = "PrioridadImportacion"
         PanelContenedorRetiro.ResumeLayout(False)
-        PanelContenedorRetiro.PerformLayout()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents PanelContenedorRetiro As Panel
+    Friend WithEvents ButtonDestino As Button
+    Friend WithEvents ButtonOrigen As Button
     Friend WithEvents LabelTitulo As Label
-    Friend WithEvents ButtonAceptar As Button
-    Friend WithEvents TextBoxPlata As TextBox
-    Friend WithEvents ButtonCancelar As Button
 End Class

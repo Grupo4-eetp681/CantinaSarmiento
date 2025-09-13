@@ -22,12 +22,19 @@ Partial Class CAJA
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CAJA))
         PanelFormulario = New Panel()
         PanelIZQDataGrid = New Panel()
         DataGridViewCAJA = New DataGridView()
         PanelDERECHO = New Panel()
         PanelContenedorLabels = New Panel()
         PanelLabels = New Panel()
+        PanelBorde3 = New Panel()
+        PanelBorde2 = New Panel()
+        PanelBorde1 = New Panel()
         LabelRetiro = New Label()
         LabelNUMRetiro = New Label()
         LabelVentas = New Label()
@@ -38,8 +45,11 @@ Partial Class CAJA
         LabelNUMCaja = New Label()
         PanelBotonCerrarCaja = New Panel()
         Panel1 = New Panel()
+        PanelMensage = New Panel()
+        LabelMensage = New Label()
         ButtonCerrarCaja = New Button()
         ButtonRetiro = New Button()
+        TimerMensage = New Timer(components)
         PanelFormulario.SuspendLayout()
         PanelIZQDataGrid.SuspendLayout()
         CType(DataGridViewCAJA, ComponentModel.ISupportInitialize).BeginInit()
@@ -48,6 +58,7 @@ Partial Class CAJA
         PanelLabels.SuspendLayout()
         PanelBotonCerrarCaja.SuspendLayout()
         Panel1.SuspendLayout()
+        PanelMensage.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelFormulario
@@ -72,7 +83,23 @@ Partial Class CAJA
         ' DataGridViewCAJA
         ' 
         DataGridViewCAJA.BorderStyle = BorderStyle.None
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = SystemColors.Control
+        DataGridViewCellStyle1.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle1.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
+        DataGridViewCAJA.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         DataGridViewCAJA.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = SystemColors.Window
+        DataGridViewCellStyle2.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle2.ForeColor = SystemColors.ControlDark
+        DataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
+        DataGridViewCAJA.DefaultCellStyle = DataGridViewCellStyle2
         DataGridViewCAJA.Dock = DockStyle.Fill
         DataGridViewCAJA.Location = New Point(0, 0)
         DataGridViewCAJA.Name = "DataGridViewCAJA"
@@ -82,6 +109,7 @@ Partial Class CAJA
         ' PanelDERECHO
         ' 
         PanelDERECHO.BackColor = Color.Transparent
+        PanelDERECHO.BorderStyle = BorderStyle.FixedSingle
         PanelDERECHO.Controls.Add(PanelContenedorLabels)
         PanelDERECHO.Controls.Add(PanelBotonCerrarCaja)
         PanelDERECHO.Dock = DockStyle.Right
@@ -96,12 +124,15 @@ Partial Class CAJA
         PanelContenedorLabels.Dock = DockStyle.Fill
         PanelContenedorLabels.Location = New Point(0, 0)
         PanelContenedorLabels.Name = "PanelContenedorLabels"
-        PanelContenedorLabels.Size = New Size(280, 350)
+        PanelContenedorLabels.Size = New Size(278, 348)
         PanelContenedorLabels.TabIndex = 5
         ' 
         ' PanelLabels
         ' 
         PanelLabels.Anchor = AnchorStyles.None
+        PanelLabels.Controls.Add(PanelBorde3)
+        PanelLabels.Controls.Add(PanelBorde2)
+        PanelLabels.Controls.Add(PanelBorde1)
         PanelLabels.Controls.Add(LabelRetiro)
         PanelLabels.Controls.Add(LabelNUMRetiro)
         PanelLabels.Controls.Add(LabelVentas)
@@ -110,10 +141,34 @@ Partial Class CAJA
         PanelLabels.Controls.Add(LabelNUMVentas)
         PanelLabels.Controls.Add(LabelINICIO)
         PanelLabels.Controls.Add(LabelNUMCaja)
-        PanelLabels.Location = New Point(40, 50)
+        PanelLabels.Location = New Point(55, 49)
         PanelLabels.Name = "PanelLabels"
-        PanelLabels.Size = New Size(200, 250)
+        PanelLabels.Size = New Size(201, 250)
         PanelLabels.TabIndex = 4
+        ' 
+        ' PanelBorde3
+        ' 
+        PanelBorde3.BackColor = Color.Gold
+        PanelBorde3.Location = New Point(0, 191)
+        PanelBorde3.Name = "PanelBorde3"
+        PanelBorde3.Size = New Size(201, 3)
+        PanelBorde3.TabIndex = 10
+        ' 
+        ' PanelBorde2
+        ' 
+        PanelBorde2.BackColor = Color.Gold
+        PanelBorde2.Location = New Point(3, 124)
+        PanelBorde2.Name = "PanelBorde2"
+        PanelBorde2.Size = New Size(200, 1)
+        PanelBorde2.TabIndex = 9
+        ' 
+        ' PanelBorde1
+        ' 
+        PanelBorde1.BackColor = Color.Gold
+        PanelBorde1.Location = New Point(0, 48)
+        PanelBorde1.Name = "PanelBorde1"
+        PanelBorde1.Size = New Size(200, 1)
+        PanelBorde1.TabIndex = 8
         ' 
         ' LabelRetiro
         ' 
@@ -136,6 +191,7 @@ Partial Class CAJA
         LabelNUMRetiro.Size = New Size(70, 25)
         LabelNUMRetiro.TabIndex = 6
         LabelNUMRetiro.Text = "$ 0.00"
+        LabelNUMRetiro.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' LabelVentas
         ' 
@@ -158,6 +214,7 @@ Partial Class CAJA
         LabelNUMInicio.Size = New Size(70, 25)
         LabelNUMInicio.TabIndex = 3
         LabelNUMInicio.Text = "$ 0.00"
+        LabelNUMInicio.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' LabelCAJA
         ' 
@@ -180,6 +237,7 @@ Partial Class CAJA
         LabelNUMVentas.Size = New Size(70, 25)
         LabelNUMVentas.TabIndex = 2
         LabelNUMVentas.Text = "$ 0.00"
+        LabelNUMVentas.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' LabelINICIO
         ' 
@@ -202,25 +260,50 @@ Partial Class CAJA
         LabelNUMCaja.Size = New Size(70, 25)
         LabelNUMCaja.TabIndex = 1
         LabelNUMCaja.Text = "$ 0.00"
+        LabelNUMCaja.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' PanelBotonCerrarCaja
         ' 
         PanelBotonCerrarCaja.Controls.Add(Panel1)
         PanelBotonCerrarCaja.Dock = DockStyle.Bottom
-        PanelBotonCerrarCaja.Location = New Point(0, 350)
+        PanelBotonCerrarCaja.Location = New Point(0, 348)
         PanelBotonCerrarCaja.Name = "PanelBotonCerrarCaja"
-        PanelBotonCerrarCaja.Size = New Size(280, 100)
+        PanelBotonCerrarCaja.Size = New Size(278, 100)
         PanelBotonCerrarCaja.TabIndex = 3
         ' 
         ' Panel1
         ' 
         Panel1.Anchor = AnchorStyles.None
+        Panel1.Controls.Add(PanelMensage)
         Panel1.Controls.Add(ButtonCerrarCaja)
         Panel1.Controls.Add(ButtonRetiro)
-        Panel1.Location = New Point(30, 25)
+        Panel1.Location = New Point(29, 25)
         Panel1.Name = "Panel1"
         Panel1.Size = New Size(220, 50)
         Panel1.TabIndex = 5
+        ' 
+        ' PanelMensage
+        ' 
+        PanelMensage.BackColor = Color.Gold
+        PanelMensage.Controls.Add(LabelMensage)
+        PanelMensage.Dock = DockStyle.Fill
+        PanelMensage.Location = New Point(0, 0)
+        PanelMensage.Name = "PanelMensage"
+        PanelMensage.Size = New Size(220, 50)
+        PanelMensage.TabIndex = 2
+        PanelMensage.Visible = False
+        ' 
+        ' LabelMensage
+        ' 
+        LabelMensage.Dock = DockStyle.Fill
+        LabelMensage.ForeColor = Color.Black
+        LabelMensage.Location = New Point(0, 0)
+        LabelMensage.Name = "LabelMensage"
+        LabelMensage.Size = New Size(220, 50)
+        LabelMensage.TabIndex = 0
+        LabelMensage.Text = "Label1"
+        LabelMensage.TextAlign = ContentAlignment.MiddleCenter
+        LabelMensage.Visible = False
         ' 
         ' ButtonCerrarCaja
         ' 
@@ -248,6 +331,11 @@ Partial Class CAJA
         ButtonRetiro.Text = "RETIRAR DINERO"
         ButtonRetiro.UseVisualStyleBackColor = False
         ' 
+        ' TimerMensage
+        ' 
+        TimerMensage.Enabled = True
+        TimerMensage.Interval = 2000
+        ' 
         ' CAJA
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -257,6 +345,7 @@ Partial Class CAJA
         Controls.Add(PanelFormulario)
         ForeColor = SystemColors.ControlDark
         FormBorderStyle = FormBorderStyle.None
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "CAJA"
         Text = "CAJA"
         PanelFormulario.ResumeLayout(False)
@@ -267,6 +356,7 @@ Partial Class CAJA
         PanelLabels.ResumeLayout(False)
         PanelBotonCerrarCaja.ResumeLayout(False)
         Panel1.ResumeLayout(False)
+        PanelMensage.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -288,4 +378,10 @@ Partial Class CAJA
     Friend WithEvents Panel1 As Panel
     Friend WithEvents LabelRetiro As Label
     Friend WithEvents LabelNUMRetiro As Label
+    Friend WithEvents PanelMensage As Panel
+    Friend WithEvents LabelMensage As Label
+    Friend WithEvents TimerMensage As Timer
+    Friend WithEvents PanelBorde2 As Panel
+    Friend WithEvents PanelBorde1 As Panel
+    Friend WithEvents PanelBorde3 As Panel
 End Class

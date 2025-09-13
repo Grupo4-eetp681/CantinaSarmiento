@@ -23,6 +23,9 @@ Partial Class formINVENTARIO
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim PanelInventarioContenedor As Panel
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(formINVENTARIO))
         PanelContenedorDataGridInventario = New Panel()
         DataGridViewInventario = New DataGridView()
         PanelInferior = New Panel()
@@ -58,7 +61,24 @@ Partial Class formINVENTARIO
         ' 
         ' DataGridViewInventario
         ' 
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = SystemColors.Control
+        DataGridViewCellStyle1.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle1.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
+        DataGridViewInventario.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         DataGridViewInventario.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = SystemColors.Window
+        DataGridViewCellStyle2.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle2.ForeColor = SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
+        DataGridViewInventario.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewInventario.Dock = DockStyle.Fill
         DataGridViewInventario.Location = New Point(0, 0)
         DataGridViewInventario.Name = "DataGridViewInventario"
         DataGridViewInventario.Size = New Size(800, 350)
@@ -88,7 +108,7 @@ Partial Class formINVENTARIO
         ButtonEliminar.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         ButtonEliminar.FlatStyle = FlatStyle.Flat
         ButtonEliminar.Font = New Font("Candara", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ButtonEliminar.Location = New Point(0, 0)
+        ButtonEliminar.Location = New Point(160, 0)
         ButtonEliminar.Name = "ButtonEliminar"
         ButtonEliminar.Size = New Size(110, 35)
         ButtonEliminar.TabIndex = 1
@@ -100,7 +120,7 @@ Partial Class formINVENTARIO
         ButtonAgregar.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         ButtonAgregar.FlatStyle = FlatStyle.Flat
         ButtonAgregar.Font = New Font("Candara", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        ButtonAgregar.Location = New Point(160, 0)
+        ButtonAgregar.Location = New Point(0, 0)
         ButtonAgregar.Name = "ButtonAgregar"
         ButtonAgregar.Size = New Size(110, 35)
         ButtonAgregar.TabIndex = 0
@@ -115,6 +135,7 @@ Partial Class formINVENTARIO
         ClientSize = New Size(800, 450)
         Controls.Add(PanelInventarioContenedor)
         FormBorderStyle = FormBorderStyle.None
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "formINVENTARIO"
         Text = "formINVENTARIO"
         PanelInventarioContenedor.ResumeLayout(False)

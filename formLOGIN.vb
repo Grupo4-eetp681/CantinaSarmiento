@@ -27,7 +27,7 @@
     End Sub
 
     Private Sub formLOGIN_Load(sender As Object, e As EventArgs) Handles Me.Load
-
+        TextBoxContra.PasswordChar = "*"c
         PanelInfo.Visible = False
         info.Visible = False
     End Sub
@@ -38,10 +38,6 @@
         Timer1.Stop()
     End Sub
 
-    Private Sub LogoSarmientoLogin_Click(sender As Object, e As EventArgs) Handles LogoSarmientoLogin.Click
-        Me.Dispose()
-    End Sub
-
     Private Sub BotonRegister_Click(sender As Object, e As EventArgs) Handles BotonRegister.Click
         FormularioRegister.ShowDialog()
     End Sub
@@ -49,4 +45,5 @@
     Private Sub formLOGIN_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         TextBoxSubdivision.Focus()
     End Sub
+
 End Class

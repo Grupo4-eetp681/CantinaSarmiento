@@ -9,6 +9,7 @@ Public Class Form1
     Private logica As New LogicaCantina
     Private dragging As Boolean = False
     Private dragOffset As Point
+    Public inicio As Int128
 
     ' Esta función le dice a Windows que libere el control del mouse
     <DllImport("user32.dll", EntryPoint:="ReleaseCapture")>
@@ -34,6 +35,7 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         'Evitar que el usuario pueda usar el tab en los botones de cierre y minimizar'
         ButtonCierreApp.TabStop = False
         ButtonMinimizarApp.TabStop = False
@@ -45,9 +47,13 @@ Public Class Form1
         If resultado Then
             formLOGIN.AbrirVentasEnPanel()
             formularioActual = ventas
+            If logica.verificarCaja() Then
+                SolicitudCaja.ShowDialog()
+            End If
         Else
             formLOGIN.ShowDialog()
         End If
+        logica.cargarSubdivision(subdivision)
     End Sub
 
     Private Sub ButtonCierreApp_Click(sender As Object, e As EventArgs) Handles ButtonCierreApp.Click
@@ -69,24 +75,19 @@ Public Class Form1
         If IsNumeric(limpio) Then
             Return CInt(limpio)
         Else
-            Return 0 ' o lanzar un error si preferís
+            Return 0
         End If
     End Function
 
-    Private Sub BotonMenu_Click(sender As Object, e As EventArgs) Handles BotonMenu.Click
-        If desplegado = False Then
-            PanelBotonesAcciones.Visible = True
-            Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechahorizontal.png")
-            BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)
-            BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
-            desplegado = True
-        Else
-            PanelBotonesAcciones.Visible = False
-            Dim rutaImagen As String = System.IO.Path.Combine(Application.StartupPath, "..\..\..\imagenes\flechavertical.png")
-            BotonMenu.BackgroundImage = Image.FromFile(rutaImagen)
-            BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
-            desplegado = False
-        End If
+    Private Sub BotonMenubajo_Click(sender As Object, e As EventArgs) Handles BotonMenuAbajo.Click
+        PanelBotonesAcciones.Visible = True
+        desplegado = True
+        ButtonMenuDerecha.Visible = True
+    End Sub
+    Private Sub ButtonMenuDerecha_Click(sender As Object, e As EventArgs) Handles ButtonMenuDerecha.Click
+        PanelBotonesAcciones.Visible = False
+        desplegado = False
+        ButtonMenuDerecha.Visible = False
     End Sub
 
     Private Sub ButtonMaximizarApp_Click(sender As Object, e As EventArgs) Handles ButtonMaximizarApp.Click
@@ -103,10 +104,6 @@ Public Class Form1
         If screenPos.Y <= 0 And Me.WindowState <> FormWindowState.Maximized Then
             Me.WindowState = FormWindowState.Maximized
         End If
-    End Sub
-
-    Private Sub PanelBarraSuperior_MouseUp(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseUp
-        ' Ya no necesitas nada aquí
     End Sub
 
     Private Sub CerrarSesion_Click(sender As Object, e As EventArgs) Handles CerrarSesion.Click
@@ -143,5 +140,23 @@ Public Class Form1
 
     Private Sub botonInventario_Click(sender As Object, e As EventArgs) Handles botonInventario.Click
         AbrirFormularioEnPanel(New formINVENTARIO())
+    End Sub
+
+    Private Sub LogoSuperiorIzquierda_MouseDown(sender As Object, e As MouseEventArgs) Handles LogoSuperiorIzquierda.MouseDown
+        If e.Button = MouseButtons.Right Then
+            Opciones.Show(LogoSuperiorIzquierda, e.Location)
+        End If
+    End Sub
+
+    Private Sub ActivarAdvertenciasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActivarAdvertenciasToolStripMenuItem.Click
+        logica.advertenciasFalse()
+    End Sub
+
+    Private Sub BotonExportar_Click(sender As Object, e As EventArgs) Handles BotonExportar.Click
+        logica.ExportarProductos()
+    End Sub
+
+    Private Sub BotonImportar_Click(sender As Object, e As EventArgs) Handles BotonImportar.Click
+        logica.ImportarProductos()
     End Sub
 End Class

@@ -187,11 +187,11 @@ Partial Class FormularioRegister
         LabelSubdivisiónRegister.AutoSize = True
         LabelSubdivisiónRegister.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelSubdivisiónRegister.ForeColor = Color.FromArgb(CByte(34), CByte(34), CByte(34))
-        LabelSubdivisiónRegister.Location = New Point(91, 40)
+        LabelSubdivisiónRegister.Location = New Point(85, 40)
         LabelSubdivisiónRegister.Name = "LabelSubdivisiónRegister"
-        LabelSubdivisiónRegister.Size = New Size(99, 19)
+        LabelSubdivisiónRegister.Size = New Size(110, 19)
         LabelSubdivisiónRegister.TabIndex = 3
-        LabelSubdivisiónRegister.Text = "SUBDIVISIÓN"
+        LabelSubdivisiónRegister.Text = "SUBCOMISIÓN"
         ' 
         ' TextBoxContraseña2
         ' 
@@ -247,6 +247,7 @@ Partial Class FormularioRegister
         ClientSize = New Size(286, 406)
         Controls.Add(FondoDeColor)
         FormBorderStyle = FormBorderStyle.None
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "FormularioRegister"
         StartPosition = FormStartPosition.CenterScreen
         Text = "Form2"

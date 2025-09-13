@@ -339,7 +339,7 @@ Public Class ventas
 
 
 
-    Private Sub EliminarProductoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EliminarProductoToolStripMenuItem.Click
+    Private Sub EliminarProductoToolStripMenuItem_Click(sender As Object, e As EventArgs)
         If DataGridVentas.SelectedRows.Count > 0 Then
             DataGridVentas.Rows.Remove(DataGridVentas.SelectedRows(0))
             ActualizarTotal() ' Si tenés un método para recalcular el total
@@ -396,12 +396,30 @@ Public Class ventas
             Return
         End If
 
-        Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
-        logica.ActualizarCaja("Ventas", total)
-        AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
-        mostrar_mensaje()
-        registrar_venta()
+        Dim origen = "BotonRegistro"
+        Dim mensaje = "¿Confirmar registro de venta?"
+        Dim continuar As Boolean = True
 
+        If Not logica.ObtenerEstadoAdvertencia(origen) Then
+            Dim frm As New Advertencia(mensaje, origen)
+            Dim resultado = frm.ShowDialog()
+            If resultado = DialogResult.OK Then
+                If frm.NoMostrarMas Then
+                    logica.GuardarEstadoAdvertencia(origen, True)
+                End If
+                continuar = True
+            Else
+                continuar = False
+            End If
+        End If
+
+        If continuar Then
+            Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
+            logica.ActualizarCaja("Ventas", total)
+            AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
+            mostrar_mensaje()
+            registrar_venta()
+        End If
     End Sub
 
     Private Sub BotonFactura_Click(sender As Object, e As EventArgs) Handles BotonFactura.Click
@@ -412,13 +430,31 @@ Public Class ventas
             Return
         End If
 
-        Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
-        logica.ActualizarCaja("Ventas", total)
-        AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
-        mostrar_mensaje()
-        EmitirFacturaTipoC()
-        registrar_venta()
+        Dim origen = "BotonFactura"
+        Dim mensaje = "¿Confirmar registro de venta?"
+        Dim continuar As Boolean = True
 
+        If Not logica.ObtenerEstadoAdvertencia(origen) Then
+            Dim frm As New Advertencia(mensaje, origen)
+            Dim resultado = frm.ShowDialog()
+            If resultado = DialogResult.OK Then
+                If frm.NoMostrarMas Then
+                    logica.GuardarEstadoAdvertencia(origen, True)
+                End If
+                continuar = True
+            Else
+                continuar = False
+            End If
+        End If
+
+        If continuar Then
+            Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
+            logica.ActualizarCaja("Ventas", total)
+            AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
+            mostrar_mensaje()
+            EmitirFacturaTipoC()
+            registrar_venta()
+        End If
     End Sub
 
     Private Sub BotonTicket_Click(sender As Object, e As EventArgs) Handles BotonTicket.Click
@@ -429,12 +465,31 @@ Public Class ventas
             Return
         End If
 
-        Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
-        logica.ActualizarCaja("Ventas", total)
-        AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
-        mostrar_mensaje()
-        ImprimirTicketsIndividuales()
-        registrar_venta()
+        Dim origen = "BotonTicket"
+        Dim mensaje = "¿Confirmar registro de venta?"
+        Dim continuar As Boolean = True
+
+        If Not logica.ObtenerEstadoAdvertencia(origen) Then
+            Dim frm As New Advertencia(mensaje, origen)
+            Dim resultado = frm.ShowDialog()
+            If resultado = DialogResult.OK Then
+                If frm.NoMostrarMas Then
+                    logica.GuardarEstadoAdvertencia(origen, True)
+                End If
+                continuar = True
+            Else
+                continuar = False
+            End If
+        End If
+
+        If continuar Then
+            Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
+            logica.ActualizarCaja("Ventas", total)
+            AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
+            mostrar_mensaje()
+            ImprimirTicketsIndividuales()
+            registrar_venta()
+        End If
 
     End Sub
 
@@ -538,20 +593,45 @@ End Class
 Public Class CustomFontResolver
     Implements IFontResolver
 
-    ' Este método debe aceptar solo un parámetro
     Public Function GetFont(faceName As String) As Byte() Implements IFontResolver.GetFont
-        ' Asegúrate de que el nombre coincida con el que usas en ResolveTypeface
-        If faceName = "Roboto" Then
-            Dim fontPath As String = "C:\ProgramData\CantinaSarmiento\Roboto\static\Roboto-Regular.ttf"
-            Return File.ReadAllBytes(fontPath)
-        End If
-        Throw New FileNotFoundException("Fuente no encontrada: " & faceName)
+        Try
+            If faceName = "Roboto" Then
+                Dim fontPath As String = "C:\ProgramData\CantinaSarmiento\Roboto\static\Roboto-Regular.ttf"
+                If File.Exists(fontPath) Then
+                    Return File.ReadAllBytes(fontPath)
+                Else
+                    Throw New FileNotFoundException("Fuente Roboto no encontrada en " & fontPath)
+                End If
+            ElseIf faceName = "Calibri" Then
+                Dim fontPath As String = "C:\Windows\Fonts\calibri.ttf"
+                If File.Exists(fontPath) Then
+                    Return File.ReadAllBytes(fontPath)
+                Else
+                    Throw New FileNotFoundException("Fuente Calibri no encontrada en " & fontPath)
+                End If
+            End If
+
+        Catch ex As Exception
+            ' Si no encuentra Roboto ni Calibri, forzamos fuente por defecto
+            ' Podrías elegir Arial que siempre está, o dejar que PdfSharp use su default
+            Dim fallbackFont As String = "C:\Windows\Fonts\arial.ttf"
+            If File.Exists(fallbackFont) Then
+                Return File.ReadAllBytes(fallbackFont)
+            End If
+        End Try
+
+        ' Si TODO falla, devolvemos Nothing y PdfSharp usa su fallback interno
+        Return Nothing
     End Function
 
     Public Function ResolveTypeface(familyName As String, isBold As Boolean, isItalic As Boolean) As FontResolverInfo Implements IFontResolver.ResolveTypeface
         If familyName.Equals("Roboto", StringComparison.OrdinalIgnoreCase) Then
             Return New FontResolverInfo("Roboto")
+        ElseIf familyName.Equals("Calibri", StringComparison.OrdinalIgnoreCase) Then
+            Return New FontResolverInfo("Calibri")
         End If
-        Return Nothing
+
+        ' Si no coincide con nada, devolvemos fuente del sistema
+        Return New FontResolverInfo("Arial")
     End Function
 End Class

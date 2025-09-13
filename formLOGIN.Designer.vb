@@ -150,11 +150,11 @@ Partial Class formLOGIN
         ' 
         LabelSubdivision.AutoSize = True
         LabelSubdivision.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        LabelSubdivision.Location = New Point(91, 180)
+        LabelSubdivision.Location = New Point(85, 180)
         LabelSubdivision.Name = "LabelSubdivision"
-        LabelSubdivision.Size = New Size(99, 19)
+        LabelSubdivision.Size = New Size(110, 19)
         LabelSubdivision.TabIndex = 3
-        LabelSubdivision.Text = "SUBDIVISIÓN"
+        LabelSubdivision.Text = "SUBCOMISIÓN"
         ' 
         ' LabelContraseña
         ' 
@@ -210,6 +210,7 @@ Partial Class formLOGIN
         ClientSize = New Size(286, 406)
         Controls.Add(FondoDeColor)
         FormBorderStyle = FormBorderStyle.None
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "formLOGIN"
         ShowInTaskbar = False
         StartPosition = FormStartPosition.CenterScreen

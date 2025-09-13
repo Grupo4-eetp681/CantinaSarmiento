@@ -1,5 +1,9 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
+Imports System.Text
+Imports PdfSharp.Drawing
+Imports PdfSharp.Fonts
+Imports PdfSharp.Pdf
 
 Public Class LogicaCantina
     Public subdivision As String = String.Empty
@@ -7,6 +11,7 @@ Public Class LogicaCantina
     Public cantinaSarmientoPath As String = Path.Combine(programDataPath, "CantinaSarmiento")
     Public baseDeDatosUsuarios = Path.Combine(cantinaSarmientoPath, "CantinaSarmiento.db")
     Public baseDeDatos As String = String.Empty
+    Public OrigenTienePrioridad As Boolean = False
 
     Public Sub cargarSubdivision(division As String)
         subdivision = division
@@ -18,24 +23,44 @@ Public Class LogicaCantina
         If Not Directory.Exists(cantinaSarmientoPath) Then
             Directory.CreateDirectory(cantinaSarmientoPath)
         End If
+
         If Not File.Exists(baseDeDatos) Then
             SQLiteConnection.CreateFile(baseDeDatos)
             Using conn As SQLiteConnection = ObtenerConexion()
-                Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
-                Dim createOperacionTable As String = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
-                Dim createInicioTable As String = "CREATE TABLE IF NOT EXISTS Inicio (Id INTEGER PRIMARY KEY AUTOINCREMENT, Plata REAL, Fecha date)"
+                ' Crear todas las tablas desde cero
+                Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (" &
+                "IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                "Descripcion TEXT, " &
+                "PrecioVenta REAL, " &
+                "PrecioCosto REAL, " &
+                "Ganancia REAL)"
+
                 Dim createVentasTable As String = "CREATE TABLE IF NOT EXISTS Ventas (" &
-                    "IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, " &
-                    "Descripcion TEXT, " &
-                    "Cantidad INTEGER, " &
-                    "Subtotal INTEGER, " &
-                    "Fecha DATE)"
+                "IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                "Descripcion TEXT, " &
+                "Cantidad INTEGER, " &
+                "Subtotal REAL, " &
+                "FechaYHora TEXT)"
+
+                Dim createAdvertenciasTable As String = "CREATE TABLE IF NOT EXISTS Advertencias (" &
+                "Id INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                "Origen TEXT UNIQUE, " &
+                "NoMostrar INTEGER DEFAULT 0)"
+
+                Dim createCajaTable As String = "CREATE TABLE IF NOT EXISTS Caja (" &
+                "Id INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                "Inicio REAL, " &
+                "Retiros REAL, " &
+                "Ventas REAL, " &
+                "Total REAL)"
+
                 Dim tablas As String() = {
-                        createProductoTable,
-                        createOperacionTable,
-                        createInicioTable,
-                        createVentasTable
-                    }
+                createProductoTable,
+                createVentasTable,
+                createAdvertenciasTable,
+                createCajaTable
+            }
+
                 For Each sql As String In tablas
                     Using cmd As New SQLiteCommand(sql, conn)
                         cmd.ExecuteNonQuery()
@@ -43,15 +68,15 @@ Public Class LogicaCantina
                 Next
             End Using
         Else
+            ' Base de datos existe, verificar estructura
             Using conn As SQLiteConnection = ObtenerConexion()
-                ' Tablas esperadas con sus columnas
+                ' Tablas esperadas con sus columnas ACTUALIZADAS
                 Dim tablasEsperadas As New Dictionary(Of String, String()) From {
-                    {"Producto", New String() {"IdProducto", "Descripcion", "PrecioVenta"}},
-                    {"Operacion", New String() {"IdOperacion", "Descripcion"}},
-                    {"Ventas", New String() {"IdVenta", "Descripcion", "Cantidad", "Subtotal", "Fecha"}},
-                    {"Advertencias", New String() {"IdAdvertencia", "Origen", "Mostrar"}},
-                    {"Caja", New String() {"Id", "Inicio", "Retiros", "Ventas", "Total"}}
-                }
+                {"Producto", New String() {"IdProducto", "Descripcion", "PrecioVenta", "PrecioCosto", "Ganancia"}},
+                {"Ventas", New String() {"IdVenta", "Descripcion", "Cantidad", "Subtotal", "FechaYHora"}},
+                {"Advertencias", New String() {"Id", "Origen", "NoMostrar"}},
+                {"Caja", New String() {"Id", "Inicio", "Retiros", "Ventas", "Total"}}
+            }
 
                 ' Eliminar la tabla Inicio si existe (ya no la necesitamos)
                 Dim dropInicio As String = "DROP TABLE IF EXISTS Inicio"
@@ -74,29 +99,41 @@ Public Class LogicaCantina
                         Dim createTableSql As String = ""
                         Select Case tabla.Key
                             Case "Producto"
-                                createTableSql = "CREATE TABLE IF NOT EXISTS Producto (IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT, PrecioVenta REAL)"
-                            Case "Operacion"
-                                createTableSql = "CREATE TABLE IF NOT EXISTS Operacion (IdOperacion INTEGER PRIMARY KEY AUTOINCREMENT, Descripcion TEXT)"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Producto (" &
+                                "IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                                "Descripcion TEXT, " &
+                                "PrecioVenta REAL, " &
+                                "PrecioCosto REAL, " &
+                                "Ganancia REAL)"
                             Case "Ventas"
                                 createTableSql = "CREATE TABLE IF NOT EXISTS Ventas (" &
-                                    "IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, " &
-                                    "Descripcion TEXT, " &
-                                    "Cantidad INTEGER, " &
-                                    "Subtotal INTEGER, " &
-                                    "Fecha DATE)"
+                                "IdVenta INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                                "Descripcion TEXT, " &
+                                "Cantidad INTEGER, " &
+                                "Subtotal REAL, " &
+                                "FechaYHora TEXT)"
                             Case "Advertencias"
-                                createTableSql = "CREATE TABLE IF NOT EXISTS Advertencias (IdAdvertencia INTEGER PRIMARY KEY AUTOINCREMENT, Origen TEXT, Mostrar INTEGER)"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Advertencias (" &
+                                "Id INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                                "Origen TEXT UNIQUE, " &
+                                "NoMostrar INTEGER DEFAULT 0)"
                             Case "Caja"
-                                createTableSql = "CREATE TABLE IF NOT EXISTS Caja (Id INTEGER PRIMARY KEY AUTOINCREMENT, Inicio REAL, Retiros REAL, Ventas REAL, Total REAL)"
+                                createTableSql = "CREATE TABLE IF NOT EXISTS Caja (" &
+                                "Id INTEGER PRIMARY KEY AUTOINCREMENT, " &
+                                "Inicio REAL, " &
+                                "Retiros REAL, " &
+                                "Ventas REAL, " &
+                                "Total REAL)"
                         End Select
                         Using cmd As New SQLiteCommand(createTableSql, conn)
                             cmd.ExecuteNonQuery()
                         End Using
                     Else
-                        ' Verificar columnas
+                        ' Verificar y agregar columnas faltantes
                         Dim columnasFaltantes As New List(Of String)
                         Dim queryColumnas As String = $"PRAGMA table_info({tabla.Key})"
                         Dim columnasActuales As New List(Of String)
+
                         Using cmd As New SQLiteCommand(queryColumnas, conn)
                             Using reader = cmd.ExecuteReader()
                                 While reader.Read()
@@ -104,6 +141,7 @@ Public Class LogicaCantina
                                 End While
                             End Using
                         End Using
+
                         For Each columnaEsperada In tabla.Value
                             If Not columnasActuales.Contains(columnaEsperada) Then
                                 columnasFaltantes.Add(columnaEsperada)
@@ -113,26 +151,53 @@ Public Class LogicaCantina
                         ' Agregar las columnas faltantes
                         For Each columna In columnasFaltantes
                             Dim tipoColumna As String = "REAL"
+                            Dim defaultValue As String = ""
+
                             Select Case columna
-                                Case "Id", "IdProducto", "IdOperacion", "IdVenta", "IdAdvertencia"
+                                Case "Id", "IdProducto", "IdVenta", "Cantidad"
                                     tipoColumna = "INTEGER"
-                                Case "Descripcion", "Origen"
+                                Case "Descripcion", "Origen", "FechaYHora"
                                     tipoColumna = "TEXT"
-                                Case "Fecha"
-                                    tipoColumna = "DATE"
-                                Case "Mostrar"
+                                Case "NoMostrar"
                                     tipoColumna = "INTEGER"
+                                    defaultValue = " DEFAULT 0"
+                                Case "PrecioVenta", "PrecioCosto", "Ganancia", "Subtotal", "Inicio", "Retiros", "Ventas", "Total"
+                                    tipoColumna = "REAL"
                             End Select
-                            Dim alterSql As String = $"ALTER TABLE {tabla.Key} ADD COLUMN {columna} {tipoColumna}"
-                            Using cmd As New SQLiteCommand(alterSql, conn)
-                                cmd.ExecuteNonQuery()
-                            End Using
+
+                            Dim alterSql As String = $"ALTER TABLE {tabla.Key} ADD COLUMN {columna} {tipoColumna}{defaultValue}"
+                            Try
+                                Using cmd As New SQLiteCommand(alterSql, conn)
+                                    cmd.ExecuteNonQuery()
+                                End Using
+                            Catch ex As Exception
+                                ' Ignorar errores de columnas que ya existen
+                                Console.WriteLine($"Advertencia al agregar columna {columna}: {ex.Message}")
+                            End Try
                         Next
                     End If
                 Next
+
+                ' Verificar y aplicar constrains únicos si es necesario
+                Try
+                    ' Para la tabla Advertencias, asegurar que Origen sea UNIQUE
+                    Dim checkUnique As String = "SELECT sql FROM sqlite_master WHERE type='table' AND name='Advertencias'"
+                    Using cmd As New SQLiteCommand(checkUnique, conn)
+                        Dim tableSql As String = cmd.ExecuteScalar()?.ToString()
+                        If Not String.IsNullOrEmpty(tableSql) AndAlso Not tableSql.Contains("UNIQUE") Then
+                            ' Si no tiene el constraint UNIQUE, crear índice único
+                            Dim createUniqueIndex As String = "CREATE UNIQUE INDEX IF NOT EXISTS idx_advertencias_origen ON Advertencias(Origen)"
+                            Using cmdIndex As New SQLiteCommand(createUniqueIndex, conn)
+                                cmdIndex.ExecuteNonQuery()
+                            End Using
+                        End If
+                    End Using
+                Catch ex As Exception
+                    ' Ignorar errores de índices
+                    Console.WriteLine($"Advertencia al crear índice único: {ex.Message}")
+                End Try
             End Using
         End If
-
     End Sub
 
     Public Sub guardarSesion(division As String)
@@ -351,6 +416,15 @@ Public Class LogicaCantina
         End Using
     End Sub
 
+    Public Sub advertenciasFalse()
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "UPDATE Advertencias SET NoMostrar = 0"
+            Using cmd As New SQLiteCommand(query, conn)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
     Public Sub ActualizarCaja(columna As String, valor As Double)
         Using conn As SQLiteConnection = ObtenerConexion()
 
@@ -407,6 +481,400 @@ Public Class LogicaCantina
             End Using
         End Using
         Return (0, 0, 0, 0)
+    End Function
+
+    Public Sub GenerarCierreCajaPDF(DataGridViewCAJA As DataGridView)
+
+        If GlobalFontSettings.FontResolver Is Nothing OrElse Not TypeOf GlobalFontSettings.FontResolver Is CustomFontResolver Then
+            GlobalFontSettings.FontResolver = New CustomFontResolver()
+        End If
+
+        Dim doc As New PdfDocument()
+        doc.Info.Title = "Cierre de Caja"
+        Dim page As PdfPage = doc.AddPage()
+        Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
+        Dim fontTitulo As New XFont("Roboto", 14)
+        Dim fontNormal As New XFont("Roboto", 10)
+        Dim fontResaltado As New XFont("Roboto", 11)
+
+        Dim y As Double = 40
+        gfx.DrawString("CIERRE DE CAJA", fontTitulo, XBrushes.Black, 40, y)
+        y += 25
+        gfx.DrawString("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), fontNormal, XBrushes.Black, 40, y)
+        y += 25
+        gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
+        y += 25
+
+        Dim totalVentas As Double = 0
+        Dim totalGanancia As Double = 0
+
+        ' --- Detalle de cada venta ---
+        Using conn As SQLiteConnection = ObtenerConexion()
+            For Each fila As DataGridViewRow In DataGridViewCAJA.Rows
+                If fila.IsNewRow Then Continue For
+
+                Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+                Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
+                Dim subtotal As Double = Convert.ToDouble(fila.Cells("Subtotal").Value)
+
+                totalVentas += subtotal
+
+                Dim gananciaProducto As Double = 0
+                Dim cmd As New SQLiteCommand("SELECT Ganancia FROM Producto WHERE Descripcion=@desc", conn)
+                cmd.Parameters.AddWithValue("@desc", descripcion)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing Then
+                    gananciaProducto = Convert.ToDouble(result)
+                End If
+
+                Dim subtotalGanancia As Double = gananciaProducto * cantidad
+                totalGanancia += subtotalGanancia
+
+                Dim linea As String = $"{descripcion} x{cantidad} - ${subtotal:N0} (Ganancia: ${subtotalGanancia:N0})"
+                gfx.DrawString(linea, fontNormal, XBrushes.Black, 40, y)
+                y += 20
+            Next
+        End Using
+
+        y += 10
+        gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
+        y += 25
+
+        ' --- Resumen por producto ---
+        gfx.DrawString("RESUMEN DE VENTAS POR PRODUCTO", fontResaltado, XBrushes.Black, 40, y)
+        y += 25
+        gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
+        y += 25
+
+        ' Agrupar y contar productos
+        Dim resumenVentas As New Dictionary(Of String, (Cantidad As Integer, Total As Double))
+        For Each fila As DataGridViewRow In DataGridViewCAJA.Rows
+            If fila.IsNewRow Then Continue For
+            Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+            Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
+            Dim subtotal As Double = Convert.ToDouble(fila.Cells("Subtotal").Value)
+            If resumenVentas.ContainsKey(descripcion) Then
+                resumenVentas(descripcion) = (resumenVentas(descripcion).Cantidad + cantidad, resumenVentas(descripcion).Total + subtotal)
+            Else
+                resumenVentas(descripcion) = (cantidad, subtotal)
+            End If
+        Next
+
+        For Each kvp In resumenVentas
+            Dim lineaResumen As String = $"{kvp.Key} - Cantidad total: {kvp.Value.Cantidad} - Total vendido: ${kvp.Value.Total:N0}"
+            gfx.DrawString(lineaResumen, fontNormal, XBrushes.Black, 40, y)
+            y += 20
+        Next
+
+        y += 10
+        gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
+        y += 25
+
+        ' --- Totales desde la tabla Caja ---
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim cmd As New SQLiteCommand("SELECT Inicio, Retiros, Ventas, Total FROM Caja LIMIT 1", conn)
+            Using reader = cmd.ExecuteReader()
+                If reader.Read() Then
+                    Dim inicio As Double = Convert.ToDouble(reader("Inicio"))
+                    Dim retiros As Double = Convert.ToDouble(reader("Retiros"))
+                    Dim ventas As Double = Convert.ToDouble(reader("Ventas"))
+                    Dim total As Double = Convert.ToDouble(reader("Total"))
+
+                    gfx.DrawString($"Dinero inicial: ${inicio:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
+                    gfx.DrawString($"Ventas registradas: ${ventas:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
+                    gfx.DrawString($"Retiros: ${retiros:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
+                    gfx.DrawString($"TOTAL EN CAJA: ${total:N0}", fontResaltado, XBrushes.Black, 40, y) : y += 25
+                End If
+            End Using
+        End Using
+
+        gfx.DrawString($"Ganancia total: ${totalGanancia:N0}", fontResaltado, XBrushes.Black, 40, y)
+
+        Dim fechayhora As String = Date.Now.ToString("yyyyMMdd_HHmmss")
+        Dim ruta As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CierreCaja_" + fechayhora + ".pdf")
+        doc.Save(ruta)
+        doc.Close()
+    End Sub
+
+    Public Sub CerrarCaja()
+        Using conn As SQLiteConnection = ObtenerConexion()
+            ' Borrar todos los registros de Ventas
+            Using cmdVentas As New SQLiteCommand("DELETE FROM Ventas", conn)
+                cmdVentas.ExecuteNonQuery()
+            End Using
+            ' Borrar todos los registros de Caja
+            Using cmdCaja As New SQLiteCommand("DELETE FROM Caja", conn)
+                cmdCaja.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Function ActualizarProducto(idProducto As Integer, descripcion As String, precioVenta As Double, precioCosto As Double) As Integer
+        Dim ganancia As Double = precioVenta - precioCosto
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "UPDATE Producto SET Descripcion = @desc, PrecioVenta = @venta, PrecioCosto = @costo, Ganancia = @ganancia WHERE IdProducto = @id"
+            Using cmd As New SQLiteCommand(query, conn)
+                cmd.Parameters.AddWithValue("@desc", descripcion)
+                cmd.Parameters.AddWithValue("@venta", precioVenta)
+                cmd.Parameters.AddWithValue("@costo", precioCosto)
+                cmd.Parameters.AddWithValue("@ganancia", ganancia)
+                cmd.Parameters.AddWithValue("@id", idProducto)
+                Return cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Function
+
+    Public Function ObtenerTodosLosProductosInventario() As DataTable
+        Dim dt As New DataTable()
+        Try
+            Using conn As SQLiteConnection = ObtenerConexion()
+                Dim query As String = "SELECT IdProducto as ID, Descripcion as Descripción, PrecioVenta as Precio_Unitario, PrecioCosto as Precio_Costo, Ganancia as Ganancia FROM Producto"
+                Using cmd As New SQLiteCommand(query, conn)
+                    Using da As New SQLiteDataAdapter(cmd)
+                        da.Fill(dt)
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+
+        End Try
+        Return dt
+    End Function
+
+    ' INSERTAR PRODUCTO VACÍO Y DEVOLVER EL ID
+    Public Function InsertarProductoVacio() As Integer
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String =
+                "INSERT INTO Producto (Descripcion, PrecioVenta, PrecioCosto, Ganancia) 
+             VALUES ('', 0, 0, 0); 
+             SELECT last_insert_rowid();"
+
+            Using cmd As New SQLiteCommand(query, conn)
+                Return Convert.ToInt32(cmd.ExecuteScalar())
+            End Using
+        End Using
+    End Function
+
+
+    ' ELIMINAR PRODUCTO POR ID
+    Public Sub EliminarProducto(idProducto As Integer)
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "DELETE FROM Producto WHERE IdProducto = @id"
+            Using cmd As New SQLiteCommand(query, conn)
+                cmd.Parameters.AddWithValue("@id", idProducto)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Function verificarCaja() As Boolean
+        Using conn As SQLiteConnection = ObtenerConexion()
+            Dim query As String = "SELECT COUNT(*) FROM Caja"
+            Using cmd As New SQLiteCommand(query, conn)
+                Dim count As Integer = Convert.ToInt32(cmd.ExecuteScalar())
+                If count > 0 Then
+                    Return False
+                Else
+                    Return True
+                End If
+            End Using
+        End Using
+    End Function
+
+    Public Sub ExportarProductos()
+        Try
+            ' Obtener los datos usando tu función existente
+            Dim dtProductos As DataTable = ObtenerTodosLosProductosInventario()
+
+            If dtProductos Is Nothing OrElse dtProductos.Rows.Count = 0 Then
+                MessageBox.Show("No hay productos para exportar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
+            End If
+
+            ' Configurar el diálogo para guardar archivo
+            Dim saveFileDialog As New SaveFileDialog()
+            saveFileDialog.Filter = "Archivo CSV (*.csv)|*.csv|Archivo de texto (*.txt)|*.txt|Todos los archivos (*.*)|*.*"
+            saveFileDialog.FilterIndex = 1
+            saveFileDialog.DefaultExt = "csv"
+            saveFileDialog.FileName = $"Productos_Inventario_{DateTime.Now:yyyyMMdd_HHmmss}"
+            saveFileDialog.Title = "Guardar exportación de productos"
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+
+            ' Mostrar el diálogo
+            If saveFileDialog.ShowDialog() = DialogResult.OK Then
+                ' Llamar a la función que hace la exportación real
+                ExportarDataTableAArchivo(dtProductos, saveFileDialog.FileName)
+
+                ' Confirmar que se exportó correctamente
+                MessageBox.Show($"Productos exportados exitosamente a:{Environment.NewLine}{saveFileDialog.FileName}{Environment.NewLine}{Environment.NewLine}Total de productos: {dtProductos.Rows.Count}",
+                              "Exportación Completada",
+                              MessageBoxButtons.OK,
+                              MessageBoxIcon.Information)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show($"Error al exportar prodctos:{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub ExportarDataTableAArchivo(productos As DataTable, rutaArchivo As String)
+        Using writer As New StreamWriter(rutaArchivo, False, Encoding.UTF8)
+            ' Escribir encabezados
+            Dim encabezados As New List(Of String)()
+            For Each columna As DataColumn In productos.Columns
+                encabezados.Add(columna.ColumnName)
+            Next
+            writer.WriteLine(String.Join(",", encabezados))
+
+            ' Escribir datos
+            For Each fila As DataRow In productos.Rows
+                Dim valores As New List(Of String)()
+                For Each valor As Object In fila.ItemArray
+                    ' Escapar comillas y manejar valores nulos
+                    Dim valorTexto As String = If(valor Is Nothing OrElse IsDBNull(valor), "", valor.ToString())
+
+                    ' Si contiene comas o comillas, envolver en comillas dobles
+                    If valorTexto.Contains(",") OrElse valorTexto.Contains("""") OrElse valorTexto.Contains(vbCrLf) Then
+                        valorTexto = """" & valorTexto.Replace("""", """""") & """"
+                    End If
+
+                    valores.Add(valorTexto)
+                Next
+                writer.WriteLine(String.Join(",", valores))
+            Next
+        End Using
+    End Sub
+
+    Public Sub ImportarProductos()
+        Try
+            ' Paso 1: Seleccionar archivo
+            Dim archivoSeleccionado As String = SeleccionarArchivo()
+            If String.IsNullOrEmpty(archivoSeleccionado) Then Return
+
+            ' Paso 2: Mostrar tu formulario de prioridad
+            Dim formPrioridad As New PrioridadImportacion()
+            formPrioridad.ShowDialog()
+
+            ' Paso 3: Procesar según la prioridad elegida
+            ProcesarImportacion(archivoSeleccionado)
+
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' Seleccionar archivo de origen
+    Private Function SeleccionarArchivo() As String
+        Dim openFileDialog As New OpenFileDialog()
+        openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv|Archivos de texto (*.txt)|*.txt"
+        openFileDialog.Title = "Seleccionar archivo de productos"
+
+        If openFileDialog.ShowDialog() = DialogResult.OK Then
+            Return openFileDialog.FileName
+        End If
+
+        Return Nothing
+    End Function
+
+    ' Procesar la importación según la prioridad
+    Private Sub ProcesarImportacion(rutaArchivo As String)
+        Dim lineas As String() = File.ReadAllLines(rutaArchivo)
+        If lineas.Length < 2 Then
+            MessageBox.Show("Archivo vacío o sin datos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Dim encabezados As String() = lineas(0).Split(","c)
+        Dim nuevos As Integer = 0
+        Dim actualizados As Integer = 0
+        Dim ignorados As Integer = 0
+
+        Using conn As SQLiteConnection = ObtenerConexion()
+            For i As Integer = 1 To lineas.Length - 1
+                Try
+                    Dim valores As String() = lineas(i).Split(","c)
+
+                    If OrigenTienePrioridad Then
+                        ' UPDATE + INSERT: Los datos del archivo tienen prioridad
+                        If InsertarOActualizar(conn, valores) Then
+                            If ProductoExiste(conn, valores(0)) Then
+                                actualizados += 1
+                            Else
+                                nuevos += 1
+                            End If
+                        End If
+                    Else
+                        ' SOLO INSERT: Solo productos nuevos
+                        If Not ProductoExiste(conn, valores(0)) Then
+                            If InsertarNuevo(conn, valores) Then
+                                nuevos += 1
+                            End If
+                        Else
+                            ignorados += 1
+                        End If
+                    End If
+
+                Catch ex As Exception
+                    ' Continuar con el siguiente registro si hay error
+                End Try
+            Next
+        End Using
+
+        ' Mostrar resumen
+        MessageBox.Show($"Importación completada:{Environment.NewLine}" &
+                   $"Nuevos: {nuevos}{Environment.NewLine}" &
+                   $"Actualizados: {actualizados}{Environment.NewLine}" &
+                   $"Ignorados: {ignorados}", "Resumen", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    ' Verificar si producto existe
+    Private Function ProductoExiste(conn As SQLiteConnection, idProducto As String) As Boolean
+        Dim query As String = "SELECT COUNT(*) FROM Producto WHERE IdProducto = @id"
+        Using cmd As New SQLiteCommand(query, conn)
+            cmd.Parameters.AddWithValue("@id", idProducto)
+            Return Convert.ToInt32(cmd.ExecuteScalar()) > 0
+        End Using
+    End Function
+
+    ' INSERT + UPDATE (cuando origen tiene prioridad)
+    Private Function InsertarOActualizar(conn As SQLiteConnection, valores As String()) As Boolean
+        Dim query As String = "
+        INSERT INTO Producto (IdProducto, Descripcion, PrecioVenta, PrecioCosto, Ganancia)
+        VALUES (@id, @desc, @precioVenta, @precioCosto, @ganancia)
+        ON CONFLICT(IdProducto) DO UPDATE SET 
+            Descripcion = excluded.Descripcion,
+            PrecioVenta = excluded.PrecioVenta,
+            PrecioCosto = excluded.PrecioCosto,
+            Ganancia = excluded.Ganancia;
+    "
+
+        Using cmd As New SQLiteCommand(query, conn)
+            cmd.Parameters.AddWithValue("@id", valores(0))
+            cmd.Parameters.AddWithValue("@desc", valores(1))
+            cmd.Parameters.AddWithValue("@precioVenta", Convert.ToDecimal(valores(2)))
+            cmd.Parameters.AddWithValue("@precioCosto", Convert.ToDecimal(valores(3)))
+            cmd.Parameters.AddWithValue("@ganancia", Convert.ToDecimal(valores(4)))
+            cmd.ExecuteNonQuery()
+            Return True
+        End Using
+    End Function
+
+    ' SOLO INSERT (cuando destino tiene prioridad)
+    Private Function InsertarNuevo(conn As SQLiteConnection, valores As String()) As Boolean
+        Dim query As String = "
+        INSERT INTO Producto (IdProducto, Descripcion, PrecioVenta, PrecioCosto, Ganancia)
+        VALUES (@id, @desc, @precioVenta, @precioCosto, @ganancia);
+    "
+
+        Using cmd As New SQLiteCommand(query, conn)
+            cmd.Parameters.AddWithValue("@id", valores(0))
+            cmd.Parameters.AddWithValue("@desc", valores(1))
+            cmd.Parameters.AddWithValue("@precioVenta", Convert.ToDecimal(valores(2)))
+            cmd.Parameters.AddWithValue("@precioCosto", Convert.ToDecimal(valores(3)))
+            cmd.Parameters.AddWithValue("@ganancia", Convert.ToDecimal(valores(4)))
+            cmd.ExecuteNonQuery()
+            Return True
+        End Using
     End Function
 
 End Class

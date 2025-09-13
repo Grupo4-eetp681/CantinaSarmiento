@@ -22,6 +22,12 @@
     <Compile Update="FormRetiro.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="PrioridadImportacion.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SolicitudCaja.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="ventas.vb">
       <SubType>Form</SubType>
     </Compile>

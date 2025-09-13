@@ -20,10 +20,6 @@
         ' Guardar si tildó el CheckBox
         If CheckBoxNoMostrar.Checked Then
             NoMostrarMas = True
-            ' Acá podés guardar en My.Settings o en la BD que para _origen ya no muestre más
-            ' Ejemplo con Settings:
-            ' My.Settings("NoMostrar_" & _origen) = True
-            ' My.Settings.Save()
         End If
 
         Me.DialogResult = DialogResult.OK

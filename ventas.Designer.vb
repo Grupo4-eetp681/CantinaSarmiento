@@ -24,6 +24,10 @@ Partial Class ventas
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ventas))
+        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As DataGridViewCellStyle = New DataGridViewCellStyle()
         PanelVentas = New Panel()
         PanelContenedorDER = New Panel()
         PanelContenedorVentas = New Panel()
@@ -58,8 +62,6 @@ Partial Class ventas
         Busqueda = New TextBox()
         PictureBox1 = New PictureBox()
         Panel10PX = New Panel()
-        MenuVentas = New ContextMenuStrip(components)
-        EliminarProductoToolStripMenuItem = New ToolStripMenuItem()
         TimerMensage = New Timer(components)
         PanelVentas.SuspendLayout()
         PanelContenedorDER.SuspendLayout()
@@ -82,7 +84,6 @@ Partial Class ventas
         PanelContenedorBusqueda.SuspendLayout()
         PanelBusqueda.SuspendLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
-        MenuVentas.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelVentas
@@ -312,7 +313,23 @@ Partial Class ventas
         ' DataGridVentas
         ' 
         DataGridVentas.BorderStyle = BorderStyle.None
+        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = SystemColors.Control
+        DataGridViewCellStyle1.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle1.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
+        DataGridVentas.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         DataGridVentas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = SystemColors.Window
+        DataGridViewCellStyle2.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle2.ForeColor = SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
+        DataGridVentas.DefaultCellStyle = DataGridViewCellStyle2
         DataGridVentas.Dock = DockStyle.Fill
         DataGridVentas.Location = New Point(0, 0)
         DataGridVentas.Name = "DataGridVentas"
@@ -381,7 +398,23 @@ Partial Class ventas
         ' DataGridView1
         ' 
         DataGridView1.BorderStyle = BorderStyle.None
+        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = SystemColors.Control
+        DataGridViewCellStyle3.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle3.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = DataGridViewTriState.True
+        DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle3
         DataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = SystemColors.Window
+        DataGridViewCellStyle4.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle4.ForeColor = SystemColors.ControlText
+        DataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = DataGridViewTriState.False
+        DataGridView1.DefaultCellStyle = DataGridViewCellStyle4
         DataGridView1.Dock = DockStyle.Fill
         DataGridView1.Location = New Point(0, 0)
         DataGridView1.Name = "DataGridView1"
@@ -436,18 +469,6 @@ Partial Class ventas
         Panel10PX.Size = New Size(850, 10)
         Panel10PX.TabIndex = 8
         ' 
-        ' MenuVentas
-        ' 
-        MenuVentas.Items.AddRange(New ToolStripItem() {EliminarProductoToolStripMenuItem})
-        MenuVentas.Name = "MenuVentas"
-        MenuVentas.Size = New Size(170, 26)
-        ' 
-        ' EliminarProductoToolStripMenuItem
-        ' 
-        EliminarProductoToolStripMenuItem.Name = "EliminarProductoToolStripMenuItem"
-        EliminarProductoToolStripMenuItem.Size = New Size(169, 22)
-        EliminarProductoToolStripMenuItem.Text = "Eliminar Producto"
-        ' 
         ' TimerMensage
         ' 
         TimerMensage.Interval = 2000
@@ -460,6 +481,7 @@ Partial Class ventas
         ClientSize = New Size(850, 500)
         Controls.Add(PanelVentas)
         FormBorderStyle = FormBorderStyle.None
+        Icon = CType(resources.GetObject("$this.Icon"), Icon)
         Name = "ventas"
         Text = "ventas"
         PanelVentas.ResumeLayout(False)
@@ -487,7 +509,6 @@ Partial Class ventas
         PanelBusqueda.ResumeLayout(False)
         PanelBusqueda.PerformLayout()
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
-        MenuVentas.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -523,8 +544,6 @@ Partial Class ventas
     Friend WithEvents PanelVuelto As Panel
     Friend WithEvents PanelCentrarVuelto As Panel
     Friend WithEvents Panel10PX2 As Panel
-    Friend WithEvents MenuVentas As ContextMenuStrip
-    Friend WithEvents EliminarProductoToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents PanelLabel As Panel
     Friend WithEvents LabelMensage As Label
     Friend WithEvents TimerMensage As Timer

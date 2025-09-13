@@ -1,4 +1,4 @@
-﻿Public Class FormRetiro
+﻿Public Class SolicitudCaja
     Dim logica As New LogicaCantina
     Private Sub TextBoxPlata_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxPlata.KeyPress
         ' Solo permitir números y control (backspace, etc.)
@@ -37,45 +37,44 @@
         TextBoxPlata.SelectionStart = TextBoxPlata.Text.Length
     End Sub
 
-    Private Sub FormRetiro_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Sub FormSolicitudCaja_Load(sender As Object, e As EventArgs) Handles Me.Load
         logica.cargarSubdivision(Form1.subdivision)
     End Sub
 
-    Private Sub confirmarRetiro()
-        Dim origen As String = "Retiro"
+    Private Sub confirmarInicio()
+        Dim origen As String = "Ingreso"
         Dim textoLimpio As String = TextBoxPlata.Text.Replace("$", "").Replace(" ", "").Replace(".", "")
         Dim monto As Long = 0
         If Not Long.TryParse(textoLimpio, monto) OrElse monto <= 0 Then
             Dim mensajeError As String = "Ingrese un monto válido mayor a cero."
-            Dim frmError As New Advertencia(mensajeError, "ValidacionRetiro")
+            Dim frmError As New Advertencia(mensajeError, "ValidacionInicio")
             frmError.ShowDialog()
             TextBoxPlata.Focus()
             Return
         End If
 
-        Dim mensaje As String = "¿Confirmar retiro de $: " + monto.ToString("N0", New Globalization.CultureInfo("es-AR")) + " ?"
+        Dim mensaje As String = "¿Confirmar $: " + monto.ToString("N0", New Globalization.CultureInfo("es-AR")) + " de inicio?"
         If Not logica.ObtenerEstadoAdvertencia(origen) Then
             Dim frm As New Advertencia(mensaje, origen)
             If frm.ShowDialog() = DialogResult.OK AndAlso frm.NoMostrarMas Then
                 logica.GuardarEstadoAdvertencia(origen, True)
             End If
         End If
-        logica.ActualizarCaja("Retiros", monto)
+        logica.ActualizarCaja("Inicio", monto)
         Me.Dispose()
     End Sub
 
     Private Sub TextBoxPlata_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxPlata.KeyDown
         If e.KeyCode = Keys.Enter Then
-            confirmarRetiro()
+            confirmarInicio()
         End If
     End Sub
 
     Private Sub ButtonAceptar_Click(sender As Object, e As EventArgs) Handles ButtonAceptar.Click
-        confirmarRetiro()
+        confirmarInicio()
     End Sub
 
     Private Sub ButtonCancelar_Click(sender As Object, e As EventArgs) Handles ButtonCancelar.Click
         Me.Dispose()
     End Sub
-
 End Class

@@ -44,6 +44,8 @@
     End Sub
 
     Private Sub FormularioRegister_Load(sender As Object, e As EventArgs) Handles Me.Load
+        TextBoxContraseña1.PasswordChar = "*"c
+        TextBoxContraseña2.PasswordChar = "*"c
         info.Visible = False
         PanelInfo.Visible = False
     End Sub

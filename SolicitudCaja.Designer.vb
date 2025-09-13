@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class FormRetiro
+Partial Class SolicitudCaja
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -22,7 +22,7 @@ Partial Class FormRetiro
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormRetiro))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SolicitudCaja))
         PanelContenedorRetiro = New Panel()
         ButtonCancelar = New Button()
         ButtonAceptar = New Button()
@@ -41,7 +41,7 @@ Partial Class FormRetiro
         PanelContenedorRetiro.Location = New Point(2, 2)
         PanelContenedorRetiro.Name = "PanelContenedorRetiro"
         PanelContenedorRetiro.Size = New Size(300, 150)
-        PanelContenedorRetiro.TabIndex = 0
+        PanelContenedorRetiro.TabIndex = 1
         ' 
         ' ButtonCancelar
         ' 
@@ -80,33 +80,33 @@ Partial Class FormRetiro
         ' 
         LabelTitulo.Anchor = AnchorStyles.Top
         LabelTitulo.Font = New Font("Candara", 14F, FontStyle.Bold)
-        LabelTitulo.Location = New Point(36, 7)
+        LabelTitulo.Location = New Point(43, 9)
         LabelTitulo.Name = "LabelTitulo"
-        LabelTitulo.Size = New Size(228, 35)
+        LabelTitulo.Size = New Size(215, 48)
         LabelTitulo.TabIndex = 0
-        LabelTitulo.Text = "¿CUANTO DESEA RETIRAR?"
+        LabelTitulo.Text = "INGRESE EL VALOR INICIAL DE CAJA"
         LabelTitulo.TextAlign = ContentAlignment.MiddleCenter
         ' 
-        ' FormRetiro
+        ' SolicitudCaja
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        BackColor = SystemColors.ControlDarkDark
+        BackColor = Color.Gold
         ClientSize = New Size(304, 154)
         Controls.Add(PanelContenedorRetiro)
         FormBorderStyle = FormBorderStyle.None
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
-        Name = "FormRetiro"
+        Name = "SolicitudCaja"
         StartPosition = FormStartPosition.CenterScreen
-        Text = "FormRetiro"
+        Text = "SolicitudCaja"
         PanelContenedorRetiro.ResumeLayout(False)
         PanelContenedorRetiro.PerformLayout()
         ResumeLayout(False)
     End Sub
 
     Friend WithEvents PanelContenedorRetiro As Panel
-    Friend WithEvents LabelTitulo As Label
+    Friend WithEvents ButtonCancelar As Button
     Friend WithEvents ButtonAceptar As Button
     Friend WithEvents TextBoxPlata As TextBox
-    Friend WithEvents ButtonCancelar As Button
+    Friend WithEvents LabelTitulo As Label
 End Class

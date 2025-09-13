@@ -37,7 +37,8 @@ Partial Class Form1
         PanelMargenI = New Panel()
         SubPanelIzquierdo = New Panel()
         PanelBotonMenu = New Panel()
-        BotonMenu = New Button()
+        ButtonMenuDerecha = New Button()
+        BotonMenuAbajo = New Button()
         PanelBarraInferior = New Panel()
         PanelHora = New Panel()
         LabelHORA = New Label()
@@ -45,11 +46,13 @@ Partial Class Form1
         ContenidoGeneral = New Panel()
         LogoMarcaAgua = New PictureBox()
         PanelMargenDerecho = New Panel()
-        FondoDeColor = New Panel()
         PanelContenedorDeFormularios = New Panel()
         botonInventario = New Button()
         botonVentas = New Button()
         botonCaja = New Button()
+        FondoDeColor = New Panel()
+        Opciones = New ContextMenuStrip(components)
+        ActivarAdvertenciasToolStripMenuItem = New ToolStripMenuItem()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -62,8 +65,9 @@ Partial Class Form1
         ContenidoGeneral.SuspendLayout()
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).BeginInit()
         PanelMargenDerecho.SuspendLayout()
-        FondoDeColor.SuspendLayout()
         PanelContenedorDeFormularios.SuspendLayout()
+        FondoDeColor.SuspendLayout()
+        Opciones.SuspendLayout()
         SuspendLayout()
         ' 
         ' PanelBarraSuperior
@@ -74,7 +78,7 @@ Partial Class Form1
         PanelBarraSuperior.Dock = DockStyle.Top
         PanelBarraSuperior.Location = New Point(0, 0)
         PanelBarraSuperior.Name = "PanelBarraSuperior"
-        PanelBarraSuperior.Size = New Size(960, 30)
+        PanelBarraSuperior.Size = New Size(960, 40)
         PanelBarraSuperior.TabIndex = 0
         ' 
         ' LogoSuperiorIzquierda
@@ -82,7 +86,7 @@ Partial Class Form1
         LogoSuperiorIzquierda.Image = CType(resources.GetObject("LogoSuperiorIzquierda.Image"), Image)
         LogoSuperiorIzquierda.Location = New Point(0, 0)
         LogoSuperiorIzquierda.Name = "LogoSuperiorIzquierda"
-        LogoSuperiorIzquierda.Size = New Size(25, 25)
+        LogoSuperiorIzquierda.Size = New Size(40, 40)
         LogoSuperiorIzquierda.SizeMode = PictureBoxSizeMode.StretchImage
         LogoSuperiorIzquierda.TabIndex = 3
         LogoSuperiorIzquierda.TabStop = False
@@ -95,7 +99,7 @@ Partial Class Form1
         PanelBotonesVentana.Controls.Add(ButtonCierreApp)
         PanelBotonesVentana.Location = New Point(875, 2)
         PanelBotonesVentana.Name = "PanelBotonesVentana"
-        PanelBotonesVentana.Size = New Size(85, 25)
+        PanelBotonesVentana.Size = New Size(85, 40)
         PanelBotonesVentana.TabIndex = 2
         ' 
         ' ButtonMaximizarApp
@@ -139,13 +143,13 @@ Partial Class Form1
         ' 
         ' PanelBotonesAcciones
         ' 
-        PanelBotonesAcciones.Anchor = AnchorStyles.Top
         PanelBotonesAcciones.Controls.Add(CerrarSesion)
         PanelBotonesAcciones.Controls.Add(BotonImportar)
         PanelBotonesAcciones.Controls.Add(BotonExportar)
-        PanelBotonesAcciones.Location = New Point(0, 6)
+        PanelBotonesAcciones.Dock = DockStyle.Top
+        PanelBotonesAcciones.Location = New Point(0, 0)
         PanelBotonesAcciones.Name = "PanelBotonesAcciones"
-        PanelBotonesAcciones.Size = New Size(30, 110)
+        PanelBotonesAcciones.Size = New Size(40, 150)
         PanelBotonesAcciones.TabIndex = 2
         PanelBotonesAcciones.Visible = False
         ' 
@@ -154,9 +158,9 @@ Partial Class Form1
         CerrarSesion.BackColor = Color.Transparent
         CerrarSesion.BackgroundImage = CType(resources.GetObject("CerrarSesion.BackgroundImage"), Image)
         CerrarSesion.BackgroundImageLayout = ImageLayout.Stretch
-        CerrarSesion.Location = New Point(0, 80)
+        CerrarSesion.Location = New Point(0, 110)
         CerrarSesion.Name = "CerrarSesion"
-        CerrarSesion.Size = New Size(30, 30)
+        CerrarSesion.Size = New Size(40, 40)
         CerrarSesion.TabIndex = 3
         CerrarSesion.UseVisualStyleBackColor = False
         ' 
@@ -165,9 +169,9 @@ Partial Class Form1
         BotonImportar.BackColor = Color.Transparent
         BotonImportar.BackgroundImage = CType(resources.GetObject("BotonImportar.BackgroundImage"), Image)
         BotonImportar.BackgroundImageLayout = ImageLayout.Stretch
-        BotonImportar.Location = New Point(0, 40)
+        BotonImportar.Location = New Point(0, 60)
         BotonImportar.Name = "BotonImportar"
-        BotonImportar.Size = New Size(30, 30)
+        BotonImportar.Size = New Size(40, 40)
         BotonImportar.TabIndex = 1
         BotonImportar.UseVisualStyleBackColor = False
         ' 
@@ -178,9 +182,9 @@ Partial Class Form1
         BotonExportar.BackgroundImageLayout = ImageLayout.Stretch
         BotonExportar.FlatAppearance.BorderSize = 0
         BotonExportar.FlatAppearance.MouseDownBackColor = SystemColors.ButtonShadow
-        BotonExportar.Location = New Point(0, 0)
+        BotonExportar.Location = New Point(0, 10)
         BotonExportar.Name = "BotonExportar"
-        BotonExportar.Size = New Size(30, 30)
+        BotonExportar.Size = New Size(40, 40)
         BotonExportar.TabIndex = 2
         BotonExportar.UseVisualStyleBackColor = False
         ' 
@@ -190,49 +194,63 @@ Partial Class Form1
         PanelMargenI.Controls.Add(SubPanelIzquierdo)
         PanelMargenI.Controls.Add(PanelBotonMenu)
         PanelMargenI.Dock = DockStyle.Left
-        PanelMargenI.Location = New Point(0, 30)
+        PanelMargenI.Location = New Point(0, 40)
         PanelMargenI.Name = "PanelMargenI"
-        PanelMargenI.Size = New Size(30, 480)
+        PanelMargenI.Size = New Size(40, 460)
         PanelMargenI.TabIndex = 3
         ' 
         ' SubPanelIzquierdo
         ' 
         SubPanelIzquierdo.Controls.Add(PanelBotonesAcciones)
         SubPanelIzquierdo.Dock = DockStyle.Fill
-        SubPanelIzquierdo.Location = New Point(0, 30)
+        SubPanelIzquierdo.Location = New Point(0, 40)
         SubPanelIzquierdo.Name = "SubPanelIzquierdo"
-        SubPanelIzquierdo.Size = New Size(30, 450)
+        SubPanelIzquierdo.Size = New Size(40, 420)
         SubPanelIzquierdo.TabIndex = 7
         ' 
         ' PanelBotonMenu
         ' 
-        PanelBotonMenu.Controls.Add(BotonMenu)
+        PanelBotonMenu.Controls.Add(ButtonMenuDerecha)
+        PanelBotonMenu.Controls.Add(BotonMenuAbajo)
         PanelBotonMenu.Dock = DockStyle.Top
         PanelBotonMenu.Location = New Point(0, 0)
         PanelBotonMenu.Name = "PanelBotonMenu"
-        PanelBotonMenu.Size = New Size(30, 30)
+        PanelBotonMenu.Size = New Size(40, 40)
         PanelBotonMenu.TabIndex = 7
         ' 
-        ' BotonMenu
+        ' ButtonMenuDerecha
         ' 
-        BotonMenu.Anchor = AnchorStyles.None
-        BotonMenu.AutoSize = True
-        BotonMenu.BackgroundImage = CType(resources.GetObject("BotonMenu.BackgroundImage"), Image)
-        BotonMenu.BackgroundImageLayout = ImageLayout.Stretch
-        BotonMenu.Location = New Point(0, 0)
-        BotonMenu.Name = "BotonMenu"
-        BotonMenu.Size = New Size(30, 30)
-        BotonMenu.TabIndex = 7
-        BotonMenu.UseVisualStyleBackColor = True
+        ButtonMenuDerecha.Anchor = AnchorStyles.None
+        ButtonMenuDerecha.AutoSize = True
+        ButtonMenuDerecha.BackgroundImage = CType(resources.GetObject("ButtonMenuDerecha.BackgroundImage"), Image)
+        ButtonMenuDerecha.BackgroundImageLayout = ImageLayout.Stretch
+        ButtonMenuDerecha.Location = New Point(0, 0)
+        ButtonMenuDerecha.Name = "ButtonMenuDerecha"
+        ButtonMenuDerecha.Size = New Size(40, 40)
+        ButtonMenuDerecha.TabIndex = 8
+        ButtonMenuDerecha.UseVisualStyleBackColor = True
+        ButtonMenuDerecha.Visible = False
+        ' 
+        ' BotonMenuAbajo
+        ' 
+        BotonMenuAbajo.Anchor = AnchorStyles.None
+        BotonMenuAbajo.AutoSize = True
+        BotonMenuAbajo.BackgroundImage = CType(resources.GetObject("BotonMenuAbajo.BackgroundImage"), Image)
+        BotonMenuAbajo.BackgroundImageLayout = ImageLayout.Stretch
+        BotonMenuAbajo.Location = New Point(0, 0)
+        BotonMenuAbajo.Name = "BotonMenuAbajo"
+        BotonMenuAbajo.Size = New Size(40, 40)
+        BotonMenuAbajo.TabIndex = 7
+        BotonMenuAbajo.UseVisualStyleBackColor = True
         ' 
         ' PanelBarraInferior
         ' 
         PanelBarraInferior.BackColor = SystemColors.ControlDarkDark
         PanelBarraInferior.Controls.Add(PanelHora)
         PanelBarraInferior.Dock = DockStyle.Bottom
-        PanelBarraInferior.Location = New Point(0, 510)
+        PanelBarraInferior.Location = New Point(0, 500)
         PanelBarraInferior.Name = "PanelBarraInferior"
-        PanelBarraInferior.Size = New Size(960, 30)
+        PanelBarraInferior.Size = New Size(960, 40)
         PanelBarraInferior.TabIndex = 4
         ' 
         ' PanelHora
@@ -241,7 +259,7 @@ Partial Class Form1
         PanelHora.Dock = DockStyle.Right
         PanelHora.Location = New Point(830, 0)
         PanelHora.Name = "PanelHora"
-        PanelHora.Size = New Size(130, 30)
+        PanelHora.Size = New Size(130, 40)
         PanelHora.TabIndex = 6
         ' 
         ' LabelHORA
@@ -250,7 +268,7 @@ Partial Class Form1
         LabelHORA.Font = New Font("Arial", 11.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         LabelHORA.Location = New Point(-120, 0)
         LabelHORA.Name = "LabelHORA"
-        LabelHORA.Size = New Size(250, 30)
+        LabelHORA.Size = New Size(250, 40)
         LabelHORA.TabIndex = 5
         LabelHORA.Text = "HORA"
         LabelHORA.TextAlign = ContentAlignment.MiddleRight
@@ -264,16 +282,17 @@ Partial Class Form1
         ' 
         ContenidoGeneral.BackColor = SystemColors.ControlDark
         ContenidoGeneral.Controls.Add(LogoMarcaAgua)
-        ContenidoGeneral.Location = New Point(3, 3)
+        ContenidoGeneral.Dock = DockStyle.Fill
+        ContenidoGeneral.Location = New Point(0, 0)
         ContenidoGeneral.Name = "ContenidoGeneral"
-        ContenidoGeneral.Size = New Size(894, 474)
+        ContenidoGeneral.Size = New Size(880, 460)
         ContenidoGeneral.TabIndex = 5
         ' 
         ' LogoMarcaAgua
         ' 
         LogoMarcaAgua.Anchor = AnchorStyles.None
         LogoMarcaAgua.Image = CType(resources.GetObject("LogoMarcaAgua.Image"), Image)
-        LogoMarcaAgua.Location = New Point(347, 137)
+        LogoMarcaAgua.Location = New Point(340, 130)
         LogoMarcaAgua.Name = "LogoMarcaAgua"
         LogoMarcaAgua.Size = New Size(200, 200)
         LogoMarcaAgua.SizeMode = PictureBoxSizeMode.StretchImage
@@ -286,20 +305,10 @@ Partial Class Form1
         PanelMargenDerecho.BackColor = SystemColors.ControlDarkDark
         PanelMargenDerecho.Controls.Add(PanelContenedorDeFormularios)
         PanelMargenDerecho.Dock = DockStyle.Right
-        PanelMargenDerecho.Location = New Point(930, 30)
+        PanelMargenDerecho.Location = New Point(920, 40)
         PanelMargenDerecho.Name = "PanelMargenDerecho"
-        PanelMargenDerecho.Size = New Size(30, 480)
+        PanelMargenDerecho.Size = New Size(40, 460)
         PanelMargenDerecho.TabIndex = 8
-        ' 
-        ' FondoDeColor
-        ' 
-        FondoDeColor.BackColor = Color.Gold
-        FondoDeColor.Controls.Add(ContenidoGeneral)
-        FondoDeColor.Dock = DockStyle.Fill
-        FondoDeColor.Location = New Point(30, 30)
-        FondoDeColor.Name = "FondoDeColor"
-        FondoDeColor.Size = New Size(900, 480)
-        FondoDeColor.TabIndex = 9
         ' 
         ' PanelContenedorDeFormularios
         ' 
@@ -309,32 +318,60 @@ Partial Class Form1
         PanelContenedorDeFormularios.Dock = DockStyle.Top
         PanelContenedorDeFormularios.Location = New Point(0, 0)
         PanelContenedorDeFormularios.Name = "PanelContenedorDeFormularios"
-        PanelContenedorDeFormularios.Size = New Size(30, 110)
+        PanelContenedorDeFormularios.Size = New Size(40, 140)
         PanelContenedorDeFormularios.TabIndex = 8
         ' 
         ' botonInventario
         ' 
-        botonInventario.Location = New Point(0, 80)
+        botonInventario.BackgroundImage = CType(resources.GetObject("botonInventario.BackgroundImage"), Image)
+        botonInventario.BackgroundImageLayout = ImageLayout.Stretch
+        botonInventario.Location = New Point(0, 100)
         botonInventario.Name = "botonInventario"
-        botonInventario.Size = New Size(30, 30)
+        botonInventario.Size = New Size(40, 40)
         botonInventario.TabIndex = 2
         botonInventario.UseVisualStyleBackColor = True
         ' 
         ' botonVentas
         ' 
+        botonVentas.BackgroundImage = CType(resources.GetObject("botonVentas.BackgroundImage"), Image)
+        botonVentas.BackgroundImageLayout = ImageLayout.Stretch
         botonVentas.Location = New Point(0, 0)
         botonVentas.Name = "botonVentas"
-        botonVentas.Size = New Size(30, 30)
+        botonVentas.Size = New Size(40, 40)
         botonVentas.TabIndex = 0
         botonVentas.UseVisualStyleBackColor = True
         ' 
         ' botonCaja
         ' 
-        botonCaja.Location = New Point(0, 40)
+        botonCaja.BackgroundImage = CType(resources.GetObject("botonCaja.BackgroundImage"), Image)
+        botonCaja.BackgroundImageLayout = ImageLayout.Stretch
+        botonCaja.Location = New Point(0, 50)
         botonCaja.Name = "botonCaja"
-        botonCaja.Size = New Size(30, 30)
+        botonCaja.Size = New Size(40, 40)
         botonCaja.TabIndex = 1
         botonCaja.UseVisualStyleBackColor = True
+        ' 
+        ' FondoDeColor
+        ' 
+        FondoDeColor.BackColor = Color.Gold
+        FondoDeColor.Controls.Add(ContenidoGeneral)
+        FondoDeColor.Dock = DockStyle.Fill
+        FondoDeColor.Location = New Point(40, 40)
+        FondoDeColor.Name = "FondoDeColor"
+        FondoDeColor.Size = New Size(880, 460)
+        FondoDeColor.TabIndex = 9
+        ' 
+        ' Opciones
+        ' 
+        Opciones.Items.AddRange(New ToolStripItem() {ActivarAdvertenciasToolStripMenuItem})
+        Opciones.Name = "ContextMenuStrip1"
+        Opciones.Size = New Size(183, 26)
+        ' 
+        ' ActivarAdvertenciasToolStripMenuItem
+        ' 
+        ActivarAdvertenciasToolStripMenuItem.Name = "ActivarAdvertenciasToolStripMenuItem"
+        ActivarAdvertenciasToolStripMenuItem.Size = New Size(182, 22)
+        ActivarAdvertenciasToolStripMenuItem.Text = "Activar Advertencias"
         ' 
         ' Form1
         ' 
@@ -366,8 +403,9 @@ Partial Class Form1
         ContenidoGeneral.ResumeLayout(False)
         CType(LogoMarcaAgua, ComponentModel.ISupportInitialize).EndInit()
         PanelMargenDerecho.ResumeLayout(False)
-        FondoDeColor.ResumeLayout(False)
         PanelContenedorDeFormularios.ResumeLayout(False)
+        FondoDeColor.ResumeLayout(False)
+        Opciones.ResumeLayout(False)
         ResumeLayout(False)
     End Sub
 
@@ -387,7 +425,7 @@ Partial Class Form1
     Friend WithEvents ContenidoGeneral As Panel
     Friend WithEvents LogoMarcaAgua As PictureBox
     Friend WithEvents PanelMargenDerecho As Panel
-    Friend WithEvents BotonMenu As Button
+    Friend WithEvents BotonMenuAbajo As Button
     Friend WithEvents PanelBotonMenu As Panel
     Friend WithEvents SubPanelIzquierdo As Panel
     Friend WithEvents ButtonMaximizarApp As Button
@@ -397,5 +435,8 @@ Partial Class Form1
     Friend WithEvents botonInventario As Button
     Friend WithEvents botonVentas As Button
     Friend WithEvents botonCaja As Button
+    Friend WithEvents Opciones As ContextMenuStrip
+    Friend WithEvents ActivarAdvertenciasToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ButtonMenuDerecha As Button
 
 End Class
