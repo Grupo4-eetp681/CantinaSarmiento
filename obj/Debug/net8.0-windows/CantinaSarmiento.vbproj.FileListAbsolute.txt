@@ -311,3 +311,5 @@ C:\Users\Acer\source\repos\Grupo4-eetp681\CantinaSarmiento\obj\Debug\net8.0-wind
 C:\Users\Acer\source\repos\Grupo4-eetp681\CantinaSarmiento\obj\Debug\net8.0-windows\ref\CantinaSarmiento.dll
 C:\Users\Acer\source\repos\Grupo4-eetp681\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.FormRetiro.resources
 C:\Users\Acer\source\repos\Grupo4-eetp681\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.Advertencia.resources
+C:\Users\Acer\source\repos\Grupo4-eetp681\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.SolicitudCaja.resources
+C:\Users\Acer\source\repos\Grupo4-eetp681\CantinaSarmiento\obj\Debug\net8.0-windows\CantinaSarmiento.PrioridadImportacion.resources
