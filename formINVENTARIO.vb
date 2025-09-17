@@ -11,6 +11,9 @@
         DataGridViewInventario.AllowUserToAddRows = False
         DataGridViewInventario.MultiSelect = False
         DataGridViewInventario.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewInventario.Columns("ID").ReadOnly = True
+        DataGridViewInventario.Columns("Ganancia").ReadOnly = True
+
     End Sub
 
     ' Guardar el producto seleccionado para operar con él
@@ -39,6 +42,7 @@
     End Sub
 
     Private Sub DataGridViewInventario_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewInventario.CellEndEdit
+
         ' Tomar la fila actual
         Dim fila = DataGridViewInventario.CurrentRow
 
@@ -59,6 +63,32 @@
             ' Guardar cambios en la base de datos
             logica.ActualizarProducto(idProducto, descripcion, precioVenta, precioCosto)
         End If
+
+
+        Dim fil As Integer = e.RowIndex
+        Dim col As Integer = e.ColumnIndex
+
+        ' Validar que los índices sean correctos
+        If fil < 0 OrElse fil >= DataGridViewInventario.Rows.Count Then Exit Sub
+        If col < 0 OrElse col >= DataGridViewInventario.Columns.Count Then Exit Sub
+
+        ' Usamos BeginInvoke para evitar la reentrancia
+        Me.BeginInvoke(New Action(Sub()
+                                      ' Validar de nuevo dentro del Invoke
+                                      If fil < DataGridViewInventario.Rows.Count AndAlso col < DataGridViewInventario.Columns.Count Then
+                                          If col < 3 And col > 0 Then ' si no es la última columna editable
+                                              Dim celdaDestino As DataGridViewCell = DataGridViewInventario.Rows(fil).Cells(col + 1)
+                                              If celdaDestino IsNot Nothing Then
+                                                  DataGridViewInventario.CurrentCell = celdaDestino
+                                                  DataGridViewInventario.BeginEdit(True)
+                                              End If
+                                          Else
+                                              ' Última columna -> sacar foco
+                                              DataGridViewInventario.CurrentCell = Nothing
+                                          End If
+                                      End If
+                                  End Sub))
+
     End Sub
 
     Private Sub ButtonAgregar_Click(sender As Object, e As EventArgs) Handles ButtonAgregar.Click
@@ -97,6 +127,11 @@
             DataGridViewInventario.CurrentCell =
             DataGridViewInventario.Rows(DataGridViewInventario.Rows.Count - 1).Cells("Descripción")
             DataGridViewInventario.BeginEdit(True)
+
+            Dim ultimaFila As Integer = DataGridViewInventario.Rows.Count - 1
+            DataGridViewInventario.CurrentCell = DataGridViewInventario.Rows(ultimaFila).Cells(1)
+            DataGridViewInventario.BeginEdit(True)
+
         End If
     End Sub
 

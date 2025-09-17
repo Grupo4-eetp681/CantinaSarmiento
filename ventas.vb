@@ -88,7 +88,7 @@ Public Class ventas
             .Columns("Descripcion").ReadOnly = True
             .Columns("Subtotal").ReadOnly = True
 
-
+            x
             ' Agregar columna botón solo si no existe aún
             If Not .Columns.Contains("Eliminar") Then
                 Dim btnEliminar As New DataGridViewButtonColumn()
@@ -228,40 +228,49 @@ Public Class ventas
     End Sub
 
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
-        If e.RowIndex >= 0 Then
-            Dim filaSeleccionada As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
 
-            Dim descripcion As String = filaSeleccionada.Cells("Descripción").Value.ToString()
-            Dim precioUnitario As Long = Convert.ToInt64(filaSeleccionada.Cells("Precio_Unitario").Value)
+        If logica.verificarCaja() Then
+            SolicitudCaja.ShowDialog()
+            Return
+        Else
+            If e.RowIndex >= 0 Then
+                Dim filaSeleccionada As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
 
-            Dim encontrado As Boolean = False
+                Dim descripcion As String = filaSeleccionada.Cells("Descripción").Value.ToString()
+                Dim precioUnitario As Long = Convert.ToInt64(filaSeleccionada.Cells("Precio_Unitario").Value)
 
-            For Each filaVenta As DataGridViewRow In DataGridVentas.Rows
-                If filaVenta.Cells("Descripcion").Value.ToString() = descripcion Then
-                    ' Producto ya existe en la grilla de ventas
-                    Dim cantidadActual As Integer = Convert.ToInt32(filaVenta.Cells("Cantidad").Value)
-                    cantidadActual += 1
-                    filaVenta.Cells("Cantidad").Value = cantidadActual
-                    filaVenta.Cells("Subtotal").Value = cantidadActual * precioUnitario
-                    encontrado = True
-                    Exit For
+                Dim encontrado As Boolean = False
+
+                For Each filaVenta As DataGridViewRow In DataGridVentas.Rows
+                    If filaVenta.Cells("Descripcion").Value.ToString() = descripcion Then
+                        ' Producto ya existe en la grilla de ventas
+                        Dim cantidadActual As Integer = Convert.ToInt32(filaVenta.Cells("Cantidad").Value)
+                        cantidadActual += 1
+                        filaVenta.Cells("Cantidad").Value = cantidadActual
+                        filaVenta.Cells("Subtotal").Value = cantidadActual * precioUnitario
+                        encontrado = True
+                        Exit For
+                    End If
+                Next
+
+                If Not encontrado Then
+                    ' Producto no está, lo agregamos nuevo
+                    DataGridVentas.Rows.Add(descripcion, 1, precioUnitario)
+
+                    Dim nuevaFilaIndex As Integer = DataGridVentas.Rows.Count - 1
+
+                    DataGridVentas.CurrentCell = DataGridVentas.Rows(nuevaFilaIndex).Cells("Cantidad")
+                    DataGridVentas.BeginEdit(True)
                 End If
-            Next
-
-            If Not encontrado Then
-                ' Producto no está, lo agregamos nuevo
-                DataGridVentas.Rows.Add(descripcion, 1, precioUnitario)
-
-                Dim nuevaFilaIndex As Integer = DataGridVentas.Rows.Count - 1
-
-                DataGridVentas.CurrentCell = DataGridVentas.Rows(nuevaFilaIndex).Cells("Cantidad")
-                DataGridVentas.BeginEdit(True)
             End If
+
+            ActualizarTotal()
         End If
 
-        ActualizarTotal()
+
     End Sub
     Private Sub DataGridVentas_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellEndEdit
+
         If e.RowIndex >= 0 AndAlso e.ColumnIndex = DataGridVentas.Columns("Cantidad").Index Then
             Dim fila As DataGridViewRow = DataGridVentas.Rows(e.RowIndex)
 
@@ -291,6 +300,7 @@ Public Class ventas
             Next
         End If
         ActualizarTotal()
+
     End Sub
     Private Sub ActualizarTotal()
 
@@ -334,16 +344,6 @@ Public Class ventas
             acomodarPagoYVuelto()
         End If
 
-    End Sub
-
-
-
-
-    Private Sub EliminarProductoToolStripMenuItem_Click(sender As Object, e As EventArgs)
-        If DataGridVentas.SelectedRows.Count > 0 Then
-            DataGridVentas.Rows.Remove(DataGridVentas.SelectedRows(0))
-            ActualizarTotal() ' Si tenés un método para recalcular el total
-        End If
     End Sub
 
     Private Sub DataGridVentas_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellDoubleClick

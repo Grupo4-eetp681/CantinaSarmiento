@@ -38,7 +38,7 @@ Partial Class Advertencia
         CheckBoxNoMostrar.Location = New Point(12, 100)
         CheckBoxNoMostrar.Name = "CheckBoxNoMostrar"
         CheckBoxNoMostrar.Size = New Size(258, 22)
-        CheckBoxNoMostrar.TabIndex = 0
+        CheckBoxNoMostrar.TabIndex = 4
         CheckBoxNoMostrar.Text = "No volver a mostrar esta advertencia"
         CheckBoxNoMostrar.UseVisualStyleBackColor = True
         ' 
@@ -48,7 +48,7 @@ Partial Class Advertencia
         LabelMensaje.Location = New Point(12, 0)
         LabelMensaje.Name = "LabelMensaje"
         LabelMensaje.Size = New Size(258, 38)
-        LabelMensaje.TabIndex = 1
+        LabelMensaje.TabIndex = 100
         LabelMensaje.Text = "Label1"
         LabelMensaje.TextAlign = ContentAlignment.MiddleLeft
         ' 

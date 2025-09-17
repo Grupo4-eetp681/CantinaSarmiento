@@ -63,6 +63,7 @@ Partial Class ventas
         PictureBox1 = New PictureBox()
         Panel10PX = New Panel()
         TimerMensage = New Timer(components)
+        ToolTip = New ToolTip(components)
         PanelVentas.SuspendLayout()
         PanelContenedorDER.SuspendLayout()
         PanelContenedorVentas.SuspendLayout()
@@ -273,6 +274,7 @@ Partial Class ventas
         BotonTicket.Name = "BotonTicket"
         BotonTicket.Size = New Size(40, 40)
         BotonTicket.TabIndex = 5
+        ToolTip.SetToolTip(BotonTicket, "Generar Tickets")
         BotonTicket.UseVisualStyleBackColor = False
         ' 
         ' BotonFactura
@@ -286,6 +288,7 @@ Partial Class ventas
         BotonFactura.Name = "BotonFactura"
         BotonFactura.Size = New Size(40, 40)
         BotonFactura.TabIndex = 4
+        ToolTip.SetToolTip(BotonFactura, "Generar Factura")
         BotonFactura.UseVisualStyleBackColor = False
         ' 
         ' BotonRegistro
@@ -299,6 +302,7 @@ Partial Class ventas
         BotonRegistro.Name = "BotonRegistro"
         BotonRegistro.Size = New Size(40, 40)
         BotonRegistro.TabIndex = 3
+        ToolTip.SetToolTip(BotonRegistro, "Registrar Venta")
         BotonRegistro.UseVisualStyleBackColor = False
         ' 
         ' PanelDataVentas
@@ -547,4 +551,5 @@ Partial Class ventas
     Friend WithEvents PanelLabel As Panel
     Friend WithEvents LabelMensage As Label
     Friend WithEvents TimerMensage As Timer
+    Friend WithEvents ToolTip As ToolTip
 End Class

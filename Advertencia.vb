@@ -52,4 +52,8 @@
         label.Text = texto
         label.TextAlign = ContentAlignment.MiddleCenter
     End Sub
+
+    Private Sub Advertencia_Load(sender As Object, e As EventArgs) Handles Me.Load
+        BtnAceptar.Focus()
+    End Sub
 End Class

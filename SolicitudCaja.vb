@@ -39,6 +39,7 @@
 
     Private Sub FormSolicitudCaja_Load(sender As Object, e As EventArgs) Handles Me.Load
         logica.cargarSubdivision(Form1.subdivision)
+        TextBoxPlata.Focus()
     End Sub
 
     Private Sub confirmarInicio()

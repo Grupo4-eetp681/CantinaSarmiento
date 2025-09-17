@@ -53,6 +53,8 @@ Partial Class Form1
         FondoDeColor = New Panel()
         Opciones = New ContextMenuStrip(components)
         ActivarAdvertenciasToolStripMenuItem = New ToolStripMenuItem()
+        ToolTip = New ToolTip(components)
+        ToolTip1 = New ToolTip(components)
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -90,6 +92,7 @@ Partial Class Form1
         LogoSuperiorIzquierda.SizeMode = PictureBoxSizeMode.StretchImage
         LogoSuperiorIzquierda.TabIndex = 3
         LogoSuperiorIzquierda.TabStop = False
+        ToolTip.SetToolTip(LogoSuperiorIzquierda, "Configuraciones")
         ' 
         ' PanelBotonesVentana
         ' 
@@ -113,6 +116,7 @@ Partial Class Form1
         ButtonMaximizarApp.Name = "ButtonMaximizarApp"
         ButtonMaximizarApp.Size = New Size(25, 25)
         ButtonMaximizarApp.TabIndex = 1
+        ToolTip.SetToolTip(ButtonMaximizarApp, "Maximizar")
         ButtonMaximizarApp.UseVisualStyleBackColor = False
         ' 
         ' ButtonMinimizarApp
@@ -126,6 +130,7 @@ Partial Class Form1
         ButtonMinimizarApp.Name = "ButtonMinimizarApp"
         ButtonMinimizarApp.Size = New Size(25, 25)
         ButtonMinimizarApp.TabIndex = 0
+        ToolTip.SetToolTip(ButtonMinimizarApp, "Minimizar")
         ButtonMinimizarApp.UseVisualStyleBackColor = False
         ' 
         ' ButtonCierreApp
@@ -139,6 +144,7 @@ Partial Class Form1
         ButtonCierreApp.Name = "ButtonCierreApp"
         ButtonCierreApp.Size = New Size(25, 25)
         ButtonCierreApp.TabIndex = 0
+        ToolTip.SetToolTip(ButtonCierreApp, "Cerrar")
         ButtonCierreApp.UseVisualStyleBackColor = False
         ' 
         ' PanelBotonesAcciones
@@ -162,6 +168,7 @@ Partial Class Form1
         CerrarSesion.Name = "CerrarSesion"
         CerrarSesion.Size = New Size(40, 40)
         CerrarSesion.TabIndex = 3
+        ToolTip.SetToolTip(CerrarSesion, "Cerrar Sesion")
         CerrarSesion.UseVisualStyleBackColor = False
         ' 
         ' BotonImportar
@@ -173,6 +180,7 @@ Partial Class Form1
         BotonImportar.Name = "BotonImportar"
         BotonImportar.Size = New Size(40, 40)
         BotonImportar.TabIndex = 1
+        ToolTip.SetToolTip(BotonImportar, "Importar")
         BotonImportar.UseVisualStyleBackColor = False
         ' 
         ' BotonExportar
@@ -186,6 +194,7 @@ Partial Class Form1
         BotonExportar.Name = "BotonExportar"
         BotonExportar.Size = New Size(40, 40)
         BotonExportar.TabIndex = 2
+        ToolTip.SetToolTip(BotonExportar, "Exportar")
         BotonExportar.UseVisualStyleBackColor = False
         ' 
         ' PanelMargenI
@@ -228,6 +237,7 @@ Partial Class Form1
         ButtonMenuDerecha.Name = "ButtonMenuDerecha"
         ButtonMenuDerecha.Size = New Size(40, 40)
         ButtonMenuDerecha.TabIndex = 8
+        ToolTip.SetToolTip(ButtonMenuDerecha, "Cerrar Menu")
         ButtonMenuDerecha.UseVisualStyleBackColor = True
         ButtonMenuDerecha.Visible = False
         ' 
@@ -241,6 +251,7 @@ Partial Class Form1
         BotonMenuAbajo.Name = "BotonMenuAbajo"
         BotonMenuAbajo.Size = New Size(40, 40)
         BotonMenuAbajo.TabIndex = 7
+        ToolTip.SetToolTip(BotonMenuAbajo, "Abrir Menu")
         BotonMenuAbajo.UseVisualStyleBackColor = True
         ' 
         ' PanelBarraInferior
@@ -329,6 +340,7 @@ Partial Class Form1
         botonInventario.Name = "botonInventario"
         botonInventario.Size = New Size(40, 40)
         botonInventario.TabIndex = 2
+        ToolTip.SetToolTip(botonInventario, "Inventario")
         botonInventario.UseVisualStyleBackColor = True
         ' 
         ' botonVentas
@@ -339,6 +351,7 @@ Partial Class Form1
         botonVentas.Name = "botonVentas"
         botonVentas.Size = New Size(40, 40)
         botonVentas.TabIndex = 0
+        ToolTip.SetToolTip(botonVentas, "Ventas")
         botonVentas.UseVisualStyleBackColor = True
         ' 
         ' botonCaja
@@ -349,6 +362,7 @@ Partial Class Form1
         botonCaja.Name = "botonCaja"
         botonCaja.Size = New Size(40, 40)
         botonCaja.TabIndex = 1
+        ToolTip.SetToolTip(botonCaja, "Caja")
         botonCaja.UseVisualStyleBackColor = True
         ' 
         ' FondoDeColor
@@ -438,5 +452,7 @@ Partial Class Form1
     Friend WithEvents Opciones As ContextMenuStrip
     Friend WithEvents ActivarAdvertenciasToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ButtonMenuDerecha As Button
+    Friend WithEvents ToolTip As ToolTip
+    Friend WithEvents ToolTip1 As ToolTip
 
 End Class

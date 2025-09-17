@@ -30,7 +30,7 @@ Public Class LogicaCantina
                 ' Crear todas las tablas desde cero
                 Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (" &
                 "IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, " &
-                "Descripcion TEXT, " &
+                "Descripcion TEXT UNIQUE, " &
                 "PrecioVenta REAL, " &
                 "PrecioCosto REAL, " &
                 "Ganancia REAL)"
@@ -796,8 +796,9 @@ Public Class LogicaCantina
 
                     If OrigenTienePrioridad Then
                         ' UPDATE + INSERT: Los datos del archivo tienen prioridad
+                        Dim yaExiste As Boolean = ProductoExiste(conn, valores(1))
                         If InsertarOActualizar(conn, valores) Then
-                            If ProductoExiste(conn, valores(0)) Then
+                            If yaExiste Then
                                 actualizados += 1
                             Else
                                 nuevos += 1
@@ -805,7 +806,7 @@ Public Class LogicaCantina
                         End If
                     Else
                         ' SOLO INSERT: Solo productos nuevos
-                        If Not ProductoExiste(conn, valores(0)) Then
+                        If Not ProductoExiste(conn, valores(1)) Then
                             If InsertarNuevo(conn, valores) Then
                                 nuevos += 1
                             End If
@@ -815,7 +816,6 @@ Public Class LogicaCantina
                     End If
 
                 Catch ex As Exception
-                    ' Continuar con el siguiente registro si hay error
                 End Try
             Next
         End Using
@@ -828,10 +828,10 @@ Public Class LogicaCantina
     End Sub
 
     ' Verificar si producto existe
-    Private Function ProductoExiste(conn As SQLiteConnection, idProducto As String) As Boolean
-        Dim query As String = "SELECT COUNT(*) FROM Producto WHERE IdProducto = @id"
+    Private Function ProductoExiste(conn As SQLiteConnection, descripcion As String) As Boolean
+        Dim query As String = "SELECT COUNT(*) FROM Producto WHERE Descripcion = @desc"
         Using cmd As New SQLiteCommand(query, conn)
-            cmd.Parameters.AddWithValue("@id", idProducto)
+            cmd.Parameters.AddWithValue("@desc", descripcion)
             Return Convert.ToInt32(cmd.ExecuteScalar()) > 0
         End Using
     End Function
@@ -839,18 +839,18 @@ Public Class LogicaCantina
     ' INSERT + UPDATE (cuando origen tiene prioridad)
     Private Function InsertarOActualizar(conn As SQLiteConnection, valores As String()) As Boolean
         Dim query As String = "
-        INSERT INTO Producto (IdProducto, Descripcion, PrecioVenta, PrecioCosto, Ganancia)
-        VALUES (@id, @desc, @precioVenta, @precioCosto, @ganancia)
-        ON CONFLICT(IdProducto) DO UPDATE SET 
-            Descripcion = excluded.Descripcion,
-            PrecioVenta = excluded.PrecioVenta,
-            PrecioCosto = excluded.PrecioCosto,
-            Ganancia = excluded.Ganancia;
+    INSERT INTO Producto (Descripcion, PrecioVenta, PrecioCosto, Ganancia)
+    VALUES (@desc, @precioVenta, @precioCosto, @ganancia)
+    ON CONFLICT(Descripcion) DO UPDATE SET 
+        PrecioVenta = excluded.PrecioVenta,
+        PrecioCosto = excluded.PrecioCosto,
+        Ganancia = excluded.Ganancia;
     "
 
+        Dim descNormalizado As String = valores(1).Trim()
+
         Using cmd As New SQLiteCommand(query, conn)
-            cmd.Parameters.AddWithValue("@id", valores(0))
-            cmd.Parameters.AddWithValue("@desc", valores(1))
+            cmd.Parameters.AddWithValue("@desc", descNormalizado)
             cmd.Parameters.AddWithValue("@precioVenta", Convert.ToDecimal(valores(2)))
             cmd.Parameters.AddWithValue("@precioCosto", Convert.ToDecimal(valores(3)))
             cmd.Parameters.AddWithValue("@ganancia", Convert.ToDecimal(valores(4)))
@@ -859,6 +859,7 @@ Public Class LogicaCantina
         End Using
     End Function
 
+
     ' SOLO INSERT (cuando destino tiene prioridad)
     Private Function InsertarNuevo(conn As SQLiteConnection, valores As String()) As Boolean
         Dim query As String = "
@@ -866,9 +867,12 @@ Public Class LogicaCantina
         VALUES (@id, @desc, @precioVenta, @precioCosto, @ganancia);
     "
 
+
+        Dim descNormalizado As String = valores(1).Trim()
+
         Using cmd As New SQLiteCommand(query, conn)
             cmd.Parameters.AddWithValue("@id", valores(0))
-            cmd.Parameters.AddWithValue("@desc", valores(1))
+            cmd.Parameters.AddWithValue("@desc", descNormalizado)
             cmd.Parameters.AddWithValue("@precioVenta", Convert.ToDecimal(valores(2)))
             cmd.Parameters.AddWithValue("@precioCosto", Convert.ToDecimal(valores(3)))
             cmd.Parameters.AddWithValue("@ganancia", Convert.ToDecimal(valores(4)))
