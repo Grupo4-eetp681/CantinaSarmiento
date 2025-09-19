@@ -379,7 +379,7 @@ Partial Class Form1
         ' 
         Opciones.Items.AddRange(New ToolStripItem() {ActivarAdvertenciasToolStripMenuItem})
         Opciones.Name = "ContextMenuStrip1"
-        Opciones.Size = New Size(183, 26)
+        Opciones.Size = New Size(183, 48)
         ' 
         ' ActivarAdvertenciasToolStripMenuItem
         ' 
