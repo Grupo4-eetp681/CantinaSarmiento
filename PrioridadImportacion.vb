@@ -3,12 +3,12 @@
     Dim logica As New LogicaCantina
 
     Private Sub ButtonOrigen_Click(sender As Object, e As EventArgs) Handles ButtonOrigen.Click
-        logica.OrigenTienePrioridad = True
+        Form1.OTP = True
         Me.Close()
     End Sub
 
     Private Sub ButtonDestino_Click(sender As Object, e As EventArgs) Handles ButtonDestino.Click
-        logica.OrigenTienePrioridad = False
+        Form1.OTP = False
         Me.Close()
     End Sub
 

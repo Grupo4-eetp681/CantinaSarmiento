@@ -3,6 +3,20 @@
     Dim plata As New Int128
     Public retiro As Int128
 
+    Private Sub responsive()
+        PanelDERECHO.Width = PanelFormulario.Width * 0.3
+
+        ' Ajustar PanelLabels al 80% del contenedor
+        PanelLabels.Width = PanelContenedorLabels.Width * 0.8
+        PanelLabels.Height = PanelContenedorLabels.Height * 0.8
+
+        ' Centrar PanelLabels dentro do contenedor
+        PanelLabels.Left = (PanelContenedorLabels.Width - PanelLabels.Width) \ 2
+        PanelLabels.Top = (PanelContenedorLabels.Height - PanelLabels.Height) \ 2
+
+        AjustarLabelsEnPanel()
+    End Sub
+
     Private Sub CAJA_shown(sender As Object, e As EventArgs) Handles Me.Shown
         PanelDERECHO.Width = PanelFormulario.Width * 0.3
 
@@ -17,15 +31,12 @@
         AjustarLabelsEnPanel()
     End Sub
 
-    Private Sub actualizarCaja()
+    Public Sub actualizarCaja()
         Dim valores = logica.obtenerCaja()
-        Dim inicio = valores.Inicio
-        Dim retiros = valores.Retiros
-        Dim ventas = valores.Ventas
-        Dim total = valores.Total
         LabelNUMInicio.Text = "$ " & valores.Inicio.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
         LabelNUMRetiro.Text = "$ " & valores.Retiros.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
         LabelNUMVentas.Text = "$ " & valores.Ventas.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
+        LabelNUMTransferencia.Text = "$ " & valores.Transferencias.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
         LabelNUMCaja.Text = "$ " & valores.Total.ToString("N0", New Globalization.CultureInfo("es-AR")).Replace(" ", "")
         DataGridViewCAJA.DataSource = logica.obtenerVentas()
     End Sub
@@ -74,9 +85,9 @@
     End Sub
 
     Private Sub AjustarLabelsEnPanel()
-        Dim labelsIzq As Label() = {LabelINICIO, LabelVentas, LabelRetiro, LabelCAJA}
-        Dim labelsDer As Label() = {LabelNUMInicio, LabelNUMVentas, LabelNUMRetiro, LabelNUMCaja}
-        Dim panelesBorde As Panel() = {PanelBorde1, PanelBorde2, PanelBorde3}
+        Dim labelsIzq As Label() = {LabelINICIO, LabelVentas, LabelTransferencia, LabelRetiro, LabelCAJA}
+        Dim labelsDer As Label() = {LabelNUMInicio, LabelNUMVentas, LabelNUMTransferencia, LabelNUMRetiro, LabelNUMCaja}
+        Dim panelesBorde As Panel() = {PanelBorde1, PanelBorde2, PanelBorde3, PanelBorde4}
 
         Dim filas As Integer = labelsIzq.Length
         Dim labelHeight As Integer = PanelLabels.Height \ filas
@@ -164,12 +175,21 @@
     Private Sub TimerMensage_Tick(sender As Object, e As EventArgs) Handles TimerMensage.Tick
         PanelMensage.Visible = False
         LabelMensage.Visible = False
+        ButtonCerrarCaja.Enabled = True
+        ButtonRetiro.Enabled = True
         TimerMensage.Stop()
     End Sub
 
     Private Sub mostrar_mensaje()
         PanelMensage.Visible = True
         LabelMensage.Visible = True
+        ButtonCerrarCaja.Enabled = False
+        ButtonRetiro.Enabled = False
         TimerMensage.Start()
     End Sub
+
+    Private Sub CAJA_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        responsive()
+    End Sub
+
 End Class

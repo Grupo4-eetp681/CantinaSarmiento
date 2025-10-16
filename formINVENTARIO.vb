@@ -2,6 +2,10 @@
     Dim logica As New LogicaCantina
     Dim productoSeleccionado As DataRow = Nothing
 
+    ' Variables de control
+    Private manejandoCelda As Boolean = False
+    Private ultimoMovimientoManual As Boolean = False
+
     Private Sub formINVENTARIO_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         logica.cargarSubdivision(Form1.subdivision)
         ' Cargar todos los productos en el DataGridView
@@ -13,6 +17,8 @@
         DataGridViewInventario.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         DataGridViewInventario.Columns("ID").ReadOnly = True
         DataGridViewInventario.Columns("Ganancia").ReadOnly = True
+
+        DataGridViewInventario.RowTemplate.Height = 30
 
     End Sub
 
@@ -38,57 +44,86 @@
     Private Sub DataGridViewInventario_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridViewInventario.KeyDown
         If e.KeyCode = Keys.Enter Then
             e.SuppressKeyPress = True
+        ElseIf e.KeyCode = Keys.Tab Then
+            ultimoMovimientoManual = True
         End If
     End Sub
 
     Private Sub DataGridViewInventario_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewInventario.CellEndEdit
+        If manejandoCelda Then Exit Sub
+        manejandoCelda = True
 
-        ' Tomar la fila actual
-        Dim fila = DataGridViewInventario.CurrentRow
+        Try
+            Dim fila = DataGridViewInventario.CurrentRow
+            DataGridViewInventario.EndEdit()
 
-        ' Finalizar edición de la celda
-        DataGridViewInventario.EndEdit()
+            If fila IsNot Nothing Then
+                Dim idProducto = Convert.ToInt32(fila.Cells("ID").Value)
+                Dim descripcion = fila.Cells("Descripción").Value.ToString()
+                Dim precioVenta = Convert.ToDouble(fila.Cells("Precio_Unitario").Value)
+                Dim precioCosto = Convert.ToDouble(fila.Cells("Precio_Costo").Value)
+                Dim ganancia = precioVenta - precioCosto
+                fila.Cells("Ganancia").Value = ganancia
 
-        If fila IsNot Nothing Then
-            ' Obtener valores de la fila
-            Dim idProducto = Convert.ToInt32(fila.Cells("ID").Value)
-            Dim descripcion = fila.Cells("Descripción").Value.ToString()
-            Dim precioVenta = Convert.ToDouble(fila.Cells("Precio_Unitario").Value)
-            Dim precioCosto = Convert.ToDouble(fila.Cells("Precio_Costo").Value)
+                ' Validar descripción vacía
+                If String.IsNullOrWhiteSpace(descripcion) Then
+                    Dim origen = "CeldasInventario"
+                    Dim mensaje = "La descripción del producto no puede estar vacía."
 
-            ' Calcular ganancia y actualizar celda
-            Dim ganancia = precioVenta - precioCosto
-            fila.Cells("Ganancia").Value = ganancia
+                    Dim continuar As Boolean = True
+                    If Not logica.ObtenerEstadoAdvertencia(origen) Then
+                        Dim frm As New Advertencia(mensaje, origen)
+                        Dim resultado = frm.ShowDialog()
+                        If resultado = DialogResult.OK Then
+                            If frm.NoMostrarMas Then logica.GuardarEstadoAdvertencia(origen, True)
+                            continuar = True
+                        Else
+                            continuar = False
+                        End If
+                    End If
 
-            ' Guardar cambios en la base de datos
-            logica.ActualizarProducto(idProducto, descripcion, precioVenta, precioCosto)
-        End If
+                    ' Restaurar valor anterior
+                    fila.Cells("Descripción").Value = If(productoSeleccionado IsNot Nothing, productoSeleccionado("Descripción"), "")
+                    DataGridViewInventario.CurrentCell = fila.Cells("Descripción")
+                    DataGridViewInventario.BeginEdit(True)
+                    Exit Sub
+                End If
 
+                ' Guardar en DB
+                logica.ActualizarProducto(idProducto, descripcion, precioVenta, precioCosto)
+            End If
 
-        Dim fil As Integer = e.RowIndex
-        Dim col As Integer = e.ColumnIndex
+            ' --- Evitar mover celda si fue por Tab ---
+            If ultimoMovimientoManual Then
+                ultimoMovimientoManual = False
+                manejandoCelda = False
+                Exit Sub
+            End If
 
-        ' Validar que los índices sean correctos
-        If fil < 0 OrElse fil >= DataGridViewInventario.Rows.Count Then Exit Sub
-        If col < 0 OrElse col >= DataGridViewInventario.Columns.Count Then Exit Sub
+            ' --- Mover automáticamente a la siguiente celda ---
+            Dim fil As Integer = e.RowIndex
+            Dim col As Integer = e.ColumnIndex
 
-        ' Usamos BeginInvoke para evitar la reentrancia
-        Me.BeginInvoke(New Action(Sub()
-                                      ' Validar de nuevo dentro del Invoke
-                                      If fil < DataGridViewInventario.Rows.Count AndAlso col < DataGridViewInventario.Columns.Count Then
-                                          If col < 3 And col > 0 Then ' si no es la última columna editable
-                                              Dim celdaDestino As DataGridViewCell = DataGridViewInventario.Rows(fil).Cells(col + 1)
-                                              If celdaDestino IsNot Nothing Then
-                                                  DataGridViewInventario.CurrentCell = celdaDestino
-                                                  DataGridViewInventario.BeginEdit(True)
+            If fil < 0 OrElse fil >= DataGridViewInventario.Rows.Count Then Exit Sub
+            If col < 0 OrElse col >= DataGridViewInventario.Columns.Count Then Exit Sub
+
+            Me.BeginInvoke(New Action(Sub()
+                                          If fil < DataGridViewInventario.Rows.Count AndAlso col < DataGridViewInventario.Columns.Count Then
+                                              If col < 3 And col > 0 Then
+                                                  Dim celdaDestino As DataGridViewCell = DataGridViewInventario.Rows(fil).Cells(col + 1)
+                                                  If celdaDestino IsNot Nothing Then
+                                                      DataGridViewInventario.CurrentCell = celdaDestino
+                                                      DataGridViewInventario.BeginEdit(True)
+                                                  End If
+                                              Else
+                                                  DataGridViewInventario.CurrentCell = Nothing
                                               End If
-                                          Else
-                                              ' Última columna -> sacar foco
-                                              DataGridViewInventario.CurrentCell = Nothing
                                           End If
-                                      End If
-                                  End Sub))
+                                      End Sub))
 
+        Finally
+            manejandoCelda = False
+        End Try
     End Sub
 
     Private Sub ButtonAgregar_Click(sender As Object, e As EventArgs) Handles ButtonAgregar.Click

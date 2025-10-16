@@ -19,7 +19,132 @@ Public Class LogicaCantina
         verificarBaseDeDatos()
     End Sub
 
-    Private Sub verificarBaseDeDatos()
+    Public Sub CargarListaDefault()
+        Dim productos As (String, Double, Double)() = {
+        ("Carpa", 12000, 0),
+        ("Casilla", 20000, 0),
+        ("Tablon", 10000, 0),
+        ("Asador", 10000, 0),
+        ("Carbón 5 KG", 4000, 0),
+        ("Carbón 12 KG", 8000, 0),
+        ("Papel Higiénico x1", 1000, 0),
+        ("Papel Higiénico x4", 3000, 0),
+        ("Servilleta de papel x1 rollo", 1000, 0),
+        ("Servilleta de papel x3 rollos", 2500, 0),
+        ("Pañuelos descartables", 500, 0),
+        ("Algodón", 1500, 0),
+        ("Bolsa residuos", 1500, 0),
+        ("Arroz 1/2 KG", 2000, 0),
+        ("Pure de tomate", 1500, 0),
+        ("Provenzal", 2500, 0),
+        ("Pimentón", 1500, 0),
+        ("Fideos Spaguettis", 1800, 0),
+        ("Fideos guiseros", 1600, 0),
+        ("Queso rallado", 200, 0),
+        ("Aceite x900 ML", 2800, 0),
+        ("Vinagre", 1500, 0),
+        ("Sal entrefina", 1500, 0),
+        ("Sal fina", 1200, 0),
+        ("Jugo de limon", 1500, 0),
+        ("Aceitunas", 2000, 0),
+        ("Mostaza", 1500, 0),
+        ("Mayonesa", 1500, 0),
+        ("Harina común kilo", 1500, 0),
+        ("Edulcorante", 2500, 0),
+        ("Dulce de leche", 2000, 0),
+        ("Escarbadientes", 1000, 0),
+        ("Encendedor", 1500, 0),
+        ("Detergente", 2500, 0),
+        ("Esponja platos", 2500, 0),
+        ("Espirales x2", 1000, 0),
+        ("Insecticida fuyi", 5000, 0),
+        ("Hielo", 1000, 0),
+        ("Jugo tang", 500, 0),
+        ("Agua mineral x5 Litros", 4000, 0),
+        ("Baggio 200 ML", 500, 0),
+        ("Baggio Litro", 300, 0),
+        ("Fernet 450 ML", 7000, 0),
+        ("Gancia Litro", 6000, 0),
+        ("Vino tinto toro Litro", 3000, 0),
+        ("Soda 2 Litros", 1500, 0),
+        ("Salamin", 3500, 0),
+        ("Bizcochos", 2500, 0),
+        ("Pan", 2000, 0),
+        ("Banana/Manzana x Unidad", 1000, 0),
+        ("Ensalada tricolor", 2500, 0),
+        ("Chorizo parilleros bolsita", 6000, 0),
+        ("Hamburguezas patty x4", 3500, 0),
+        ("Ensalada de frutas", 2500, 0),
+        ("Pebete de jamón y queso", 1500, 0),
+        ("Sandwich de miga 6", 4500, 0),
+        ("Empanada de carne/J y Q", 1500, 0),
+        ("Cigarrillos", 2500, 0),
+        ("Yerba sinceridad x 1/2 KG", 2500, 0),
+        ("Azúcar", 2000, 0),
+        ("Leche entera ilolay", 2500, 0),
+        ("Té la virginia caja", 1500, 0),
+        ("Té la virginia saquito", 300, 0),
+        ("Café x 50G", 2500, 0),
+        ("Café saquito", 500, 0),
+        ("Mate cocido x1 saquito", 300, 0),
+        ("Mate cocido x caja", 2500, 0),
+        ("Cacao x 200g", 2000, 0),
+        ("Chocolatada litro", 3000, 0),
+        ("Toallitas húmedas", 4500, 0),
+        ("Repelente", 9000, 0),
+        ("Toallitas femeninas", 4500, 0),
+        ("Jabón de tocador", 1500, 0),
+        ("Desodrante rexona", 2500, 0),
+        ("Shampo", 3000, 0),
+        ("Acondicionador", 3000, 0),
+        ("Protector solar", 17000, 0),
+        ("Esponja para baño", 1000, 0),
+        ("Pañales x8", 5000, 0),
+        ("Papas fritas snack", 1500, 0),
+        ("Chalitas", 2000, 0),
+        ("Chizitos", 1500, 0),
+        ("Palitos", 1500, 0),
+        ("Maní", 2500, 0),
+        ("Rex", 2000, 0),
+        ("Saladix", 2000, 0),
+        ("Fajita saborizada", 2000, 0),
+        ("Galletitas dulces trio", 2000, 0),
+        ("Galletitas media tarde x3", 2000, 0),
+        ("Tostadas de arroz", 2500, 0),
+        ("Galletitas con semillas", 2500, 0),
+        ("Galletita granix salada x1", 2000, 0),
+        ("Bizcochos don satur", 2000, 0),
+        ("Bizcochos de arroz", 2500, 0),
+        ("Jugitos congelados", 500, 0),
+        ("Turrón miski", 300, 0),
+        ("Alfajor simple", 500, 0),
+        ("Barritas de cereal", 1500, 0),
+        ("Pipas", 500, 0),
+        ("Alfajor rasta", 2000, 0)
+    }
+
+        Using conn As SQLiteConnection = ObtenerConexion()
+        For Each prod In productos
+            Dim desc As String = prod.Item1
+            Dim venta As Double = prod.Item2
+            Dim costo As Double = prod.Item3
+            Dim ganancia As Double = venta - costo
+
+            Dim query As String = "INSERT OR IGNORE INTO Producto (Descripcion, PrecioVenta, PrecioCosto, Ganancia) 
+                                   VALUES (@desc, @venta, @costo, @ganancia)"
+            Using cmd As New SQLiteCommand(query, conn)
+                cmd.Parameters.AddWithValue("@desc", desc)
+                cmd.Parameters.AddWithValue("@venta", venta)
+                cmd.Parameters.AddWithValue("@costo", costo)
+                cmd.Parameters.AddWithValue("@ganancia", ganancia)
+                cmd.ExecuteNonQuery()
+            End Using
+        Next
+    End Using
+End Sub
+
+
+    Public Sub verificarBaseDeDatos()
         If Not Directory.Exists(cantinaSarmientoPath) Then
             Directory.CreateDirectory(cantinaSarmientoPath)
         End If
@@ -51,7 +176,8 @@ Public Class LogicaCantina
                 "Id INTEGER PRIMARY KEY AUTOINCREMENT, " &
                 "Inicio REAL, " &
                 "Retiros REAL, " &
-                "Ventas REAL, " &
+                "VentasEfectivo REAL, " &
+                "VentasTransferencias REAL, " &
                 "Total REAL)"
 
                 Dim tablas As String() = {
@@ -75,7 +201,7 @@ Public Class LogicaCantina
                 {"Producto", New String() {"IdProducto", "Descripcion", "PrecioVenta", "PrecioCosto", "Ganancia"}},
                 {"Ventas", New String() {"IdVenta", "Descripcion", "Cantidad", "Subtotal", "FechaYHora"}},
                 {"Advertencias", New String() {"Id", "Origen", "NoMostrar"}},
-                {"Caja", New String() {"Id", "Inicio", "Retiros", "Ventas", "Total"}}
+                {"Caja", New String() {"Id", "Inicio", "Retiros", "VentasEfectivo", "VentasTransferencias", "Total"}}
             }
 
                 ' Eliminar la tabla Inicio si existe (ya no la necesitamos)
@@ -122,7 +248,8 @@ Public Class LogicaCantina
                                 "Id INTEGER PRIMARY KEY AUTOINCREMENT, " &
                                 "Inicio REAL, " &
                                 "Retiros REAL, " &
-                                "Ventas REAL, " &
+                                "VentasEfectivo REAL, " &
+                                "VentasTransferencias REAL," &
                                 "Total REAL)"
                         End Select
                         Using cmd As New SQLiteCommand(createTableSql, conn)
@@ -161,7 +288,7 @@ Public Class LogicaCantina
                                 Case "NoMostrar"
                                     tipoColumna = "INTEGER"
                                     defaultValue = " DEFAULT 0"
-                                Case "PrecioVenta", "PrecioCosto", "Ganancia", "Subtotal", "Inicio", "Retiros", "Ventas", "Total"
+                                Case "PrecioVenta", "PrecioCosto", "Ganancia", "Subtotal", "Inicio", "Retiros", "VentasEfectivo", "VentasTransferencias", "Total"
                                     tipoColumna = "REAL"
                             End Select
 
@@ -314,7 +441,7 @@ Public Class LogicaCantina
         Dim dt As New DataTable()
         Try
             Using conn As SQLiteConnection = ObtenerConexion()
-                Dim query As String = "SELECT IdProducto as ID, Descripcion as Descripción, PrecioVenta as Precio_Unitario FROM Producto"
+                Dim query As String = "SELECT IdProducto as ID, Descripcion as Descripción, PrecioVenta as Precio FROM Producto ORDER BY Descripcion ASC"
                 Using cmd As New SQLiteCommand(query, conn)
                     Using da As New SQLiteDataAdapter(cmd)
                         da.Fill(dt)
@@ -331,7 +458,7 @@ Public Class LogicaCantina
         Dim dt As New DataTable()
         Try
             Using conn As SQLiteConnection = ObtenerConexion()
-                Dim query As String = "SELECT IdProducto as ID, Descripcion as Descripción, PrecioVenta as Precio_Unitario FROM Producto WHERE Descripcion LIKE @Descripcion"
+                Dim query As String = "SELECT IdProducto as ID, Descripcion as Descripción, PrecioVenta as Precio FROM Producto WHERE Descripcion LIKE @Descripcion"
                 Using cmd As New SQLiteCommand(query, conn)
                     cmd.Parameters.AddWithValue("@Descripcion", "%" & nombre & "%")
                     Using da As New SQLiteDataAdapter(cmd)
@@ -372,7 +499,7 @@ Public Class LogicaCantina
     Public Function obtenerVentas() As DataTable
         Dim dt As New DataTable()
         Using conn As SQLiteConnection = ObtenerConexion()
-            Dim query As String = "SELECT Descripcion, Cantidad, Subtotal, FechaYHora " &
+            Dim query As String = "SELECT Descripcion as Descripción, Cantidad, Subtotal, FechaYHora as Fecha " &
                                   "FROM Ventas v "
             Using cmd As New SQLiteCommand(query, conn)
                 Using da As New SQLiteDataAdapter(cmd)
@@ -425,6 +552,39 @@ Public Class LogicaCantina
         End Using
     End Sub
 
+    Public Sub ActualizarInicio(valor As Double)
+        Using conn As SQLiteConnection = ObtenerConexion()
+            ' Primero verificamos si hay registro en Caja
+            Dim existeRegistro As Boolean = False
+            Dim idRegistro As Integer = -1
+            Using cmd As New SQLiteCommand("SELECT Id FROM Caja LIMIT 1", conn)
+                Dim result = cmd.ExecuteScalar()
+                If result IsNot Nothing AndAlso Not DBNull.Value.Equals(result) Then
+                    existeRegistro = True
+                    idRegistro = Convert.ToInt32(result)
+                End If
+            End Using
+
+            ' Si no existe, lo creamos vacío
+            If Not existeRegistro Then
+                Dim insertSql As String = "INSERT INTO Caja (Inicio, Retiros, VentasEfectivo, VentasTransferencias, Total) VALUES (0, 0, 0, 0, 0)"
+                Using cmd As New SQLiteCommand(insertSql, conn)
+                    cmd.ExecuteNonQuery()
+                End Using
+                idRegistro = CInt(conn.LastInsertRowId)
+            End If
+
+            ' Actualizamos la columna sumando el valor
+            Dim updateSql As String = $"UPDATE Caja SET Inicio = IFNULL({valor}, 0)"
+            Using cmd As New SQLiteCommand(updateSql, conn)
+                cmd.Parameters.AddWithValue("@valor", valor)
+                cmd.Parameters.AddWithValue("@id", idRegistro)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+        ActualizarCaja("Inicio", 0)
+    End Sub
+
     Public Sub ActualizarCaja(columna As String, valor As Double)
         Using conn As SQLiteConnection = ObtenerConexion()
 
@@ -441,7 +601,7 @@ Public Class LogicaCantina
 
             ' Si no existe, lo creamos vacío
             If Not existeRegistro Then
-                Dim insertSql As String = "INSERT INTO Caja (Inicio, Retiros, Ventas, Total) VALUES (0, 0, 0, 0)"
+                Dim insertSql As String = "INSERT INTO Caja (Inicio, Retiros, VentasEfectivo, VentasTransferencia, Total) VALUES (0, 0, 0, 0, 0)"
                 Using cmd As New SQLiteCommand(insertSql, conn)
                     cmd.ExecuteNonQuery()
                 End Using
@@ -457,7 +617,7 @@ Public Class LogicaCantina
             End Using
 
             ' Recalcular el total
-            Dim recalcularSql As String = "UPDATE Caja SET Total = IFNULL(Inicio,0) - IFNULL(Retiros,0) + IFNULL(Ventas,0) WHERE Id=@id"
+            Dim recalcularSql As String = "UPDATE Caja SET Total = IFNULL(Inicio,0) - IFNULL(Retiros,0) + IFNULL(VentasEfectivo,0) + IFNULL(VentasTransferencias,0) WHERE Id=@id"
             Using cmd As New SQLiteCommand(recalcularSql, conn)
                 cmd.Parameters.AddWithValue("@id", idRegistro)
                 cmd.ExecuteNonQuery()
@@ -465,37 +625,37 @@ Public Class LogicaCantina
         End Using
     End Sub
 
-    Public Function obtenerCaja() As (Inicio As Double, Retiros As Double, Ventas As Double, Total As Double)
+    Public Function obtenerCaja() As (Inicio As Double, Retiros As Double, Ventas As Double, Transferencias As Double, Total As Double)
         Using conn As SQLiteConnection = ObtenerConexion()
-            Dim query As String = "SELECT Inicio, Retiros, Ventas, Total FROM Caja LIMIT 1"
+            Dim query As String = "SELECT Inicio, Retiros, VentasEfectivo, VentasTransferencias, Total FROM Caja LIMIT 1"
             Using cmd As New SQLiteCommand(query, conn)
                 Using reader = cmd.ExecuteReader()
                     If reader.Read() Then
                         Dim inicio As Double = If(Not IsDBNull(reader("Inicio")), Convert.ToDouble(reader("Inicio")), 0)
                         Dim retiros As Double = If(Not IsDBNull(reader("Retiros")), Convert.ToDouble(reader("Retiros")), 0)
-                        Dim ventas As Double = If(Not IsDBNull(reader("Ventas")), Convert.ToDouble(reader("Ventas")), 0)
+                        Dim ventas As Double = If(Not IsDBNull(reader("VentasEfectivo")), Convert.ToDouble(reader("VentasEfectivo")), 0)
+                        Dim transferencias As Double = If(Not IsDBNull(reader("VentasTransferencias")), Convert.ToDouble(reader("VentasTransferencias")), 0)
                         Dim total As Double = If(Not IsDBNull(reader("Total")), Convert.ToDouble(reader("Total")), 0)
-                        Return (inicio, retiros, ventas, total)
+                        Return (inicio, retiros, ventas, transferencias, total)
                     End If
                 End Using
             End Using
         End Using
-        Return (0, 0, 0, 0)
+        Return (0, 0, 0, 0, 0)
     End Function
 
     Public Sub GenerarCierreCajaPDF(DataGridViewCAJA As DataGridView)
-
-        If GlobalFontSettings.FontResolver Is Nothing OrElse Not TypeOf GlobalFontSettings.FontResolver Is CustomFontResolver Then
-            GlobalFontSettings.FontResolver = New CustomFontResolver()
-        End If
-
+        GlobalFontSettings.FontResolver = New CustomFontResolver()
+        Dim font As New XFont("Calibri", 12)
         Dim doc As New PdfDocument()
         doc.Info.Title = "Cierre de Caja"
         Dim page As PdfPage = doc.AddPage()
+        Dim pageHeight As Double = page.Height.Point ' Altura total de la página
+        Dim marginBottom As Double = 40 ' Margen inferior
         Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
-        Dim fontTitulo As New XFont("Roboto", 14)
-        Dim fontNormal As New XFont("Roboto", 10)
-        Dim fontResaltado As New XFont("Roboto", 11)
+        Dim fontTitulo As New XFont("Helvetica", 14)
+        Dim fontNormal As New XFont("Helvetica", 10)
+        Dim fontResaltado As New XFont("Helvetica", 11)
 
         Dim y As Double = 40
         gfx.DrawString("CIERRE DE CAJA", fontTitulo, XBrushes.Black, 40, y)
@@ -513,24 +673,33 @@ Public Class LogicaCantina
             For Each fila As DataGridViewRow In DataGridViewCAJA.Rows
                 If fila.IsNewRow Then Continue For
 
-                Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+                Dim descripcion As String = fila.Cells("Descripción").Value.ToString()
                 Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
                 Dim subtotal As Double = Convert.ToDouble(fila.Cells("Subtotal").Value)
 
-                totalVentas += subtotal
-
+                ' Obtener ganancia del producto desde la base de datos
                 Dim gananciaProducto As Double = 0
-                Dim cmd As New SQLiteCommand("SELECT Ganancia FROM Producto WHERE Descripcion=@desc", conn)
-                cmd.Parameters.AddWithValue("@desc", descripcion)
-                Dim result = cmd.ExecuteScalar()
-                If result IsNot Nothing Then
-                    gananciaProducto = Convert.ToDouble(result)
-                End If
+                Using cmd As New SQLiteCommand("SELECT Ganancia FROM Producto WHERE Descripcion=@desc", conn)
+                    cmd.Parameters.AddWithValue("@desc", descripcion)
+                    Dim result = cmd.ExecuteScalar()
+                    If result IsNot Nothing Then
+                        gananciaProducto = Convert.ToDouble(result)
+                    End If
+                End Using
 
                 Dim subtotalGanancia As Double = gananciaProducto * cantidad
                 totalGanancia += subtotalGanancia
 
                 Dim linea As String = $"{descripcion} x{cantidad} - ${subtotal:N0} (Ganancia: ${subtotalGanancia:N0})"
+
+                ' --- Salto de página automático ---
+                If y + 20 > page.Height.Point - 40 Then
+                    page = doc.AddPage()
+                    gfx = XGraphics.FromPdfPage(page)
+                    y = 40 ' Reiniciar posición en la nueva página
+                End If
+
+                ' Dibujar línea
                 gfx.DrawString(linea, fontNormal, XBrushes.Black, 40, y)
                 y += 20
             Next
@@ -550,7 +719,7 @@ Public Class LogicaCantina
         Dim resumenVentas As New Dictionary(Of String, (Cantidad As Integer, Total As Double))
         For Each fila As DataGridViewRow In DataGridViewCAJA.Rows
             If fila.IsNewRow Then Continue For
-            Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+            Dim descripcion As String = fila.Cells("Descripción").Value.ToString()
             Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
             Dim subtotal As Double = Convert.ToDouble(fila.Cells("Subtotal").Value)
             If resumenVentas.ContainsKey(descripcion) Then
@@ -561,6 +730,13 @@ Public Class LogicaCantina
         Next
 
         For Each kvp In resumenVentas
+
+            If y + 20 > page.Height.Point - marginBottom Then
+                page = doc.AddPage()
+                gfx = XGraphics.FromPdfPage(page)
+                y = 40 ' reiniciar posición en la nueva página
+            End If
+
             Dim lineaResumen As String = $"{kvp.Key} - Cantidad total: {kvp.Value.Cantidad} - Total vendido: ${kvp.Value.Total:N0}"
             gfx.DrawString(lineaResumen, fontNormal, XBrushes.Black, 40, y)
             y += 20
@@ -572,16 +748,18 @@ Public Class LogicaCantina
 
         ' --- Totales desde la tabla Caja ---
         Using conn As SQLiteConnection = ObtenerConexion()
-            Dim cmd As New SQLiteCommand("SELECT Inicio, Retiros, Ventas, Total FROM Caja LIMIT 1", conn)
+            Dim cmd As New SQLiteCommand("SELECT Inicio, Retiros, VentasEfectivo, VentasTransferencias, Total FROM Caja LIMIT 1", conn)
             Using reader = cmd.ExecuteReader()
                 If reader.Read() Then
                     Dim inicio As Double = Convert.ToDouble(reader("Inicio"))
                     Dim retiros As Double = Convert.ToDouble(reader("Retiros"))
-                    Dim ventas As Double = Convert.ToDouble(reader("Ventas"))
+                    Dim ventas As Double = Convert.ToDouble(reader("VentasEfectivo"))
+                    Dim transferencias As Double = Convert.ToDouble(reader("VentasTransferencias"))
                     Dim total As Double = Convert.ToDouble(reader("Total"))
 
                     gfx.DrawString($"Dinero inicial: ${inicio:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
-                    gfx.DrawString($"Ventas registradas: ${ventas:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
+                    gfx.DrawString($"Ventas en efectivo: ${ventas:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
+                    gfx.DrawString($"Ventas por transferencia: ${transferencias:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
                     gfx.DrawString($"Retiros: ${retiros:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
                     gfx.DrawString($"TOTAL EN CAJA: ${total:N0}", fontResaltado, XBrushes.Black, 40, y) : y += 25
                 End If
@@ -759,7 +937,6 @@ Public Class LogicaCantina
             ProcesarImportacion(archivoSeleccionado)
 
         Catch ex As Exception
-            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -819,12 +996,6 @@ Public Class LogicaCantina
                 End Try
             Next
         End Using
-
-        ' Mostrar resumen
-        MessageBox.Show($"Importación completada:{Environment.NewLine}" &
-                   $"Nuevos: {nuevos}{Environment.NewLine}" &
-                   $"Actualizados: {actualizados}{Environment.NewLine}" &
-                   $"Ignorados: {ignorados}", "Resumen", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
     ' Verificar si producto existe
@@ -881,4 +1052,27 @@ Public Class LogicaCantina
         End Using
     End Function
 
+End Class
+
+
+Public Class CustomFontResolver
+    Implements IFontResolver
+
+    Public Function ResolveTypeface(familyName As String, isBold As Boolean, isItalic As Boolean) As FontResolverInfo Implements IFontResolver.ResolveTypeface
+        ' Aquí puedes mapear tus fuentes a archivos .ttf
+        If familyName = "Calibri" Then
+            Return New FontResolverInfo("Calibri#")
+        End If
+        Return New FontResolverInfo("Arial#") ' fallback
+    End Function
+
+    Public Function GetFont(faceName As String) As Byte() Implements IFontResolver.GetFont
+        ' Retornar el contenido del .ttf en bytes
+        If faceName = "Calibri#" Then
+            Return System.IO.File.ReadAllBytes("C:\Windows\Fonts\calibri.ttf")
+        ElseIf faceName = "Arial#" Then
+            Return System.IO.File.ReadAllBytes("C:\Windows\Fonts\arial.ttf")
+        End If
+        Return Nothing
+    End Function
 End Class

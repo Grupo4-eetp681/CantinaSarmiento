@@ -23,8 +23,10 @@ Partial Class CAJA
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         components = New ComponentModel.Container()
-        Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CAJA))
         PanelFormulario = New Panel()
         PanelIZQDataGrid = New Panel()
@@ -32,7 +34,10 @@ Partial Class CAJA
         PanelDERECHO = New Panel()
         PanelContenedorLabels = New Panel()
         PanelLabels = New Panel()
+        LabelTransferencia = New Label()
+        LabelNUMTransferencia = New Label()
         PanelBorde3 = New Panel()
+        PanelBorde4 = New Panel()
         PanelBorde2 = New Panel()
         PanelBorde1 = New Panel()
         LabelRetiro = New Label()
@@ -82,29 +87,47 @@ Partial Class CAJA
         ' 
         ' DataGridViewCAJA
         ' 
-        DataGridViewCAJA.BorderStyle = BorderStyle.None
-        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = SystemColors.Control
-        DataGridViewCellStyle1.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        DataGridViewCellStyle1.ForeColor = SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
-        DataGridViewCAJA.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCAJA.AllowUserToAddRows = False
+        DataGridViewCAJA.AllowUserToDeleteRows = False
+        DataGridViewCAJA.AllowUserToResizeColumns = False
+        DataGridViewCAJA.AllowUserToResizeRows = False
+        DataGridViewCellStyle5.BackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
+        DataGridViewCellStyle5.SelectionBackColor = Color.FromArgb(CByte(0), CByte(123), CByte(255))
+        DataGridViewCAJA.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCAJA.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.BackColor = SystemColors.Control
+        DataGridViewCellStyle6.Font = New Font("Candara", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle6.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle6.SelectionBackColor = Color.Transparent
+        DataGridViewCellStyle6.SelectionForeColor = Color.White
+        DataGridViewCellStyle6.WrapMode = DataGridViewTriState.True
+        DataGridViewCAJA.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         DataGridViewCAJA.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = SystemColors.Window
-        DataGridViewCellStyle2.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        DataGridViewCellStyle2.ForeColor = SystemColors.ControlDark
-        DataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
-        DataGridViewCAJA.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = SystemColors.Window
+        DataGridViewCellStyle7.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle7.ForeColor = SystemColors.ControlDark
+        DataGridViewCellStyle7.SelectionBackColor = Color.FromArgb(CByte(0), CByte(123), CByte(255))
+        DataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = DataGridViewTriState.False
+        DataGridViewCAJA.DefaultCellStyle = DataGridViewCellStyle7
         DataGridViewCAJA.Dock = DockStyle.Fill
         DataGridViewCAJA.Location = New Point(0, 0)
         DataGridViewCAJA.Name = "DataGridViewCAJA"
+        DataGridViewCAJA.ReadOnly = True
+        DataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = SystemColors.Control
+        DataGridViewCellStyle8.Font = New Font("Candara", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle8.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle8.SelectionBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
+        DataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle8.WrapMode = DataGridViewTriState.True
+        DataGridViewCAJA.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCAJA.RowHeadersVisible = False
+        DataGridViewCAJA.SelectionMode = DataGridViewSelectionMode.FullRowSelect
         DataGridViewCAJA.Size = New Size(520, 450)
-        DataGridViewCAJA.TabIndex = 0
+        DataGridViewCAJA.TabIndex = 3
         ' 
         ' PanelDERECHO
         ' 
@@ -130,7 +153,10 @@ Partial Class CAJA
         ' PanelLabels
         ' 
         PanelLabels.Anchor = AnchorStyles.None
+        PanelLabels.Controls.Add(LabelTransferencia)
+        PanelLabels.Controls.Add(LabelNUMTransferencia)
         PanelLabels.Controls.Add(PanelBorde3)
+        PanelLabels.Controls.Add(PanelBorde4)
         PanelLabels.Controls.Add(PanelBorde2)
         PanelLabels.Controls.Add(PanelBorde1)
         PanelLabels.Controls.Add(LabelRetiro)
@@ -141,25 +167,56 @@ Partial Class CAJA
         PanelLabels.Controls.Add(LabelNUMVentas)
         PanelLabels.Controls.Add(LabelINICIO)
         PanelLabels.Controls.Add(LabelNUMCaja)
-        PanelLabels.Location = New Point(55, 49)
+        PanelLabels.Location = New Point(20, 12)
         PanelLabels.Name = "PanelLabels"
-        PanelLabels.Size = New Size(201, 250)
+        PanelLabels.Size = New Size(250, 325)
         PanelLabels.TabIndex = 4
+        ' 
+        ' LabelTransferencia
+        ' 
+        LabelTransferencia.BackColor = SystemColors.ControlDark
+        LabelTransferencia.Font = New Font("Candara", 16F, FontStyle.Bold)
+        LabelTransferencia.ForeColor = SystemColors.ActiveCaptionText
+        LabelTransferencia.Location = New Point(0, 150)
+        LabelTransferencia.Name = "LabelTransferencia"
+        LabelTransferencia.Size = New Size(177, 25)
+        LabelTransferencia.TabIndex = 13
+        LabelTransferencia.Text = "TRANSFERENCIA"
+        ' 
+        ' LabelNUMTransferencia
+        ' 
+        LabelNUMTransferencia.BackColor = SystemColors.ControlDark
+        LabelNUMTransferencia.Font = New Font("Candara", 16F, FontStyle.Bold)
+        LabelNUMTransferencia.ForeColor = SystemColors.ActiveCaptionText
+        LabelNUMTransferencia.Location = New Point(180, 150)
+        LabelNUMTransferencia.Name = "LabelNUMTransferencia"
+        LabelNUMTransferencia.Size = New Size(70, 25)
+        LabelNUMTransferencia.TabIndex = 12
+        LabelNUMTransferencia.Text = "$ 0.00"
+        LabelNUMTransferencia.TextAlign = ContentAlignment.MiddleRight
         ' 
         ' PanelBorde3
         ' 
         PanelBorde3.BackColor = Color.Gold
-        PanelBorde3.Location = New Point(0, 191)
+        PanelBorde3.Location = New Point(0, 200)
         PanelBorde3.Name = "PanelBorde3"
-        PanelBorde3.Size = New Size(201, 3)
-        PanelBorde3.TabIndex = 10
+        PanelBorde3.Size = New Size(250, 3)
+        PanelBorde3.TabIndex = 11
+        ' 
+        ' PanelBorde4
+        ' 
+        PanelBorde4.BackColor = Color.Gold
+        PanelBorde4.Location = New Point(0, 276)
+        PanelBorde4.Name = "PanelBorde4"
+        PanelBorde4.Size = New Size(250, 3)
+        PanelBorde4.TabIndex = 10
         ' 
         ' PanelBorde2
         ' 
         PanelBorde2.BackColor = Color.Gold
-        PanelBorde2.Location = New Point(3, 124)
+        PanelBorde2.Location = New Point(0, 124)
         PanelBorde2.Name = "PanelBorde2"
-        PanelBorde2.Size = New Size(200, 1)
+        PanelBorde2.Size = New Size(250, 3)
         PanelBorde2.TabIndex = 9
         ' 
         ' PanelBorde1
@@ -167,7 +224,7 @@ Partial Class CAJA
         PanelBorde1.BackColor = Color.Gold
         PanelBorde1.Location = New Point(0, 48)
         PanelBorde1.Name = "PanelBorde1"
-        PanelBorde1.Size = New Size(200, 1)
+        PanelBorde1.Size = New Size(250, 3)
         PanelBorde1.TabIndex = 8
         ' 
         ' LabelRetiro
@@ -175,7 +232,7 @@ Partial Class CAJA
         LabelRetiro.BackColor = SystemColors.ControlDark
         LabelRetiro.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelRetiro.ForeColor = SystemColors.ActiveCaptionText
-        LabelRetiro.Location = New Point(0, 150)
+        LabelRetiro.Location = New Point(0, 225)
         LabelRetiro.Name = "LabelRetiro"
         LabelRetiro.Size = New Size(109, 25)
         LabelRetiro.TabIndex = 7
@@ -186,7 +243,7 @@ Partial Class CAJA
         LabelNUMRetiro.BackColor = SystemColors.ControlDark
         LabelNUMRetiro.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMRetiro.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMRetiro.Location = New Point(130, 150)
+        LabelNUMRetiro.Location = New Point(180, 225)
         LabelNUMRetiro.Name = "LabelNUMRetiro"
         LabelNUMRetiro.Size = New Size(70, 25)
         LabelNUMRetiro.TabIndex = 6
@@ -209,7 +266,7 @@ Partial Class CAJA
         LabelNUMInicio.BackColor = SystemColors.ControlDark
         LabelNUMInicio.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMInicio.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMInicio.Location = New Point(130, 0)
+        LabelNUMInicio.Location = New Point(180, 0)
         LabelNUMInicio.Name = "LabelNUMInicio"
         LabelNUMInicio.Size = New Size(70, 25)
         LabelNUMInicio.TabIndex = 3
@@ -221,7 +278,7 @@ Partial Class CAJA
         LabelCAJA.BackColor = SystemColors.ControlDark
         LabelCAJA.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelCAJA.ForeColor = SystemColors.ActiveCaptionText
-        LabelCAJA.Location = New Point(0, 225)
+        LabelCAJA.Location = New Point(0, 300)
         LabelCAJA.Name = "LabelCAJA"
         LabelCAJA.Size = New Size(137, 25)
         LabelCAJA.TabIndex = 4
@@ -232,7 +289,7 @@ Partial Class CAJA
         LabelNUMVentas.BackColor = SystemColors.ControlDark
         LabelNUMVentas.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMVentas.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMVentas.Location = New Point(130, 75)
+        LabelNUMVentas.Location = New Point(180, 75)
         LabelNUMVentas.Name = "LabelNUMVentas"
         LabelNUMVentas.Size = New Size(70, 25)
         LabelNUMVentas.TabIndex = 2
@@ -255,7 +312,7 @@ Partial Class CAJA
         LabelNUMCaja.BackColor = SystemColors.ControlDark
         LabelNUMCaja.Font = New Font("Candara", 16F, FontStyle.Bold)
         LabelNUMCaja.ForeColor = SystemColors.ActiveCaptionText
-        LabelNUMCaja.Location = New Point(130, 225)
+        LabelNUMCaja.Location = New Point(180, 300)
         LabelNUMCaja.Name = "LabelNUMCaja"
         LabelNUMCaja.Size = New Size(70, 25)
         LabelNUMCaja.TabIndex = 1
@@ -296,6 +353,7 @@ Partial Class CAJA
         ' LabelMensage
         ' 
         LabelMensage.Dock = DockStyle.Fill
+        LabelMensage.Font = New Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         LabelMensage.ForeColor = Color.Black
         LabelMensage.Location = New Point(0, 0)
         LabelMensage.Name = "LabelMensage"
@@ -363,7 +421,6 @@ Partial Class CAJA
     Friend WithEvents PanelFormulario As Panel
     Friend WithEvents PanelDERECHO As Panel
     Friend WithEvents PanelIZQDataGrid As Panel
-    Friend WithEvents DataGridViewCAJA As DataGridView
     Friend WithEvents LabelNUMVentas As Label
     Friend WithEvents LabelNUMCaja As Label
     Friend WithEvents LabelINICIO As Label
@@ -383,5 +440,9 @@ Partial Class CAJA
     Friend WithEvents TimerMensage As Timer
     Friend WithEvents PanelBorde2 As Panel
     Friend WithEvents PanelBorde1 As Panel
+    Friend WithEvents PanelBorde4 As Panel
+    Friend WithEvents DataGridViewCAJA As DataGridView
+    Friend WithEvents LabelTransferencia As Label
+    Friend WithEvents LabelNUMTransferencia As Label
     Friend WithEvents PanelBorde3 As Panel
 End Class

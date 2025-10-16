@@ -45,5 +45,4 @@
     Private Sub formLOGIN_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         TextBoxSubdivision.Focus()
     End Sub
-
 End Class

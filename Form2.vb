@@ -26,6 +26,21 @@
             division = division.ToLower()
             Dim resultado = logica.registrarDivision(division, contraseña)
             If resultado.Exito Then
+
+                Dim continuar As Boolean
+                Dim frm As New Advertencia("¿Desea cargar una lista por defecto de productos?", "Register", False)
+                Dim rest = frm.ShowDialog()
+                If rest = DialogResult.OK Then
+                    continuar = True
+                Else
+                    continuar = False
+                End If
+
+                If continuar Then
+                    logica.cargarSubdivision(division)
+                    logica.CargarListaDefault()
+                End If
+
                 Me.Dispose()
             End If
             If Not resultado.Exito Then
@@ -49,4 +64,5 @@
         info.Visible = False
         PanelInfo.Visible = False
     End Sub
+
 End Class

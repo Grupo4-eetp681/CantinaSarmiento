@@ -4,7 +4,7 @@
     Public Property NoMostrarMas As Boolean = False
 
     ' Constructor que recibe mensaje y origen
-    Public Sub New(mensaje As String, origen As String)
+    Public Sub New(mensaje As String, origen As String, Optional mostrarCheckBox As Boolean = True)
         ' Llamar al diseñador
         InitializeComponent()
 
@@ -13,7 +13,11 @@
 
         ' Guardar de dónde viene (para saber qué advertencia se quiere silenciar)
         _origen = origen
+
+        ' Mostrar u ocultar el CheckBox según el parámetro
+        CheckBoxNoMostrar.Visible = mostrarCheckBox
     End Sub
+
 
     ' Botón Aceptar
     Private Sub BtnAceptar_Click(sender As Object, e As EventArgs) Handles BtnAceptar.Click

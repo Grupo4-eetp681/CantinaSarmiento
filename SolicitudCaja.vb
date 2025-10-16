@@ -61,7 +61,7 @@
                 logica.GuardarEstadoAdvertencia(origen, True)
             End If
         End If
-        logica.ActualizarCaja("Inicio", monto)
+        logica.ActualizarInicio(monto)
         Me.Dispose()
     End Sub
 

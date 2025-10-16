@@ -1,11 +1,112 @@
-﻿Imports System.IO
-Imports PdfSharp.Pdf
-Imports PdfSharp.Drawing
-Imports PdfSharp.Fonts
+﻿Imports System.Drawing.Printing
 
 Public Class ventas
     Dim logica As New LogicaCantina
     Dim calcularVuelto As Boolean = False
+
+    Private Sub responsive()
+        PanelContenedorIZQ.Width = Form1.ContenidoGeneral.Width * 0.7
+
+        Dim altura As Integer = PanelContenedorVentas.Height
+        Dim ancho As Integer = PanelContenedorVentas.Width
+
+        PanelDataVentas.Height = altura * (2 / 3)
+        PanelDataVentas.Width = ancho - 50
+        PanelDataVentas.Location = New Point(25, 0)
+        PanelDataVentas.BringToFront()
+
+        TXTPago.Width = PanelDerechaINFVueltoYPago.Width * 0.3
+        PanelCentrarPago.Width = (TXTPago.Location.X + TXTPago.Width)
+        PanelCentrarVuelto.Width = PanelCentrarPago.Width
+
+        acomodarPagoYVuelto()
+
+        'Acomodar Botones'
+        Dim anchoConjunto As Integer = PanelContenedorButtonVentas.Width
+        Dim centroEspacioDisponible As Integer = PanelDerechaINFButton.Width / 2
+        Dim nuevaX As Integer = centroEspacioDisponible - (anchoConjunto \ 2)
+        PanelContenedorButtonVentas.Location = New Point(nuevaX, PanelContenedorButtonVentas.Location.Y)
+
+        TXTPago.Text = "$ "
+
+        AjustarFuenteLabelMaximo(LabelPago, "PAGO:")
+        AjustarFuenteLabelMaximo(LabelVuelto, "VUELTO:")
+
+        DataGridView1.RowTemplate.Height = 40
+        DataGridVentas.RowTemplate.Height = 30
+
+    End Sub
+
+    Private Sub AjustarFuenteEncabezado(dgv As DataGridView)
+        Dim anchoTotal As Integer = dgv.Width
+
+        ' Tamaños base
+        Dim tamañoMin As Single = 8
+        Dim tamañoMax As Single = 16
+
+        ' Escalado lineal entre 400 y 1000 px de ancho
+        Dim factor As Single = Math.Min(1.0F, Math.Max(0.0F, (anchoTotal - 200) / 350.0F))
+        Dim nuevoTamaño As Single = tamañoMin + (tamañoMax - tamañoMin) * factor
+
+        ' Aplicar estilos
+        dgv.ColumnHeadersDefaultCellStyle.Font = New Font("Candara", nuevoTamaño, FontStyle.Bold)
+        dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+        dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
+    End Sub
+
+
+    Private Sub DataGridView1_Resize(sender As Object, e As EventArgs) Handles DataGridView1.Resize
+        AjustarFuenteEncabezado(DataGridView1)
+    End Sub
+    Private Sub DataGridVentas_Resize(sender As Object, e As EventArgs) Handles DataGridVentas.Resize
+        AjustarFuenteEncabezado(DataGridVentas)
+    End Sub
+
+    Private Sub DataGridView1_KeyDown(sender As Object, e As KeyEventArgs) Handles DataGridView1.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True
+
+            If DataGridView1.CurrentRow IsNot Nothing Then
+                AgregarProductoDesdeFila(DataGridView1.CurrentRow)
+                Busqueda.Clear()
+                Busqueda.Focus()
+            End If
+        End If
+    End Sub
+    Private Sub AgregarProductoDesdeFila(fila As DataGridViewRow)
+        Dim descripcion As String = fila.Cells("Descripción").Value.ToString()
+        Dim precio As Decimal = Convert.ToDecimal(fila.Cells("Precio_Unitario").Value)
+
+        If logica.verificarCaja Then
+            SolicitudCaja.ShowDialog()
+            Return
+        Else
+            Dim encontrado = False
+            For Each filaVenta As DataGridViewRow In DataGridVentas.Rows
+                    If filaVenta.Cells("Descripcion").Value.ToString = descripcion Then
+                        ' Producto ya existe en la grilla de ventas
+                        Dim cantidadActual = Convert.ToInt32(filaVenta.Cells("Cantidad").Value)
+                        cantidadActual += 1
+                        filaVenta.Cells("Cantidad").Value = cantidadActual
+                    filaVenta.Cells("Subtotal").Value = cantidadActual * precio
+                    encontrado = True
+                        Exit For
+                    End If
+                Next
+
+            If Not encontrado Then
+                DataGridVentas.Rows.Add(descripcion, 1, precio)
+
+                Dim nuevaFilaIndex = DataGridVentas.Rows.Count - 1
+
+                DataGridVentas.CurrentCell = DataGridVentas.Rows(nuevaFilaIndex).Cells("Cantidad")
+                DataGridVentas.BeginEdit(True)
+            End If
+        End If
+
+        ActualizarTotal()
+    End Sub
+
     Private Sub Busqueda_TextChanged(sender As Object, e As EventArgs) Handles Busqueda.TextChanged
         If Busqueda.Text() = "" Then
             Dim tb = logica.ObtenerTodosLosProductos()
@@ -14,46 +115,32 @@ Public Class ventas
             Dim tb = logica.FiltrarProductosPorNombre(Busqueda.Text())
             DataGridView1.DataSource = tb
         End If
-
     End Sub
-    Private Sub ventas_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        If GlobalFontSettings.FontResolver Is Nothing Then
-            GlobalFontSettings.FontResolver = New CustomFontResolver()
+    Private Sub Busqueda_KeyDown(sender As Object, e As KeyEventArgs) Handles Busqueda.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            e.SuppressKeyPress = True  ' evita beep
+
+            If DataGridView1.Rows.Count = 1 Then
+                AgregarProductoDesdeFila(DataGridView1.Rows(0))
+                Busqueda.Clear()
+            ElseIf DataGridView1.Rows.Count > 1 Then
+                DataGridView1.Focus()
+                If DataGridView1.Rows.Count > 0 Then
+                    DataGridView1.CurrentCell = DataGridView1.Rows(0).Cells(0)
+                End If
+            End If
         End If
+        Busqueda.Focus()
+    End Sub
+
+    Private Sub ventas_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         logica.cargarSubdivision(Form1.subdivision)
         Dim tb = logica.ObtenerTodosLosProductos()
         DataGridView1.DataSource = tb
 
         PanelContenedorIZQ.Width = Form1.ContenidoGeneral.Width * 0.7
-
-        With DataGridView1
-            .Dock = DockStyle.Fill
-            .AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
-            .RowHeadersVisible = False
-            .AllowUserToAddRows = False
-            .AllowUserToResizeColumns = False
-            .AllowUserToResizeRows = False
-            .AllowUserToOrderColumns = False
-            .SelectionMode = DataGridViewSelectionMode.FullRowSelect
-            .MultiSelect = False
-            .ReadOnly = True
-            .EnableHeadersVisualStyles = False
-            .BackColor = Color.LightGray
-            .ForeColor = Color.Black
-            .CurrentCell = Nothing
-            .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
-            .DefaultCellStyle.SelectionForeColor = .DefaultCellStyle.ForeColor
-            .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-
-            ' Desactiva el resaltado de selección
-            .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
-            .DefaultCellStyle.SelectionForeColor = .DefaultCellStyle.ForeColor
-
-            ' Opcional: desactiva la edición de celdas (aunque .ReadOnly ya lo hace)
-            .EditMode = DataGridViewEditMode.EditProgrammatically
-        End With
 
         With DataGridVentas
             .Dock = DockStyle.Fill
@@ -72,6 +159,8 @@ Public Class ventas
             .DefaultCellStyle.SelectionBackColor = DataGridVentas.DefaultCellStyle.BackColor
             .DefaultCellStyle.SelectionForeColor = DataGridVentas.DefaultCellStyle.ForeColor
             .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            .Font = New Font("Candara", 10)
+            .ColumnHeadersDefaultCellStyle = DataGridView1.ColumnHeadersDefaultCellStyle
 
             ' Desactiva el resaltado de selección
             .DefaultCellStyle.SelectionBackColor = .DefaultCellStyle.BackColor
@@ -88,7 +177,7 @@ Public Class ventas
             .Columns("Descripcion").ReadOnly = True
             .Columns("Subtotal").ReadOnly = True
 
-            x
+
             ' Agregar columna botón solo si no existe aún
             If Not .Columns.Contains("Eliminar") Then
                 Dim btnEliminar As New DataGridViewButtonColumn()
@@ -229,22 +318,22 @@ Public Class ventas
 
     Private Sub DataGridView1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellDoubleClick
 
-        If logica.verificarCaja() Then
+        If logica.verificarCaja Then
             SolicitudCaja.ShowDialog()
             Return
         Else
             If e.RowIndex >= 0 Then
-                Dim filaSeleccionada As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+                Dim filaSeleccionada = DataGridView1.Rows(e.RowIndex)
 
-                Dim descripcion As String = filaSeleccionada.Cells("Descripción").Value.ToString()
-                Dim precioUnitario As Long = Convert.ToInt64(filaSeleccionada.Cells("Precio_Unitario").Value)
+                Dim descripcion = filaSeleccionada.Cells("Descripción").Value.ToString
+                Dim precioUnitario = Convert.ToInt64(filaSeleccionada.Cells("Precio").Value)
 
-                Dim encontrado As Boolean = False
+                Dim encontrado = False
 
                 For Each filaVenta As DataGridViewRow In DataGridVentas.Rows
-                    If filaVenta.Cells("Descripcion").Value.ToString() = descripcion Then
+                    If filaVenta.Cells("Descripcion").Value.ToString = descripcion Then
                         ' Producto ya existe en la grilla de ventas
-                        Dim cantidadActual As Integer = Convert.ToInt32(filaVenta.Cells("Cantidad").Value)
+                        Dim cantidadActual = Convert.ToInt32(filaVenta.Cells("Cantidad").Value)
                         cantidadActual += 1
                         filaVenta.Cells("Cantidad").Value = cantidadActual
                         filaVenta.Cells("Subtotal").Value = cantidadActual * precioUnitario
@@ -257,7 +346,7 @@ Public Class ventas
                     ' Producto no está, lo agregamos nuevo
                     DataGridVentas.Rows.Add(descripcion, 1, precioUnitario)
 
-                    Dim nuevaFilaIndex As Integer = DataGridVentas.Rows.Count - 1
+                    Dim nuevaFilaIndex = DataGridVentas.Rows.Count - 1
 
                     DataGridVentas.CurrentCell = DataGridVentas.Rows(nuevaFilaIndex).Cells("Cantidad")
                     DataGridVentas.BeginEdit(True)
@@ -266,7 +355,6 @@ Public Class ventas
 
             ActualizarTotal()
         End If
-
 
     End Sub
     Private Sub DataGridVentas_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellEndEdit
@@ -293,7 +381,7 @@ Public Class ventas
             ' Lo buscás en el DataGridView1 (productos) para obtener el precio
             For Each filaProducto As DataGridViewRow In DataGridView1.Rows
                 If filaProducto.Cells("Descripción").Value.ToString() = descripcion Then
-                    Dim precioUnitario As Long = Convert.ToInt64(filaProducto.Cells("Precio_Unitario").Value)
+                    Dim precioUnitario As Long = Convert.ToInt64(filaProducto.Cells("Precio").Value)
                     fila.Cells("Subtotal").Value = cantidad * precioUnitario
                     Exit For
                 End If
@@ -345,7 +433,6 @@ Public Class ventas
         End If
 
     End Sub
-
     Private Sub DataGridVentas_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridVentas.CellDoubleClick
         If e.RowIndex >= 0 Then
             DataGridVentas.ClearSelection()
@@ -363,6 +450,9 @@ Public Class ventas
     Private Sub mostrar_mensaje()
         PanelLabel.Visible = True
         LabelMensage.Visible = True
+        BotonFactura.Enabled = False
+        BotonRegistro.Enabled = False
+        BotonTicket.Enabled = False
         TimerMensage.Start()
     End Sub
 
@@ -389,6 +479,11 @@ Public Class ventas
     End Sub
 
     Private Sub BotonRegistro_Click(sender As Object, e As EventArgs) Handles BotonRegistro.Click
+
+        If Form1.botonRegistro = False Then
+            Exit Sub
+        End If
+
         calcularVuelto = False
         If DataGridVentas.Rows.Count = 0 Then
             AjustarFuenteLabelMaximo(LabelMensage, "Lista de venta vacía")
@@ -415,7 +510,11 @@ Public Class ventas
 
         If continuar Then
             Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
-            logica.ActualizarCaja("Ventas", total)
+            If CheckBoxTransferencia.CheckState Then
+                logica.ActualizarCaja("VentasTransferencias", total)
+            Else
+                logica.ActualizarCaja("VentasEfectivo", total)
+            End If
             AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
             mostrar_mensaje()
             registrar_venta()
@@ -449,7 +548,11 @@ Public Class ventas
 
         If continuar Then
             Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
-            logica.ActualizarCaja("Ventas", total)
+            If CheckBoxTransferencia.CheckState Then
+                logica.ActualizarCaja("VentasTransferencias", total)
+            Else
+                logica.ActualizarCaja("VentasEfectivo", total)
+            End If
             AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
             mostrar_mensaje()
             EmitirFacturaTipoC()
@@ -484,7 +587,11 @@ Public Class ventas
 
         If continuar Then
             Dim total As Int128 = Int128.Parse(LabelPrecioTotal.Text.Replace("$", "").Replace(".", "").Replace(",", "").Trim())
-            logica.ActualizarCaja("Ventas", total)
+            If CheckBoxTransferencia.CheckState Then
+                logica.ActualizarCaja("VentasTransferencias", total)
+            Else
+                logica.ActualizarCaja("VentasEfectivo", total)
+            End If
             AjustarFuenteLabelMaximo(LabelMensage, "Venta guardada")
             mostrar_mensaje()
             ImprimirTicketsIndividuales()
@@ -496,6 +603,9 @@ Public Class ventas
     Private Sub TimerMensage_Tick(sender As Object, e As EventArgs) Handles TimerMensage.Tick
         PanelLabel.Visible = False
         LabelMensage.Visible = False
+        BotonFactura.Enabled = True
+        BotonRegistro.Enabled = True
+        BotonTicket.Enabled = True
         TimerMensage.Stop()
     End Sub
 
@@ -525,113 +635,112 @@ Public Class ventas
     End Sub
 
     Private Sub EmitirFacturaTipoC()
-        Dim doc As New PdfDocument()
-        doc.Info.Title = "Factura Tipo C"
-        Dim page As PdfPage = doc.AddPage()
-        Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
-        Dim font As New XFont("Roboto", 12, 0)
+        Dim printDoc As New PrintDocument()
+        AddHandler printDoc.PrintPage, AddressOf ImprimirFactura
+        printDoc.DefaultPageSettings.Margins = New Margins(5, 5, 5, 5) ' 5 px en cada lado
+        printDoc.Print()
+    End Sub
 
-        Dim y As Double = 40
-        gfx.DrawString("FACTURA TIPO C", font, XBrushes.Black, 40, y)
-        y += 25
-        gfx.DrawString("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), font, XBrushes.Black, 40, y)
-        y += 25
-        gfx.DrawString(New String("-"c, 40), font, XBrushes.Black, 40, y)
-        y += 25
+    Private Sub drawFittedText(text As String, baseFont As Font, x As Integer, ByRef yPos As Integer, bold As Boolean, maxWidth As Integer, gfx As Graphics, Optional extraSize As Single = 0)
+        Dim size As Single = baseFont.Size + extraSize
+        Dim style As FontStyle = If(bold, FontStyle.Bold, FontStyle.Regular)
+        Dim fittedFont As Font = New Font(baseFont.FontFamily, size, style)
+
+        ' --- Aumentar hasta llenar el ancho ---
+        While gfx.MeasureString(text, fittedFont).Width < maxWidth AndAlso size < 24 ' tope máximo más grande
+            size += 0.5F
+            fittedFont = New Font(baseFont.FontFamily, size, style)
+        End While
+
+        ' --- Solo reducir si se pasa del ancho ---
+        While gfx.MeasureString(text, fittedFont).Width > maxWidth AndAlso size > 6
+            size -= 0.5F
+            fittedFont = New Font(baseFont.FontFamily, size, style)
+        End While
+
+        ' Dibujar texto
+        gfx.DrawString(text, fittedFont, Brushes.Black, x, yPos)
+        yPos += fittedFont.Height + 2
+    End Sub
+
+    Private Sub drawWrappedText(text As String, baseFont As Font, x As Integer, ByRef yPos As Integer, bold As Boolean, maxWidth As Integer, gfx As Graphics)
+        Dim style As FontStyle = If(bold, FontStyle.Bold, FontStyle.Regular)
+        Dim drawFont As Font = New Font(baseFont.FontFamily, baseFont.Size, style)
+
+        ' Crear un rectángulo para limitar el ancho
+        Dim layoutRect As New RectangleF(x, yPos, maxWidth, 1000) ' 1000 es altura máxima temporal
+        Dim stringFormat As New StringFormat()
+        stringFormat.FormatFlags = StringFormatFlags.LineLimit
+
+        ' Dibujar texto ajustado automáticamente en varias líneas
+        gfx.DrawString(text, drawFont, Brushes.Black, layoutRect, stringFormat)
+
+        ' Calcular altura ocupada y actualizar yPos
+        Dim measuredSize As SizeF = gfx.MeasureString(text, drawFont, maxWidth)
+        yPos += CInt(measuredSize.Height) + 2
+    End Sub
+
+    Private Sub ImprimirFactura(sender As Object, e As PrintPageEventArgs)
+        Dim gfx As Graphics = e.Graphics
+        Dim maxWidth As Integer = e.MarginBounds.Width
+        Dim y As Integer = 4
+        ' Título
+        drawFittedText("TICKET DE COMPRA", New Font("Roboto", 12), 4, y, True, maxWidth, gfx, 4)
+        drawFittedText("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
+        drawFittedText(New String("-"c, 32), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
 
         For Each fila As DataGridViewRow In DataGridVentas.Rows
             If fila.IsNewRow Then Continue For
             Dim linea As String = $"{fila.Cells("Descripcion").Value} x{fila.Cells("Cantidad").Value} - ${fila.Cells("Subtotal").Value}"
-            gfx.DrawString(linea, font, XBrushes.Black, 40, y)
-            y += 20
+            drawWrappedText(linea, New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
         Next
 
-        y += 10
-        gfx.DrawString(New String("-"c, 40), font, XBrushes.Black, 40, y)
-        y += 25
-        gfx.DrawString("TOTAL: " & LabelPrecioTotal.Text, font, XBrushes.Black, 40, y)
+        ' Separador
+        drawFittedText(New String("-"c, 32), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
 
-        ' Guardar el PDF
-        Dim ruta As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"FacturaTipoC_{Date.Now:yyyyMMddHHmmssfff}.pdf")
-        doc.Save(ruta)
-        doc.Close()
-
-        AjustarFuenteLabelMaximo(LabelMensage, "Factura Genarada")
-        mostrar_mensaje()
+        ' Total
+        drawFittedText("TOTAL: " & LabelPrecioTotal.Text, New Font("Roboto", 12), 4, y, True, maxWidth, gfx, 4)
+        drawFittedText(New String("-"c, 32), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
     End Sub
 
     Private Sub ImprimirTicketsIndividuales()
+        ' Recorremos cada fila del DataGrid
         For Each fila As DataGridViewRow In DataGridVentas.Rows
             If fila.IsNewRow Then Continue For
-            Dim descripcion As String = fila.Cells("Descripcion").Value.ToString()
+            Dim descripcion As String = $"{fila.Cells("Descripcion").Value} x{fila.Cells("Cantidad").Value} - ${fila.Cells("Subtotal").Value}"
             Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
+
             For i As Integer = 1 To cantidad
-                Dim doc As New PdfDocument()
-                doc.Info.Title = "Ticket de Retiro"
-                Dim page As PdfPage = doc.AddPage()
-                Dim gfx As XGraphics = XGraphics.FromPdfPage(page)
-                Dim font As New XFont("Roboto", 12, 0)
+                ' Creamos el PrintDocument
+                Dim printDoc As New PrintDocument()
+                AddHandler printDoc.PrintPage, Sub(sender As Object, e As PrintPageEventArgs)
+                                                   Dim gfx As Graphics = e.Graphics
+                                                   Dim maxWidth As Integer = e.MarginBounds.Width
+                                                   Dim y As Integer = 5
 
-                Dim y As Double = 60
-                gfx.DrawString("TICKET DE RETIRO", font, XBrushes.Black, 40, y)
-                y += 30
-                gfx.DrawString("Producto: " & descripcion, font, XBrushes.Black, 40, y)
-                y += 30
-                gfx.DrawString("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), font, XBrushes.Black, 40, y)
+                                                   ' Encabezado del ticket
+                                                   drawFittedText("TICKET DE RETIRO", New Font("Roboto", 12), 4, y, True, maxWidth, gfx, 2)
+                                                   drawWrappedText("Producto: " & descripcion, New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
+                                                   drawFittedText("Fecha: " & Date.Now.ToString("dd/MM/yyyy HH:mm"), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
 
-                Dim nombreArchivo As String = $"Ticket_{descripcion}_{Date.Now:yyyyMMddHHmmssfff}_{i}.pdf"
-                Dim ruta As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), nombreArchivo)
-                doc.Save(ruta)
-                doc.Close()
+                                                   ' Separador
+                                                   drawFittedText(New String("-"c, 32), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
+
+                                                   ' Total
+                                                   drawFittedText("TOTAL: " & LabelPrecioTotal.Text, New Font("Roboto", 10), 4, y, True, maxWidth, gfx, 4)
+                                                   drawFittedText(New String("-"c, 32), New Font("Roboto", 10), 4, y, False, maxWidth, gfx)
+                                               End Sub
+                ' Mandamos a imprimir
+                printDoc.DefaultPageSettings.Margins = New Margins(5, 5, 5, 5) ' 5 px en cada lado
+                printDoc.Print()
             Next
         Next
+
         AjustarFuenteLabelMaximo(LabelMensage, "Tickets Generados")
         mostrar_mensaje()
     End Sub
-End Class
 
-Public Class CustomFontResolver
-    Implements IFontResolver
-
-    Public Function GetFont(faceName As String) As Byte() Implements IFontResolver.GetFont
-        Try
-            If faceName = "Roboto" Then
-                Dim fontPath As String = "C:\ProgramData\CantinaSarmiento\Roboto\static\Roboto-Regular.ttf"
-                If File.Exists(fontPath) Then
-                    Return File.ReadAllBytes(fontPath)
-                Else
-                    Throw New FileNotFoundException("Fuente Roboto no encontrada en " & fontPath)
-                End If
-            ElseIf faceName = "Calibri" Then
-                Dim fontPath As String = "C:\Windows\Fonts\calibri.ttf"
-                If File.Exists(fontPath) Then
-                    Return File.ReadAllBytes(fontPath)
-                Else
-                    Throw New FileNotFoundException("Fuente Calibri no encontrada en " & fontPath)
-                End If
-            End If
-
-        Catch ex As Exception
-            ' Si no encuentra Roboto ni Calibri, forzamos fuente por defecto
-            ' Podrías elegir Arial que siempre está, o dejar que PdfSharp use su default
-            Dim fallbackFont As String = "C:\Windows\Fonts\arial.ttf"
-            If File.Exists(fallbackFont) Then
-                Return File.ReadAllBytes(fallbackFont)
-            End If
-        End Try
-
-        ' Si TODO falla, devolvemos Nothing y PdfSharp usa su fallback interno
-        Return Nothing
-    End Function
-
-    Public Function ResolveTypeface(familyName As String, isBold As Boolean, isItalic As Boolean) As FontResolverInfo Implements IFontResolver.ResolveTypeface
-        If familyName.Equals("Roboto", StringComparison.OrdinalIgnoreCase) Then
-            Return New FontResolverInfo("Roboto")
-        ElseIf familyName.Equals("Calibri", StringComparison.OrdinalIgnoreCase) Then
-            Return New FontResolverInfo("Calibri")
-        End If
-
-        ' Si no coincide con nada, devolvemos fuente del sistema
-        Return New FontResolverInfo("Arial")
-    End Function
+    Private Sub ventas_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+        responsive()
+    End Sub
 End Class

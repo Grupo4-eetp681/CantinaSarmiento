@@ -25,6 +25,8 @@ Partial Class formINVENTARIO
         Dim PanelInventarioContenedor As Panel
         Dim DataGridViewCellStyle1 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As DataGridViewCellStyle = New DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As DataGridViewCellStyle = New DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(formINVENTARIO))
         PanelContenedorDataGridInventario = New Panel()
         DataGridViewInventario = New DataGridView()
@@ -61,28 +63,47 @@ Partial Class formINVENTARIO
         ' 
         ' DataGridViewInventario
         ' 
-        DataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle1.BackColor = SystemColors.Control
-        DataGridViewCellStyle1.Font = New Font("Candara Light", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        DataGridViewCellStyle1.ForeColor = SystemColors.WindowText
-        DataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = DataGridViewTriState.True
-        DataGridViewInventario.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewInventario.AllowUserToAddRows = False
+        DataGridViewInventario.AllowUserToDeleteRows = False
+        DataGridViewInventario.AllowUserToResizeColumns = False
+        DataGridViewInventario.AllowUserToResizeRows = False
+        DataGridViewCellStyle1.BackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
+        DataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(CByte(0), CByte(123), CByte(255))
+        DataGridViewInventario.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewInventario.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = SystemColors.Control
+        DataGridViewCellStyle2.Font = New Font("Candara", 15.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle2.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle2.SelectionBackColor = Color.Transparent
+        DataGridViewCellStyle2.SelectionForeColor = Color.White
+        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.True
+        DataGridViewInventario.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle2
         DataGridViewInventario.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        DataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = SystemColors.Window
-        DataGridViewCellStyle2.Font = New Font("Candara Light", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        DataGridViewCellStyle2.ForeColor = SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText
-        DataGridViewCellStyle2.WrapMode = DataGridViewTriState.False
-        DataGridViewInventario.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle3.BackColor = SystemColors.Window
+        DataGridViewCellStyle3.Font = New Font("Candara", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle3.ForeColor = SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(CByte(0), CByte(123), CByte(255))
+        DataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = DataGridViewTriState.False
+        DataGridViewInventario.DefaultCellStyle = DataGridViewCellStyle3
         DataGridViewInventario.Dock = DockStyle.Fill
         DataGridViewInventario.Location = New Point(0, 0)
         DataGridViewInventario.Name = "DataGridViewInventario"
+        DataGridViewInventario.ReadOnly = True
+        DataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle4.BackColor = SystemColors.Control
+        DataGridViewCellStyle4.Font = New Font("Candara", 12F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        DataGridViewCellStyle4.ForeColor = SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
+        DataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = DataGridViewTriState.True
+        DataGridViewInventario.RowHeadersDefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewInventario.RowHeadersVisible = False
+        DataGridViewInventario.SelectionMode = DataGridViewSelectionMode.FullRowSelect
         DataGridViewInventario.Size = New Size(800, 350)
-        DataGridViewInventario.TabIndex = 0
+        DataGridViewInventario.TabIndex = 2
         ' 
         ' PanelInferior
         ' 
@@ -107,7 +128,7 @@ Partial Class formINVENTARIO
         ' 
         ButtonEliminar.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         ButtonEliminar.FlatStyle = FlatStyle.Flat
-        ButtonEliminar.Font = New Font("Candara", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ButtonEliminar.Font = New Font("Candara", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         ButtonEliminar.Location = New Point(160, 0)
         ButtonEliminar.Name = "ButtonEliminar"
         ButtonEliminar.Size = New Size(110, 35)
@@ -119,7 +140,7 @@ Partial Class formINVENTARIO
         ' 
         ButtonAgregar.BackColor = Color.FromArgb(CByte(255), CByte(203), CByte(0))
         ButtonAgregar.FlatStyle = FlatStyle.Flat
-        ButtonAgregar.Font = New Font("Candara", 14.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        ButtonAgregar.Font = New Font("Candara", 14.25F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         ButtonAgregar.Location = New Point(0, 0)
         ButtonAgregar.Name = "ButtonAgregar"
         ButtonAgregar.Size = New Size(110, 35)
@@ -148,9 +169,9 @@ Partial Class formINVENTARIO
 
     Friend WithEvents PanelInventarioContenedor As Panel
     Friend WithEvents PanelContenedorDataGridInventario As Panel
-    Friend WithEvents DataGridViewInventario As DataGridView
     Friend WithEvents PanelInferior As Panel
     Friend WithEvents ButtonAgregar As Button
     Friend WithEvents ButtonEliminar As Button
     Friend WithEvents PanelButtons As Panel
+    Friend WithEvents DataGridViewInventario As DataGridView
 End Class

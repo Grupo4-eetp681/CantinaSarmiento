@@ -1,8 +1,7 @@
 ﻿Imports System.Runtime.InteropServices
-Imports System.Security.Policy
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Form1
+    Public botonRegistro As Boolean = False
     Public subdivision As String = String.Empty
     Public desplegado As Boolean = False
     Private formularioActual As Form = Nothing
@@ -10,6 +9,8 @@ Public Class Form1
     Private dragging As Boolean = False
     Private dragOffset As Point
     Public inicio As Int128
+    Public OTP As Boolean = False
+    Private estaMaximizado As Boolean = True
 
     ' Esta función le dice a Windows que libere el control del mouse
     <DllImport("user32.dll", EntryPoint:="ReleaseCapture")>
@@ -28,14 +29,45 @@ Public Class Form1
     ' Evento del panel que permite mover el formulario al hacer clic y arrastrar
     Private Sub PanelBarraSuperior_MouseDown(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseDown
         If e.Button = MouseButtons.Left Then
+            If Me.Bounds = Screen.PrimaryScreen.WorkingArea Then
+                ' Obtener posición actual del mouse en pantalla
+                Dim mousePos As Point = Cursor.Position
+
+                ' Restaurar tamaño normal
+                RestaurarPersonalizado()
+
+                ' Reposicionar ventana centrando el cursor en la parte superior del formulario restaurado
+                Me.Location = New Point(mousePos.X - (Me.Width \ 2), mousePos.Y - 10)
+            End If
+
+            ' Ahora sí, permitir mover
             LiberarCapturaMouse()
             EnviarMensajeVentana(Me.Handle, MENSAJE_CLICK_NO_CLIENTE, IDENTIFICADOR_BARRA_TITULO, 0)
-            ' Ya no necesitas activar dragging ni dragOffset
+        End If
+    End Sub
+
+
+    Private Sub MaximizarPersonalizado()
+        If Not estaMaximizado Then
+            Dim pantallaActual As Screen = Screen.FromControl(Me)
+            Me.Bounds = pantallaActual.WorkingArea
+            estaMaximizado = True
+        End If
+    End Sub
+
+    Private Sub RestaurarPersonalizado()
+        If estaMaximizado Then
+            Me.Size = New Size(1280, 720) ' el tamaño que quieras por defecto
+            Me.CenterToScreen()
+            estaMaximizado = False
         End If
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        Dim areaTrabajo As Rectangle = Screen.PrimaryScreen.WorkingArea
+        Me.FormBorderStyle = FormBorderStyle.None
+        Me.Bounds = areaTrabajo
         'Evitar que el usuario pueda usar el tab en los botones de cierre y minimizar'
         ButtonCierreApp.TabStop = False
         ButtonMinimizarApp.TabStop = False
@@ -54,6 +86,7 @@ Public Class Form1
             formLOGIN.ShowDialog()
         End If
         logica.cargarSubdivision(subdivision)
+        logica.verificarBaseDeDatos()
     End Sub
 
     Private Sub ButtonCierreApp_Click(sender As Object, e As EventArgs) Handles ButtonCierreApp.Click
@@ -63,12 +96,7 @@ Public Class Form1
 
     Private Sub ButtonMinimizarApp_Click(sender As Object, e As EventArgs) Handles ButtonMinimizarApp.Click
         'Minimizar la ventana'
-        WindowState = FormWindowState.Minimized
-    End Sub
-
-    Private Sub TimerHORA_Tick(sender As Object, e As EventArgs) Handles TimerHORA.Tick
-        'Cambiar la hora del label'
-        LabelHORA.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
+        Me.WindowState = FormWindowState.Minimized
     End Sub
     Public Function ObtenerValorNumerico(textoFormateado As String) As Integer
         Dim limpio = textoFormateado.Replace("$", "").Replace(".", "").Trim()
@@ -91,18 +119,18 @@ Public Class Form1
     End Sub
 
     Private Sub ButtonMaximizarApp_Click(sender As Object, e As EventArgs) Handles ButtonMaximizarApp.Click
-        If WindowState = FormWindowState.Normal Then
-            WindowState = FormWindowState.Maximized
+        If Not estaMaximizado Then
+            MaximizarPersonalizado()
         Else
-            WindowState = FormWindowState.Normal
+            RestaurarPersonalizado()
         End If
     End Sub
 
     Private Sub PanelBarraSuperior_MouseMove(sender As Object, e As MouseEventArgs) Handles PanelBarraSuperior.MouseMove
         ' Si quieres maximizar al llegar arriba, puedes hacerlo así:
         Dim screenPos As Point = PanelBarraSuperior.PointToScreen(e.Location)
-        If screenPos.Y <= 0 And Me.WindowState <> FormWindowState.Maximized Then
-            Me.WindowState = FormWindowState.Maximized
+        If screenPos.Y <= 0 And Not estaMaximizado Then
+            MaximizarPersonalizado()
         End If
     End Sub
 
@@ -157,6 +185,23 @@ Public Class Form1
     End Sub
 
     Private Sub BotonImportar_Click(sender As Object, e As EventArgs) Handles BotonImportar.Click
+        logica.OrigenTienePrioridad = OTP
         logica.ImportarProductos()
+    End Sub
+
+    Private Sub Form1_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        MaximizarPersonalizado()
+    End Sub
+
+    Private Sub CambiarInicioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CambiarInicioToolStripMenuItem.Click
+        SolicitudCaja.ShowDialog()
+    End Sub
+
+    Private Sub HabilitarDeshabilitarRegistroToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HabilitarDeshabilitarRegistroToolStripMenuItem.Click
+        If botonRegistro Then
+            botonRegistro = False
+        Else
+            botonRegistro = True
+        End If
     End Sub
 End Class
