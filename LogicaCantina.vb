@@ -5,22 +5,53 @@ Imports PdfSharp.Drawing
 Imports PdfSharp.Fonts
 Imports PdfSharp.Pdf
 
+''' <summary>
+''' Clase principal que gestiona la lógica de negocio de la Cantina Sarmiento.
+''' Maneja operaciones de base de datos, ventas, productos, caja y generación de reportes PDF.
+''' </summary>
 Public Class LogicaCantina
+    '==================================
+    ' VARIABLES GLOBALES
+    '==================================
+    ' Identificador de la subdivisión actualmente cargada
     Public subdivision As String = String.Empty
+    
+    ' Ruta base del sistema para guardar datos de la aplicación
     Public programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+    
+    ' Ruta del directorio donde se guardan todas las bases de datos de CantinaSarmiento
     Public cantinaSarmientoPath As String = Path.Combine(programDataPath, "CantinaSarmiento")
+    
+    ' Ruta a la base de datos de usuarios (administración de divisiones y credenciales)
     Public baseDeDatosUsuarios = Path.Combine(cantinaSarmientoPath, "CantinaSarmiento.db")
+    
+    ' Ruta a la base de datos específica de la subdivisión cargada
     Public baseDeDatos As String = String.Empty
+    
+    ' Bandera que define la prioridad en importaciones: si True, el archivo importado tiene prioridad
     Public OrigenTienePrioridad As Boolean = False
 
+    ''' <summary>
+    ''' Carga una subdivisión específica y establece la conexión a su base de datos.
+    ''' </summary>
+    ''' <param name="division">Nombre de la subdivisión a cargar.</param>
     Public Sub cargarSubdivision(division As String)
+        ' Asignar la subdivisión actual
         subdivision = division
+        
+        ' Construir la ruta de la base de datos basada en la subdivisión
         baseDeDatos = Path.Combine(cantinaSarmientoPath, $"{subdivision}_CantinaSarmiento.db")
+        
+        ' Verificar que la base de datos existe; si no, crearla con tablas iniciales
         verificarBaseDeDatos()
     End Sub
-
+    ''' <summary>
+    ''' Carga la lista de productos por defecto (inventario inicial) en la base de datos.
+    ''' Cada producto incluye descripción, precio de venta y precio de costo.
+    ''' </summary>
     Public Sub CargarListaDefault()
-        Dim productos As (String, Double, Double)() = {
+        ' Array de tuplas (Descripción, Precio Venta, Precio Costo)
+        Dim productos As (String, Double, Double)() = { 
         ("Carpa", 12000, 0),
         ("Casilla", 20000, 0),
         ("Tablon", 10000, 0),
@@ -122,37 +153,35 @@ Public Class LogicaCantina
         ("Pipas", 500, 0),
         ("Alfajor rasta", 2000, 0)
     }
-
-        Using conn As SQLiteConnection = ObtenerConexion()
-        For Each prod In productos
-            Dim desc As String = prod.Item1
-            Dim venta As Double = prod.Item2
-            Dim costo As Double = prod.Item3
-            Dim ganancia As Double = venta - costo
+        Using conn As SQLiteConnection = ObtenerConexion() ' abrir conexión a la base de datos
+        For Each prod In productos 
+            Dim desc As String = prod.Item1 ' descripción del producto
+            Dim venta As Double = prod.Item2 ' precio de venta
+            Dim costo As Double = prod.Item3 ' precio de costo
+            Dim ganancia As Double = venta - costo ' calcular ganancia
 
             Dim query As String = "INSERT OR IGNORE INTO Producto (Descripcion, PrecioVenta, PrecioCosto, Ganancia) 
-                                   VALUES (@desc, @venta, @costo, @ganancia)"
-            Using cmd As New SQLiteCommand(query, conn)
-                cmd.Parameters.AddWithValue("@desc", desc)
-                cmd.Parameters.AddWithValue("@venta", venta)
-                cmd.Parameters.AddWithValue("@costo", costo)
-                cmd.Parameters.AddWithValue("@ganancia", ganancia)
-                cmd.ExecuteNonQuery()
+                                   VALUES (@desc, @venta, @costo, @ganancia)" ' consulta SQL para insertar el producto
+            Using cmd As New SQLiteCommand(query, conn) ' crear comando SQL
+                cmd.Parameters.AddWithValue("@desc", desc) ' agregar parámetros
+                cmd.Parameters.AddWithValue("@venta", venta) ' agregar parámetros
+                cmd.Parameters.AddWithValue("@costo", costo) ' agregar parámetros
+                cmd.Parameters.AddWithValue("@ganancia", ganancia) ' agregar parámetros
+                cmd.ExecuteNonQuery() ' ejecutar el comando
             End Using
         Next
-    End Using
-End Sub
-
+        End Using
+    End Sub
 
     Public Sub verificarBaseDeDatos()
         If Not Directory.Exists(cantinaSarmientoPath) Then
-            Directory.CreateDirectory(cantinaSarmientoPath)
+            Directory.CreateDirectory(cantinaSarmientoPath) ' crear el directorio si no existe
         End If
 
         If Not File.Exists(baseDeDatos) Then
-            SQLiteConnection.CreateFile(baseDeDatos)
-            Using conn As SQLiteConnection = ObtenerConexion()
-                ' Crear todas las tablas desde cero
+            SQLiteConnection.CreateFile(baseDeDatos) ' crear la base de datos si no existe
+            Using conn As SQLiteConnection = ObtenerConexion() ' abrir conexión a la base de datos 
+                ' Crear tablas necesarias
                 Dim createProductoTable As String = "CREATE TABLE IF NOT EXISTS Producto (" &
                 "IdProducto INTEGER PRIMARY KEY AUTOINCREMENT, " &
                 "Descripcion TEXT UNIQUE, " &
@@ -186,10 +215,9 @@ End Sub
                 createAdvertenciasTable,
                 createCajaTable
             }
-
                 For Each sql As String In tablas
                     Using cmd As New SQLiteCommand(sql, conn)
-                        cmd.ExecuteNonQuery()
+                        cmd.ExecuteNonQuery() ' ejecutar el comando para crear la tabla
                     End Using
                 Next
             End Using
@@ -207,22 +235,20 @@ End Sub
                 ' Eliminar la tabla Inicio si existe (ya no la necesitamos)
                 Dim dropInicio As String = "DROP TABLE IF EXISTS Inicio"
                 Using cmdDrop As New SQLiteCommand(dropInicio, conn)
-                    cmdDrop.ExecuteNonQuery()
+                    cmdDrop.ExecuteNonQuery() ' ejecutar el comando para eliminar la tabla
                 End Using
-
                 For Each tabla In tablasEsperadas
                     Dim existeTabla As Boolean = False
-                    Dim queryTabla As String = "SELECT name FROM sqlite_master WHERE type='table' AND name=@tabla"
-                    Using cmd As New SQLiteCommand(queryTabla, conn)
-                        cmd.Parameters.AddWithValue("@tabla", tabla.Key)
-                        Using reader = cmd.ExecuteReader()
-                            existeTabla = reader.HasRows
-                        End Using
+                    Dim queryTabla As String = "SELECT name FROM sqlite_master WHERE type='table' AND name=@tabla" ' consulta para verificar si la tabla existe
+                    Using cmd As New SQLiteCommand(queryTabla, conn) ' crear comando SQL
+                        cmd.Parameters.AddWithValue("@tabla", tabla.Key) ' agregar parámetro
+                        Using reader = cmd.ExecuteReader() ' ejecutar el comando
+                            existeTabla = reader.HasRows ' verificar si la tabla existe
+                        End Using 
                     End Using
-
                     If Not existeTabla Then
                         ' Crear la tabla si no existe
-                        Dim createTableSql As String = ""
+                        Dim createTableSql As String = "" ' consulta para crear la tabla
                         Select Case tabla.Key
                             Case "Producto"
                                 createTableSql = "CREATE TABLE IF NOT EXISTS Producto (" &
@@ -253,33 +279,29 @@ End Sub
                                 "Total REAL)"
                         End Select
                         Using cmd As New SQLiteCommand(createTableSql, conn)
-                            cmd.ExecuteNonQuery()
+                            cmd.ExecuteNonQuery() ' ejecutar el comando para crear la tabla
                         End Using
                     Else
                         ' Verificar y agregar columnas faltantes
-                        Dim columnasFaltantes As New List(Of String)
-                        Dim queryColumnas As String = $"PRAGMA table_info({tabla.Key})"
-                        Dim columnasActuales As New List(Of String)
-
-                        Using cmd As New SQLiteCommand(queryColumnas, conn)
-                            Using reader = cmd.ExecuteReader()
-                                While reader.Read()
-                                    columnasActuales.Add(reader("name").ToString())
+                        Dim columnasFaltantes As New List(Of String) ' lista de columnas faltantes
+                        Dim queryColumnas As String = $"PRAGMA table_info({tabla.Key})" ' consulta para obtener las columnas de la tabla
+                        Dim columnasActuales As New List(Of String) ' lista de columnas actuales
+                        Using cmd As New SQLiteCommand(queryColumnas, conn) ' crear comando SQL
+                            Using reader = cmd.ExecuteReader() ' ejecutar el comando
+                                While reader.Read() ' leer las columnas
+                                    columnasActuales.Add(reader("name").ToString()) ' agregar el nombre de la columna a la lista
                                 End While
                             End Using
                         End Using
-
                         For Each columnaEsperada In tabla.Value
                             If Not columnasActuales.Contains(columnaEsperada) Then
-                                columnasFaltantes.Add(columnaEsperada)
+                                columnasFaltantes.Add(columnaEsperada) ' agregar la columna faltante a la lista
                             End If
                         Next
-
                         ' Agregar las columnas faltantes
                         For Each columna In columnasFaltantes
-                            Dim tipoColumna As String = "REAL"
-                            Dim defaultValue As String = ""
-
+                            Dim tipoColumna As String = "REAL" ' tipo de dato por defecto
+                            Dim defaultValue As String = "" ' valor por defecto vacío
                             Select Case columna
                                 Case "Id", "IdProducto", "IdVenta", "Cantidad"
                                     tipoColumna = "INTEGER"
@@ -291,58 +313,53 @@ End Sub
                                 Case "PrecioVenta", "PrecioCosto", "Ganancia", "Subtotal", "Inicio", "Retiros", "VentasEfectivo", "VentasTransferencias", "Total"
                                     tipoColumna = "REAL"
                             End Select
-
                             Dim alterSql As String = $"ALTER TABLE {tabla.Key} ADD COLUMN {columna} {tipoColumna}{defaultValue}"
                             Try
                                 Using cmd As New SQLiteCommand(alterSql, conn)
-                                    cmd.ExecuteNonQuery()
+                                    cmd.ExecuteNonQuery() ' ejecutar el comando para agregar la columna
                                 End Using
                             Catch ex As Exception
                                 ' Ignorar errores de columnas que ya existen
-                                Console.WriteLine($"Advertencia al agregar columna {columna}: {ex.Message}")
+                                Console.WriteLine($"Advertencia al agregar columna {columna}: {ex.Message}") ' mostrar advertencia
                             End Try
                         Next
                     End If
                 Next
-
                 ' Verificar y aplicar constrains únicos si es necesario
                 Try
                     ' Para la tabla Advertencias, asegurar que Origen sea UNIQUE
-                    Dim checkUnique As String = "SELECT sql FROM sqlite_master WHERE type='table' AND name='Advertencias'"
-                    Using cmd As New SQLiteCommand(checkUnique, conn)
-                        Dim tableSql As String = cmd.ExecuteScalar()?.ToString()
+                    Dim checkUnique As String = "SELECT sql FROM sqlite_master WHERE type='table' AND name='Advertencias'" ' consulta para verificar el constraint UNIQUE
+                    Using cmd As New SQLiteCommand(checkUnique, conn) ' crear comando SQL
+                        Dim tableSql As String = cmd.ExecuteScalar()?.ToString() ' ejecutar el comando
                         If Not String.IsNullOrEmpty(tableSql) AndAlso Not tableSql.Contains("UNIQUE") Then
-                            ' Si no tiene el constraint UNIQUE, crear índice único
-                            Dim createUniqueIndex As String = "CREATE UNIQUE INDEX IF NOT EXISTS idx_advertencias_origen ON Advertencias(Origen)"
-                            Using cmdIndex As New SQLiteCommand(createUniqueIndex, conn)
-                                cmdIndex.ExecuteNonQuery()
+                            Dim createUniqueIndex As String = "CREATE UNIQUE INDEX IF NOT EXISTS idx_advertencias_origen ON Advertencias(Origen)" ' consulta para crear el índice único
+                            Using cmdIndex As New SQLiteCommand(createUniqueIndex, conn) ' crear comando SQL
+                                cmdIndex.ExecuteNonQuery()  
                             End Using
                         End If
                     End Using
                 Catch ex As Exception
-                    ' Ignorar errores de índices
-                    Console.WriteLine($"Advertencia al crear índice único: {ex.Message}")
                 End Try
             End Using
         End If
     End Sub
 
     Public Sub guardarSesion(division As String)
-        Using conn As SQLiteConnection = ObtenerConexionUsuario()
-            Dim deleteQuery As String = "DELETE FROM sesion"
+        Using conn As SQLiteConnection = ObtenerConexionUsuario() ' abrir conexión a la base de datos de usuarios
+            Dim deleteQuery As String = "DELETE FROM sesion" ' consulta para eliminar las sesion preexistente
             Using deleteCmd As New SQLiteCommand(deleteQuery, conn)
-                deleteCmd.ExecuteNonQuery()
+                deleteCmd.ExecuteNonQuery() 
             End Using
-            Dim insertQuery As String = "INSERT INTO sesion (division) VALUES (@division)"
+            Dim insertQuery As String = "INSERT INTO sesion (division) VALUES (@division)" ' insertar la nueva sesion
             Using insertCmd As New SQLiteCommand(insertQuery, conn)
                 insertCmd.Parameters.AddWithValue("@division", division)
                 insertCmd.ExecuteNonQuery()
             End Using
         End Using
     End Sub
-
+    ' Contar cuantas sesiones hay activas
     Public Function verificarSesion() As Boolean
-        Using conn As SQLiteConnection = ObtenerConexionUsuario()
+        Using conn As SQLiteConnection = ObtenerConexionUsuario() 
             Dim query As String = "SELECT division FROM sesion LIMIT 1"
             Using cmd As New SQLiteCommand(query, conn)
                 Dim result = cmd.ExecuteScalar()
@@ -355,7 +372,7 @@ End Sub
             End Using
         End Using
     End Function
-
+    ' Verificar la base de datos que contiene a los usuarios y la sesion
     Public Sub verificarBaseDeDatosUsuarios()
         If Not Directory.Exists(cantinaSarmientoPath) Then
             Directory.CreateDirectory(cantinaSarmientoPath)
@@ -377,13 +394,14 @@ End Sub
             End Using
         End If
     End Sub
+    ' Funcion que nos devuelve la conexion a la base de datos
     Public Function ObtenerConexion() As SQLiteConnection
         Dim connectionString As String = $"Data Source={baseDeDatos};Version=3;"
         Dim conn As New SQLiteConnection(connectionString)
         conn.Open()
         Return conn
     End Function
-
+    ' Obtener la conexion a la base de datos de usuarios
     Public Function ObtenerConexionUsuario() As SQLiteConnection
         verificarBaseDeDatosUsuarios()
         Dim connectionString As String = $"Data Source={baseDeDatosUsuarios};Version=3;"
@@ -391,10 +409,11 @@ End Sub
         conn.Open()
         Return conn
     End Function
-
+    ' Validar si el login fue correcto o no
     Public Function ValidarLogin(division As String, contraseña As String) As (Exito As Boolean, Motivo As String)
         Try
             Using SQLiteConnection As SQLiteConnection = ObtenerConexionUsuario()
+                ' Consultar si existe un usuario con la división y contraseña especificadas
                 Dim query As String = "SELECT COUNT(*) FROM usuarios WHERE Division = @Division AND Contraseña = @Contraseña"
                 Using command As New SQLiteCommand(query, SQLiteConnection)
                     command.Parameters.AddWithValue("@Division", division)
@@ -403,7 +422,7 @@ End Sub
                     If count > 0 Then
                         Return (True, "")
                     Else
-                        ' Puedes mejorar el motivo según la lógica que desees
+                        ' Credenciales no coinciden
                         Return (False, "Los datos no coinciden con los registros")
                     End If
                 End Using
@@ -412,10 +431,11 @@ End Sub
             Return (False, "Error al validar el login: " & ex.Message)
         End Try
     End Function
-
+    ' Registrar las divisiones
     Public Function registrarDivision(division As String, contraseña As String) As (Exito As Boolean, Motivo As String)
         Try
             Using SQLiteConnection As SQLiteConnection = ObtenerConexionUsuario()
+                ' Verificar si la división ya existe
                 Dim query As String = "SELECT COUNT(*) FROM usuarios WHERE Division = @Division"
                 Using command As New SQLiteCommand(query, SQLiteConnection)
                     command.Parameters.AddWithValue("@Division", division)
@@ -424,6 +444,8 @@ End Sub
                         Return (False, "La división ya existe")
                     End If
                 End Using
+                
+                ' Insertar nueva división
                 query = "INSERT INTO usuarios (Division, Contraseña) VALUES (@Division, @Contraseña)"
                 Using command As New SQLiteCommand(query, SQLiteConnection)
                     command.Parameters.AddWithValue("@Division", division)
@@ -436,7 +458,7 @@ End Sub
             Return (False, "Error al registrar la división: " & ex.Message)
         End Try
     End Function
-
+    ' Obtener todos los productos de la tabla productos
     Public Function ObtenerTodosLosProductos() As DataTable
         Dim dt As New DataTable()
         Try
@@ -453,7 +475,7 @@ End Sub
         End Try
         Return dt
     End Function
-
+    ' Obtener todos los productos que coincidan con la descripcion
     Public Function FiltrarProductosPorNombre(nombre As String) As DataTable
         Dim dt As New DataTable()
         Try
@@ -471,7 +493,7 @@ End Sub
         End Try
         Return dt
     End Function
-
+    ' Registrar la venta
     Public Sub RegistrarVentas(filas As List(Of (Descripcion As String, Cantidad As Integer, Subtotal As Integer, Fecha As Date)))
         Using conn As SQLiteConnection = ObtenerConexion()
             For Each venta In filas
@@ -486,7 +508,7 @@ End Sub
             Next
         End Using
     End Sub
-
+    ' Cerrar la sesion
     Public Sub cerrarSesion()
         Using conn As SQLiteConnection = ObtenerConexionUsuario()
             Dim deleteQuery As String = "DELETE FROM sesion"
@@ -495,7 +517,7 @@ End Sub
             End Using
         End Using
     End Sub
-
+    ' Obtener todas las ventas
     Public Function obtenerVentas() As DataTable
         Dim dt As New DataTable()
         Using conn As SQLiteConnection = ObtenerConexion()
@@ -509,7 +531,6 @@ End Sub
         End Using
         Return dt
     End Function
-
     ' Verifica si existe una advertencia registrada y devuelve el estado
     Public Function ObtenerEstadoAdvertencia(origen As String) As Boolean
         Using conn As SQLiteConnection = ObtenerConexion()
@@ -525,7 +546,6 @@ End Sub
         End Using
         Return False ' Por defecto, mostrar
     End Function
-
     ' Inserta o actualiza una advertencia
     Public Sub GuardarEstadoAdvertencia(origen As String, noMostrar As Boolean)
         Using conn As SQLiteConnection = ObtenerConexion()
@@ -542,7 +562,7 @@ End Sub
             End Using
         End Using
     End Sub
-
+    ' Cambiar el estado de advertencia de todas las advertencias a 0 (false)
     Public Sub advertenciasFalse()
         Using conn As SQLiteConnection = ObtenerConexion()
             Dim query As String = "UPDATE Advertencias SET NoMostrar = 0"
@@ -551,7 +571,7 @@ End Sub
             End Using
         End Using
     End Sub
-
+    ' Funcion para cambiar el valor de inicio de caja
     Public Sub ActualizarInicio(valor As Double)
         Using conn As SQLiteConnection = ObtenerConexion()
             ' Primero verificamos si hay registro en Caja
@@ -564,7 +584,6 @@ End Sub
                     idRegistro = Convert.ToInt32(result)
                 End If
             End Using
-
             ' Si no existe, lo creamos vacío
             If Not existeRegistro Then
                 Dim insertSql As String = "INSERT INTO Caja (Inicio, Retiros, VentasEfectivo, VentasTransferencias, Total) VALUES (0, 0, 0, 0, 0)"
@@ -573,7 +592,6 @@ End Sub
                 End Using
                 idRegistro = CInt(conn.LastInsertRowId)
             End If
-
             ' Actualizamos la columna sumando el valor
             Dim updateSql As String = $"UPDATE Caja SET Inicio = IFNULL({valor}, 0)"
             Using cmd As New SQLiteCommand(updateSql, conn)
@@ -584,10 +602,9 @@ End Sub
         End Using
         ActualizarCaja("Inicio", 0)
     End Sub
-
+    ' Cambiar los valores de la caja en la base de datos
     Public Sub ActualizarCaja(columna As String, valor As Double)
         Using conn As SQLiteConnection = ObtenerConexion()
-
             ' Primero verificamos si hay registro en Caja
             Dim existeRegistro As Boolean = False
             Dim idRegistro As Integer = -1
@@ -598,7 +615,6 @@ End Sub
                     idRegistro = Convert.ToInt32(result)
                 End If
             End Using
-
             ' Si no existe, lo creamos vacío
             If Not existeRegistro Then
                 Dim insertSql As String = "INSERT INTO Caja (Inicio, Retiros, VentasEfectivo, VentasTransferencia, Total) VALUES (0, 0, 0, 0, 0)"
@@ -607,7 +623,6 @@ End Sub
                 End Using
                 idRegistro = CInt(conn.LastInsertRowId)
             End If
-
             ' Actualizamos la columna sumando el valor
             Dim updateSql As String = $"UPDATE Caja SET {columna} = IFNULL({columna}, 0) + @valor WHERE Id=@id"
             Using cmd As New SQLiteCommand(updateSql, conn)
@@ -615,7 +630,6 @@ End Sub
                 cmd.Parameters.AddWithValue("@id", idRegistro)
                 cmd.ExecuteNonQuery()
             End Using
-
             ' Recalcular el total
             Dim recalcularSql As String = "UPDATE Caja SET Total = IFNULL(Inicio,0) - IFNULL(Retiros,0) + IFNULL(VentasEfectivo,0) + IFNULL(VentasTransferencias,0) WHERE Id=@id"
             Using cmd As New SQLiteCommand(recalcularSql, conn)
@@ -624,7 +638,7 @@ End Sub
             End Using
         End Using
     End Sub
-
+    ' Obtener los valores de la caja
     Public Function obtenerCaja() As (Inicio As Double, Retiros As Double, Ventas As Double, Transferencias As Double, Total As Double)
         Using conn As SQLiteConnection = ObtenerConexion()
             Dim query As String = "SELECT Inicio, Retiros, VentasEfectivo, VentasTransferencias, Total FROM Caja LIMIT 1"
@@ -643,7 +657,7 @@ End Sub
         End Using
         Return (0, 0, 0, 0, 0)
     End Function
-
+    ' Generar el PDF de cierre de caja
     Public Sub GenerarCierreCajaPDF(DataGridViewCAJA As DataGridView)
         GlobalFontSettings.FontResolver = New CustomFontResolver()
         Dim font As New XFont("Calibri", 12)
@@ -656,7 +670,6 @@ End Sub
         Dim fontTitulo As New XFont("Helvetica", 14)
         Dim fontNormal As New XFont("Helvetica", 10)
         Dim fontResaltado As New XFont("Helvetica", 11)
-
         Dim y As Double = 40
         gfx.DrawString("CIERRE DE CAJA", fontTitulo, XBrushes.Black, 40, y)
         y += 25
@@ -664,19 +677,15 @@ End Sub
         y += 25
         gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
         y += 25
-
         Dim totalVentas As Double = 0
         Dim totalGanancia As Double = 0
-
         ' --- Detalle de cada venta ---
         Using conn As SQLiteConnection = ObtenerConexion()
             For Each fila As DataGridViewRow In DataGridViewCAJA.Rows
                 If fila.IsNewRow Then Continue For
-
                 Dim descripcion As String = fila.Cells("Descripción").Value.ToString()
                 Dim cantidad As Integer = Convert.ToInt32(fila.Cells("Cantidad").Value)
                 Dim subtotal As Double = Convert.ToDouble(fila.Cells("Subtotal").Value)
-
                 ' Obtener ganancia del producto desde la base de datos
                 Dim gananciaProducto As Double = 0
                 Using cmd As New SQLiteCommand("SELECT Ganancia FROM Producto WHERE Descripcion=@desc", conn)
@@ -686,35 +695,28 @@ End Sub
                         gananciaProducto = Convert.ToDouble(result)
                     End If
                 End Using
-
                 Dim subtotalGanancia As Double = gananciaProducto * cantidad
                 totalGanancia += subtotalGanancia
-
                 Dim linea As String = $"{descripcion} x{cantidad} - ${subtotal:N0} (Ganancia: ${subtotalGanancia:N0})"
-
                 ' --- Salto de página automático ---
                 If y + 20 > page.Height.Point - 40 Then
                     page = doc.AddPage()
                     gfx = XGraphics.FromPdfPage(page)
                     y = 40 ' Reiniciar posición en la nueva página
                 End If
-
                 ' Dibujar línea
                 gfx.DrawString(linea, fontNormal, XBrushes.Black, 40, y)
                 y += 20
             Next
         End Using
-
         y += 10
         gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
         y += 25
-
         ' --- Resumen por producto ---
         gfx.DrawString("RESUMEN DE VENTAS POR PRODUCTO", fontResaltado, XBrushes.Black, 40, y)
         y += 25
         gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
         y += 25
-
         ' Agrupar y contar productos
         Dim resumenVentas As New Dictionary(Of String, (Cantidad As Integer, Total As Double))
         For Each fila As DataGridViewRow In DataGridViewCAJA.Rows
@@ -728,24 +730,19 @@ End Sub
                 resumenVentas(descripcion) = (cantidad, subtotal)
             End If
         Next
-
         For Each kvp In resumenVentas
-
             If y + 20 > page.Height.Point - marginBottom Then
                 page = doc.AddPage()
                 gfx = XGraphics.FromPdfPage(page)
                 y = 40 ' reiniciar posición en la nueva página
             End If
-
             Dim lineaResumen As String = $"{kvp.Key} - Cantidad total: {kvp.Value.Cantidad} - Total vendido: ${kvp.Value.Total:N0}"
             gfx.DrawString(lineaResumen, fontNormal, XBrushes.Black, 40, y)
             y += 20
         Next
-
         y += 10
         gfx.DrawString(New String("-"c, 80), fontNormal, XBrushes.Black, 40, y)
         y += 25
-
         ' --- Totales desde la tabla Caja ---
         Using conn As SQLiteConnection = ObtenerConexion()
             Dim cmd As New SQLiteCommand("SELECT Inicio, Retiros, VentasEfectivo, VentasTransferencias, Total FROM Caja LIMIT 1", conn)
@@ -756,7 +753,6 @@ End Sub
                     Dim ventas As Double = Convert.ToDouble(reader("VentasEfectivo"))
                     Dim transferencias As Double = Convert.ToDouble(reader("VentasTransferencias"))
                     Dim total As Double = Convert.ToDouble(reader("Total"))
-
                     gfx.DrawString($"Dinero inicial: ${inicio:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
                     gfx.DrawString($"Ventas en efectivo: ${ventas:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
                     gfx.DrawString($"Ventas por transferencia: ${transferencias:N0}", fontNormal, XBrushes.Black, 40, y) : y += 20
@@ -765,15 +761,13 @@ End Sub
                 End If
             End Using
         End Using
-
         gfx.DrawString($"Ganancia total: ${totalGanancia:N0}", fontResaltado, XBrushes.Black, 40, y)
-
         Dim fechayhora As String = Date.Now.ToString("yyyyMMdd_HHmmss")
         Dim ruta As String = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "CierreCaja_" + fechayhora + ".pdf")
         doc.Save(ruta)
         doc.Close()
     End Sub
-
+    ' Eliminar el registro de caja y ventas
     Public Sub CerrarCaja()
         Using conn As SQLiteConnection = ObtenerConexion()
             ' Borrar todos los registros de Ventas
@@ -786,7 +780,7 @@ End Sub
             End Using
         End Using
     End Sub
-
+    ' Actualizar los datos de un producto
     Public Function ActualizarProducto(idProducto As Integer, descripcion As String, precioVenta As Double, precioCosto As Double) As Integer
         Dim ganancia As Double = precioVenta - precioCosto
         Using conn As SQLiteConnection = ObtenerConexion()
@@ -801,7 +795,7 @@ End Sub
             End Using
         End Using
     End Function
-
+    ' Obtener todos los productos para el inventario
     Public Function ObtenerTodosLosProductosInventario() As DataTable
         Dim dt As New DataTable()
         Try
@@ -818,7 +812,6 @@ End Sub
         End Try
         Return dt
     End Function
-
     ' INSERTAR PRODUCTO VACÍO Y DEVOLVER EL ID
     Public Function InsertarProductoVacio() As Integer
         Using conn As SQLiteConnection = ObtenerConexion()
@@ -826,14 +819,11 @@ End Sub
                 "INSERT INTO Producto (Descripcion, PrecioVenta, PrecioCosto, Ganancia) 
              VALUES ('', 0, 0, 0); 
              SELECT last_insert_rowid();"
-
             Using cmd As New SQLiteCommand(query, conn)
                 Return Convert.ToInt32(cmd.ExecuteScalar())
             End Using
         End Using
     End Function
-
-
     ' ELIMINAR PRODUCTO POR ID
     Public Sub EliminarProducto(idProducto As Integer)
         Using conn As SQLiteConnection = ObtenerConexion()
@@ -844,7 +834,7 @@ End Sub
             End Using
         End Using
     End Sub
-
+    ' Verificar si hay un registro de caja
     Public Function verificarCaja() As Boolean
         Using conn As SQLiteConnection = ObtenerConexion()
             Dim query As String = "SELECT COUNT(*) FROM Caja"
@@ -858,8 +848,8 @@ End Sub
             End Using
         End Using
     End Function
-
-    Public Sub ExportarProductos()
+    ' Exportar la lista de productos
+    Public Sub ExportarProductos()  
         Try
             ' Obtener los datos usando tu función existente
             Dim dtProductos As DataTable = ObtenerTodosLosProductosInventario()
@@ -868,7 +858,6 @@ End Sub
                 MessageBox.Show("No hay productos para exportar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Return
             End If
-
             ' Configurar el diálogo para guardar archivo
             Dim saveFileDialog As New SaveFileDialog()
             saveFileDialog.Filter = "Archivo CSV (*.csv)|*.csv|Archivo de texto (*.txt)|*.txt|Todos los archivos (*.*)|*.*"
@@ -877,24 +866,21 @@ End Sub
             saveFileDialog.FileName = $"Productos_Inventario_{DateTime.Now:yyyyMMdd_HHmmss}"
             saveFileDialog.Title = "Guardar exportación de productos"
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-
             ' Mostrar el diálogo
             If saveFileDialog.ShowDialog() = DialogResult.OK Then
                 ' Llamar a la función que hace la exportación real
                 ExportarDataTableAArchivo(dtProductos, saveFileDialog.FileName)
-
                 ' Confirmar que se exportó correctamente
                 MessageBox.Show($"Productos exportados exitosamente a:{Environment.NewLine}{saveFileDialog.FileName}{Environment.NewLine}{Environment.NewLine}Total de productos: {dtProductos.Rows.Count}",
                               "Exportación Completada",
                               MessageBoxButtons.OK,
                               MessageBoxIcon.Information)
             End If
-
         Catch ex As Exception
             MessageBox.Show($"Error al exportar prodctos:{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
-
+    ' Exportar los datos a un archivo csv
     Private Sub ExportarDataTableAArchivo(productos As DataTable, rutaArchivo As String)
         Using writer As New StreamWriter(rutaArchivo, False, Encoding.UTF8)
             ' Escribir encabezados
@@ -903,56 +889,46 @@ End Sub
                 encabezados.Add(columna.ColumnName)
             Next
             writer.WriteLine(String.Join(",", encabezados))
-
             ' Escribir datos
             For Each fila As DataRow In productos.Rows
                 Dim valores As New List(Of String)()
                 For Each valor As Object In fila.ItemArray
                     ' Escapar comillas y manejar valores nulos
                     Dim valorTexto As String = If(valor Is Nothing OrElse IsDBNull(valor), "", valor.ToString())
-
                     ' Si contiene comas o comillas, envolver en comillas dobles
                     If valorTexto.Contains(",") OrElse valorTexto.Contains("""") OrElse valorTexto.Contains(vbCrLf) Then
                         valorTexto = """" & valorTexto.Replace("""", """""") & """"
                     End If
-
                     valores.Add(valorTexto)
                 Next
                 writer.WriteLine(String.Join(",", valores))
             Next
         End Using
     End Sub
-
+    ' Iniciar la importacion de productos
     Public Sub ImportarProductos()
         Try
             ' Paso 1: Seleccionar archivo
             Dim archivoSeleccionado As String = SeleccionarArchivo()
             If String.IsNullOrEmpty(archivoSeleccionado) Then Return
-
             ' Paso 2: Mostrar tu formulario de prioridad
             Dim formPrioridad As New PrioridadImportacion()
             formPrioridad.ShowDialog()
-
             ' Paso 3: Procesar según la prioridad elegida
             ProcesarImportacion(archivoSeleccionado)
-
         Catch ex As Exception
         End Try
     End Sub
-
     ' Seleccionar archivo de origen
     Private Function SeleccionarArchivo() As String
         Dim openFileDialog As New OpenFileDialog()
         openFileDialog.Filter = "Archivos CSV (*.csv)|*.csv|Archivos de texto (*.txt)|*.txt"
         openFileDialog.Title = "Seleccionar archivo de productos"
-
         If openFileDialog.ShowDialog() = DialogResult.OK Then
             Return openFileDialog.FileName
         End If
-
         Return Nothing
     End Function
-
     ' Procesar la importación según la prioridad
     Private Sub ProcesarImportacion(rutaArchivo As String)
         Dim lineas As String() = File.ReadAllLines(rutaArchivo)
@@ -960,17 +936,14 @@ End Sub
             MessageBox.Show("Archivo vacío o sin datos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
-
         Dim encabezados As String() = lineas(0).Split(","c)
         Dim nuevos As Integer = 0
         Dim actualizados As Integer = 0
         Dim ignorados As Integer = 0
-
         Using conn As SQLiteConnection = ObtenerConexion()
             For i As Integer = 1 To lineas.Length - 1
                 Try
                     Dim valores As String() = lineas(i).Split(","c)
-
                     If OrigenTienePrioridad Then
                         ' UPDATE + INSERT: Los datos del archivo tienen prioridad
                         Dim yaExiste As Boolean = ProductoExiste(conn, valores(1))
@@ -997,7 +970,6 @@ End Sub
             Next
         End Using
     End Sub
-
     ' Verificar si producto existe
     Private Function ProductoExiste(conn As SQLiteConnection, descripcion As String) As Boolean
         Dim query As String = "SELECT COUNT(*) FROM Producto WHERE Descripcion = @desc"
@@ -1006,7 +978,6 @@ End Sub
             Return Convert.ToInt32(cmd.ExecuteScalar()) > 0
         End Using
     End Function
-
     ' INSERT + UPDATE (cuando origen tiene prioridad)
     Private Function InsertarOActualizar(conn As SQLiteConnection, valores As String()) As Boolean
         Dim query As String = "
@@ -1017,9 +988,7 @@ End Sub
         PrecioCosto = excluded.PrecioCosto,
         Ganancia = excluded.Ganancia;
     "
-
         Dim descNormalizado As String = valores(1).Trim()
-
         Using cmd As New SQLiteCommand(query, conn)
             cmd.Parameters.AddWithValue("@desc", descNormalizado)
             cmd.Parameters.AddWithValue("@precioVenta", Convert.ToDecimal(valores(2)))
@@ -1029,18 +998,13 @@ End Sub
             Return True
         End Using
     End Function
-
-
     ' SOLO INSERT (cuando destino tiene prioridad)
     Private Function InsertarNuevo(conn As SQLiteConnection, valores As String()) As Boolean
         Dim query As String = "
         INSERT INTO Producto (IdProducto, Descripcion, PrecioVenta, PrecioCosto, Ganancia)
         VALUES (@id, @desc, @precioVenta, @precioCosto, @ganancia);
     "
-
-
         Dim descNormalizado As String = valores(1).Trim()
-
         Using cmd As New SQLiteCommand(query, conn)
             cmd.Parameters.AddWithValue("@id", valores(0))
             cmd.Parameters.AddWithValue("@desc", descNormalizado)
@@ -1051,13 +1015,10 @@ End Sub
             Return True
         End Using
     End Function
-
 End Class
-
-
+' Classe dedicada a la fuentes del pdf
 Public Class CustomFontResolver
     Implements IFontResolver
-
     Public Function ResolveTypeface(familyName As String, isBold As Boolean, isItalic As Boolean) As FontResolverInfo Implements IFontResolver.ResolveTypeface
         ' Aquí puedes mapear tus fuentes a archivos .ttf
         If familyName = "Calibri" Then
@@ -1065,7 +1026,6 @@ Public Class CustomFontResolver
         End If
         Return New FontResolverInfo("Arial#") ' fallback
     End Function
-
     Public Function GetFont(faceName As String) As Byte() Implements IFontResolver.GetFont
         ' Retornar el contenido del .ttf en bytes
         If faceName = "Calibri#" Then

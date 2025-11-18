@@ -1,14 +1,15 @@
 ﻿Public Class FormRetiro
+    ' variables globales
     Dim logica As New LogicaCantina
     Private Sub TextBoxPlata_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxPlata.KeyPress
         ' Solo permitir números y control (backspace, etc.)
         If Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsDigit(e.KeyChar) Then
-            e.Handled = True
+            e.Handled = True ' rechazar el carácter
         End If
 
         ' No permitir borrar el símbolo "$"
         If TextBoxPlata.SelectionStart <= 1 AndAlso e.KeyChar = ChrW(Keys.Back) Then
-            e.Handled = True
+            e.Handled = True ' rechazar el carácter
         End If
     End Sub
 
@@ -21,14 +22,14 @@
 
         ' Si está vacío, dejar solo el $`
         If String.IsNullOrEmpty(textoLimpio) Then
-            TextBoxPlata.Text = "$ "
-            TextBoxPlata.SelectionStart = TextBoxPlata.Text.Length
+            TextBoxPlata.Text = "$ " 
+            TextBoxPlata.SelectionStart = TextBoxPlata.Text.Length ' Mover el cursor al final
             Exit Sub
         End If
 
         ' Formatear con separadores de miles
         Dim valorNumerico As Long = Long.Parse(textoLimpio)
-        Dim textoFormateado As String = "$ " & valorNumerico.ToString("N0", New Globalization.CultureInfo("es-AR"))
+        Dim textoFormateado As String = "$ " & valorNumerico.ToString("N0", New Globalization.CultureInfo("es-AR")) ' Formato con puntos como separadores de miles
 
         ' Reasignar el texto formateado
         TextBoxPlata.Text = textoFormateado
@@ -38,44 +39,43 @@
     End Sub
 
     Private Sub FormRetiro_Load(sender As Object, e As EventArgs) Handles Me.Load
-        logica.cargarSubdivision(Form1.subdivision)
+        logica.cargarSubdivision(Form1.subdivision) ' cargar la subdivisión actual
     End Sub
 
     Private Sub confirmarRetiro()
-        Dim origen As String = "Retiro"
-        Dim textoLimpio As String = TextBoxPlata.Text.Replace("$", "").Replace(" ", "").Replace(".", "")
-        Dim monto As Long = 0
+        Dim origen As String = "Retiro" ' origen para la advertencia
+        Dim textoLimpio As String = TextBoxPlata.Text.Replace("$", "").Replace(" ", "").Replace(".", "") ' limpiar el texto
+        Dim monto As Long = 0 ' variable para el monto
         If Not Long.TryParse(textoLimpio, monto) OrElse monto <= 0 Then
-            Dim mensajeError As String = "Ingrese un monto válido mayor a cero."
-            Dim frmError As New Advertencia(mensajeError, "ValidacionRetiro")
-            frmError.ShowDialog()
-            TextBoxPlata.Focus()
+            Dim mensajeError As String = "Ingrese un monto válido mayor a cero." ' mensaje de error
+            Dim frmError As New Advertencia(mensajeError, "ValidacionRetiro") ' crear formulario de advertencia
+            frmError.ShowDialog() ' mostrar el formulario de advertencia
+            TextBoxPlata.Focus() ' establecer el foco en el textbox de plata
             Return
         End If
 
-        Dim mensaje As String = "¿Confirmar retiro de $: " + monto.ToString("N0", New Globalization.CultureInfo("es-AR")) + " ?"
+        Dim mensaje As String = "¿Confirmar retiro de $: " + monto.ToString("N0", New Globalization.CultureInfo("es-AR")) + " ?" ' mensaje de confirmación
         If Not logica.ObtenerEstadoAdvertencia(origen) Then
-            Dim frm As New Advertencia(mensaje, origen)
+            Dim frm As New Advertencia(mensaje, origen) ' crear formulario de advertencia
             If frm.ShowDialog() = DialogResult.OK AndAlso frm.NoMostrarMas Then
-                logica.GuardarEstadoAdvertencia(origen, True)
+                logica.GuardarEstadoAdvertencia(origen, True) ' guardar estado de advertencia
             End If
         End If
-        logica.ActualizarCaja("Retiros", monto)
+        logica.ActualizarCaja("Retiros", monto) ' actualizar la caja con el retiro
         Me.Dispose()
     End Sub
 
     Private Sub TextBoxPlata_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxPlata.KeyDown
         If e.KeyCode = Keys.Enter Then
-            confirmarRetiro()
+            confirmarRetiro() ' confirmar el retiro
         End If
     End Sub
 
     Private Sub ButtonAceptar_Click(sender As Object, e As EventArgs) Handles ButtonAceptar.Click
-        confirmarRetiro()
+        confirmarRetiro() ' confirmar el retiro
     End Sub
 
     Private Sub ButtonCancelar_Click(sender As Object, e As EventArgs) Handles ButtonCancelar.Click
-        Me.Dispose()
+        Me.Dispose() ' cerrar el formulario
     End Sub
-
 End Class

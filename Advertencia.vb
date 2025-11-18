@@ -1,4 +1,5 @@
 ﻿Public Class Advertencia
+    ' variables globales
     Dim logica As New LogicaCantina
     Private _origen As String
     Public Property NoMostrarMas As Boolean = False
@@ -25,7 +26,7 @@
         If CheckBoxNoMostrar.Checked Then
             NoMostrarMas = True
         End If
-
+        ' Cerrar el formulario con DialogResult OK
         Me.DialogResult = DialogResult.OK
         Me.Close()
     End Sub
@@ -35,6 +36,7 @@
         Me.DialogResult = DialogResult.Cancel
         Me.Close()
     End Sub
+    ' Ajustar la fuente del Label para que el texto quepa
     Private Sub AjustarFuenteLabelMaximo(label As Label, texto As String)
         Dim anchoMaximo As Integer = label.Width
         Dim altoMaximo As Integer = label.Height
@@ -51,12 +53,12 @@
                 End If
             End Using
         Next
-
+        ' Aplicar la fuente ajustada al Label
         label.Font = New Font(fuenteBase.FontFamily, tamañoFuente, fuenteBase.Style)
         label.Text = texto
         label.TextAlign = ContentAlignment.MiddleCenter
     End Sub
-
+    ' Darle el focus al boton aceptar cuando carga el formulario
     Private Sub Advertencia_Load(sender As Object, e As EventArgs) Handles Me.Load
         BtnAceptar.Focus()
     End Sub

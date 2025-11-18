@@ -51,9 +51,9 @@ Partial Class Form1
         Opciones = New ContextMenuStrip(components)
         ActivarAdvertenciasToolStripMenuItem = New ToolStripMenuItem()
         CambiarInicioToolStripMenuItem = New ToolStripMenuItem()
+        HabilitarDeshabilitarRegistroToolStripMenuItem = New ToolStripMenuItem()
         ToolTip = New ToolTip(components)
         ToolTip1 = New ToolTip(components)
-        HabilitarDeshabilitarRegistroToolStripMenuItem = New ToolStripMenuItem()
         PanelBarraSuperior.SuspendLayout()
         CType(LogoSuperiorIzquierda, ComponentModel.ISupportInitialize).BeginInit()
         PanelBotonesVentana.SuspendLayout()
@@ -350,7 +350,7 @@ Partial Class Form1
         ' 
         Opciones.Items.AddRange(New ToolStripItem() {ActivarAdvertenciasToolStripMenuItem, CambiarInicioToolStripMenuItem, HabilitarDeshabilitarRegistroToolStripMenuItem})
         Opciones.Name = "ContextMenuStrip1"
-        Opciones.Size = New Size(233, 92)
+        Opciones.Size = New Size(233, 70)
         ' 
         ' ActivarAdvertenciasToolStripMenuItem
         ' 
